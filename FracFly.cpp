@@ -4,6 +4,7 @@
  * Construtor Da classe principal
  **/
 FracFly::FracFly() {
+	Surf_Test = NULL;
 	Plano_Exibicao = NULL;
 	Rodando = true;
 }

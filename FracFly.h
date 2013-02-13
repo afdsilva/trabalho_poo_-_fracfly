@@ -1,7 +1,10 @@
-#ifndef FRACFLY_H
-	#define FRACFLY_H
-	
+#ifndef _FRACFLY_H
+	#define _FRACFLY_H
+
 #include <SDL/SDL.h>
+
+#include "FSuperficie.h"
+
 #include <iostream>
 
 using namespace std;
@@ -11,6 +14,8 @@ class FracFly {
 		bool Rodando;
 		
 		SDL_Surface * Plano_Exibicao;
+		
+		SDL_Surface * Surf_Test;
 		
 	public:
 		FracFly();
