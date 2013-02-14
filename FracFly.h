@@ -9,6 +9,7 @@
 #include "FSuperficie.h"
 #include "FAnimacao.h"
 #include "FEvento.h"
+#include "FEntidade.h"
 
 using namespace std;
 
@@ -17,11 +18,11 @@ class FracFly : public FEvento {
 		bool Rodando;
 		
 		SDL_Surface * Plano_Exibicao;
-		
-		SDL_Surface * Surf_Test;
 		SDL_Surface * Surf_bg;
 		
-		FAnimacao Anim_Yoshi;
+	private:
+		FEntidade Entity1;
+		FEntidade Entity2;
 		
 	public:
 		FracFly();

@@ -10,18 +10,20 @@ bool FracFly::NoInic() {
 	}
 	
 	char bg[] = "res/teste.bmp";
-	if((Surf_bg = FSuperficie::NoCarregar(bg)) == NULL) {
-        return false;
-    }
+	if ((Surf_bg = FSuperficie::NoCarregar(bg)) == NULL) {
+		return false;
+	}
 
 	char Arquivo[] = "res/yoshi.bmp";
-	if((Surf_Test = FSuperficie::NoCarregar(Arquivo)) == NULL) {
+
+	if((Entity1.NoCarregar(Arquivo, 64, 64, 8)) == false) {
         return false;
     }
-    FSuperficie::Transparencia(Surf_Test, 255, 0, 255);
-    
-    Anim_Yoshi.MaxFrames = 8;
-    //Anim_Yoshi.Oscilacao = true;
-	
+	if((Entity2.NoCarregar(Arquivo, 64, 64, 8)) == false) {
+        return false;
+    }
+	Entity2.X = 100;
+	FEntidade::ListaEntidades.push_back(&Entity1);
+	FEntidade::ListaEntidades.push_back(&Entity2);
 	return true;
 }

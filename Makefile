@@ -4,10 +4,10 @@
 CC=g++
 
 # Objects
-OBJETOS=FracFly.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FSuperficie.o FEvento.o FAnimacao.o
+OBJETOS=FracFly.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FSuperficie.o FEvento.o FAnimacao.o FEntidade.o
 
 # Compilador flags - Warning, debug, sdl
-CPPFLAGS=-Wall -g `sdl-config --cflags`
+CPPFLAGS=-std=c++0x -Wall -g `sdl-config --cflags`
 
 # Ligador flags - sdl
 LDFLAGS=`sdl-config --libs` -lSDL -lSDL_image
@@ -18,7 +18,6 @@ EXECUTAVEL=fracfly
 #jogo: NaLimpeza FSuperficie NoEvento NoInic NoLaco NaRenderezicao FracFly FracFly.cpp
 jogo: $(OBJETOS) FracFly.h FracFly.cpp
 	$(CC) $(OBJETOS) $(CPPFLAGS) $(LDFLAGS) -o $(EXECUTAVEL)
-
 FracFly: $(OBJETOS) FracFly.h FracFly.cpp
 	$(CC) $(CPPFLAGS) -c FracFly.cpp
 NoInic: FracFly.h FracFly_NoInic.cpp
@@ -37,6 +36,8 @@ FEvento: FEvento.h FEvento.cpp
 	$(CC) $(CPPFLAGS) -c FEvento.cpp
 FAnimacao: FAnimacao.h FAnimacao.cpp
 	$(CC) $(CPPFLAGS) -c FAnimacao.cpp
+FEntidade: FEntidade.h FEntidade.cpp
+	$(CC) $(CPPFLAGS) -c FEntidade.cpp
 
 #Instalar SDL
 pacotes:
@@ -45,4 +46,4 @@ pacotes:
 #limpeza
 clean:
 	rm -rf $(OBJETOS)
-	rm -rf $(EXECUTAVEL)
+#	rm -rf $(EXECUTAVEL)

@@ -9,9 +9,6 @@ FAnimacao::FAnimacao() {
     AntTime = 0;
  
     Oscilacao = false;
-
-    printf("FrameAtual: %d \n", FrameAtual);
-
 }
  
 void FAnimacao::NaAnimacao() {
