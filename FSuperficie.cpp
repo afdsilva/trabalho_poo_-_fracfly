@@ -8,11 +8,11 @@ SDL_Surface * FSuperficie::NoCarregar(char * Arquivo) {
     SDL_Surface* Surf_Temp = NULL;
     SDL_Surface* Surf_Retorno = NULL;
 
-    if((Surf_Temp = SDL_LoadBMP(Arquivo)) == NULL) {
+    if((Surf_Temp = IMG_Load(Arquivo)) == NULL) {
         return NULL;
     }
  
-    Surf_Retorno = SDL_DisplayFormat(Surf_Temp);
+    Surf_Retorno = SDL_DisplayFormatAlpha(Surf_Temp);
     SDL_FreeSurface(Surf_Temp);
  
     return Surf_Retorno;

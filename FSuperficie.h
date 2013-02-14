@@ -2,11 +2,8 @@
     #define _FSUPERFICIE_H_
  
 #include <SDL/SDL.h>
-#include <iostream>
-#include <string>
-#include <sstream>
+#include <SDL/SDL_image.h>
 
-using namespace std;
 class FSuperficie {
     public:
         FSuperficie();

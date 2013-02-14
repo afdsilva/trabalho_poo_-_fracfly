@@ -15,11 +15,12 @@ bool FracFly::NoInic() {
 	}
 
 	char Arquivo[] = "res/yoshi.bmp";
+	char Arquivo2[] = "res/yoshi.png";
 
 	if((Entity1.NoCarregar(Arquivo, 64, 64, 8)) == false) {
         return false;
     }
-	if((Entity2.NoCarregar(Arquivo, 64, 64, 8)) == false) {
+	if((Entity2.NoCarregar(Arquivo2, 64, 64, 8)) == false) {
         return false;
     }
 	Entity2.X = 100;
