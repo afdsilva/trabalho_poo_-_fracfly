@@ -4,10 +4,10 @@
 CC=g++
 
 # Objects
-OBJETOS=FracFly.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FSuperficie.o FEvento.o FAnimacao.o FEntidade.o
+OBJETOS=FracFly.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FSuperficie.o FEvento.o FAnimacao.o FEntidade.o FEntidade_Arma.o
 
 # Compilador flags - Warning, debug, sdl
-CPPFLAGS=-std=c++0x -Wall -g `sdl-config --cflags`
+CPPFLAGS=-std=c++0x -Wall -g -lm `sdl-config --cflags`
 
 # Ligador flags - sdl
 LDFLAGS=`sdl-config --libs` -lSDL -lSDL_image
@@ -38,6 +38,8 @@ FAnimacao: FAnimacao.h FAnimacao.cpp
 	$(CC) $(CPPFLAGS) -c FAnimacao.cpp
 FEntidade: FEntidade.h FEntidade.cpp
 	$(CC) $(CPPFLAGS) -c FEntidade.cpp
+FEntidade_Arma: FEntidade_Arma.h FEntidade_Arma.cpp
+	$(CC) $(CPPFLAGS) -c FEntidade_Arma.cpp
 
 #Instalar SDL
 pacotes:

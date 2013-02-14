@@ -19,6 +19,13 @@ class FEntidade {
 	public:
 		float X;
 		float Y;
+
+		bool moveCima;
+		bool moveBaixo;
+		bool moveDireita;
+		bool moveEsquerda;
+		
+		int Aceleracao;
 		
 		int Width; //nomes da variavel em ingles
 		int Height; //pra facilitar o entendimento Width = largura, Height = altura

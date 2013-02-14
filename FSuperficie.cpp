@@ -22,7 +22,7 @@ bool FSuperficie::NoDesenhar(SDL_Surface * Surf_Dest, SDL_Surface * Surf_Ori, in
     if(Surf_Dest == NULL || Surf_Ori == NULL) {
         return false;
     }
- 
+
     SDL_Rect DestR;
  
     DestR.x = X;
