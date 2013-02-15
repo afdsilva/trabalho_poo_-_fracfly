@@ -39,11 +39,12 @@ bool FEntidade::NoCarregar (char * Arquivo, int Width, int Height, int MaxFrames
 
 void FEntidade::NoLaco() {
 	Anim_Control.NaAnimacao();
+	/**
 	if (moveCima && Y > 0) Y--;
 	if (moveBaixo && Y < (480-Width)) Y++;
 	if (moveDireita && X < (640-Height)) X++;
 	if (moveEsquerda && X > 0) X--;
-	
+	**/
 }
 
 void FEntidade::NaRenderizacao(SDL_Surface * Plano_Exibicao) {

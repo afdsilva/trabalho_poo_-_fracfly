@@ -11,12 +11,10 @@ void FracFly::NoLaco() {
 		if(!FEntidade::ListaEntidades[i]) continue;
 		FEntidade::ListaEntidades[i]->NoLaco();
 	}
-	/**
-	for(int i = 0;i < (int) FEntidade_Arma::ListaTiros.size();i++) {
-		if(!FEntidade_Arma::ListaTiros[i]) continue;
-		FEntidade_Arma::ListaTiros[i]->NaRenderizacao(Plano_Exibicao);
+	for(int i = 0;i < (int) FEntidade_Tiro::ListaTiros.size();i++) {
+		if(!FEntidade_Tiro::ListaTiros[i]) continue;
+		FEntidade_Tiro::ListaTiros[i]->NoLaco();
 	}
-	**/
 	//Reduz o consumo de CPU adicionando um delay
 	delaytime = waittime - (SDL_GetTicks() - framestarttime);
     if(delaytime > 0)

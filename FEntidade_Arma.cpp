@@ -1,6 +1,5 @@
 #include "FEntidade_Arma.h"
-
-std::vector<FEntidade_Arma*> FEntidade_Arma::ListaTiros;
+#include "FEntidade_Tiro.h"
 
 FEntidade_Arma::FEntidade_Arma() {
 
@@ -13,20 +12,20 @@ FEntidade_Arma::FEntidade_Arma() {
 }
 
 void FEntidade_Arma::Atirar(int X, int Y) {
-	FEntidade_Arma Ovo;
+	FEntidade_Tiro * Tiro = new FEntidade_Tiro();
 
 	char Arquivo3[] = "res/ovo.png";
-	if((Ovo.NoCarregar(Arquivo3, 200, 240, 1)) == false) {
+	if((Tiro->NoCarregar(Arquivo3, 100, 120, 1)) == false) {
         return;
 	}
+	Tiro->X2 = X;
+	Tiro->Y2 = Y;
+	Tiro->X = this->X;
+	Tiro->Y = this->Y;
 
-	Ovo.X = X;
-	Ovo.Y = Y;
-	
 	printf("Atirou\n");
-	FEntidade_Arma::ListaTiros.push_back(&Ovo);
-
-	FinalX = X;
-	FinalY = Y;
+	FEntidade_Tiro::ListaTiros.push_back(Tiro);
+	//if (!FEntidade_Tiro::ListaTiros.size())
+	//printf("Punheta mal batida...\n");
 	
 }

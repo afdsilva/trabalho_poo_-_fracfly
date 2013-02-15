@@ -12,6 +12,7 @@
 #include "FEvento.h"
 #include "FEntidade.h"
 #include "FEntidade_Arma.h"
+#include "FEntidade_Tiro.h"
 
 using namespace std;
 
@@ -25,6 +26,7 @@ class FracFly : public FEvento {
 	private:
 		FEntidade_Arma Arma1;
 		FEntidade_Arma Arma2;
+		FEntidade_Tiro Tiro;
 		
 	public:
 		FracFly();

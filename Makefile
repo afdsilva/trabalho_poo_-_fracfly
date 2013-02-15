@@ -4,7 +4,7 @@
 CC=g++
 
 # Objects
-OBJETOS=FracFly.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FSuperficie.o FEvento.o FAnimacao.o FEntidade.o FEntidade_Arma.o
+OBJETOS=FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FSuperficie.o FEvento.o FAnimacao.o FEntidade.o FEntidade_Tiro.o FEntidade_Arma.o FracFly.o 
 
 # Compilador flags - Warning, debug, sdl
 CPPFLAGS=-std=c++0x -Wall -g -lm `sdl-config --cflags`
@@ -38,6 +38,8 @@ FAnimacao: FAnimacao.h FAnimacao.cpp
 	$(CC) $(CPPFLAGS) -c FAnimacao.cpp
 FEntidade: FEntidade.h FEntidade.cpp
 	$(CC) $(CPPFLAGS) -c FEntidade.cpp
+FEntidade_Tiro: FEntidade_Tiro.h FEntidade_Tiro.cpp
+	$(CC) $(CPPFLAGS) -c FEntidade_Tiro.cpp
 FEntidade_Arma: FEntidade_Arma.h FEntidade_Arma.cpp
 	$(CC) $(CPPFLAGS) -c FEntidade_Arma.cpp
 

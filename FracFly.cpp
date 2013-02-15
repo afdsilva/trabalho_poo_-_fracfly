@@ -20,7 +20,8 @@ int FracFly::naExec() {
 	
 	SDL_Event Evento;
 	
-	//Permanece no loop infinito enquanto o nao for especificado para sair
+	//Permanece no loop infinito enquanto nao for especificado para sair
+	//cout << FEntidade_Tiro::ListaTiros.size() << endl;
 	while(Rodando) {
 		//checa por eventos e passa um por um para o NoEvento
 		while(SDL_PollEvent(&Evento)) {

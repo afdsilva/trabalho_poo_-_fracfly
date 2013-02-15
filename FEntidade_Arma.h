@@ -5,9 +5,6 @@
 
 class FEntidade_Arma : public FEntidade {
 	public:
-		static vector<FEntidade_Arma*> ListaTiros;
-	
-	public:
 		FEntidade_Arma();
 		
 		bool Tiro;
