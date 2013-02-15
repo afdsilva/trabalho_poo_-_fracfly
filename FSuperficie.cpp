@@ -1,4 +1,6 @@
 #include "FSuperficie.h"
+#include <iostream>
+using namespace std;
 
 FSuperficie::FSuperficie() {
 }
@@ -62,5 +64,23 @@ bool FSuperficie::Transparencia(SDL_Surface * Surf_Dest, int R, int G, int B) {
  
     SDL_SetColorKey(Surf_Dest, SDL_SRCCOLORKEY | SDL_RLEACCEL, SDL_MapRGB(Surf_Dest->format, R, G, B));
  
+    return true;
+}
+
+//rotate image
+bool FSuperficie::Rotacionar(SDL_Surface * Surf_Dest, double angulo, double zoom, int smooth) {
+	cout << "Girando e rodando" << endl;
+    //give initial for rotate image
+    SDL_Surface * rotatefile = NULL;
+
+    //get rotate here
+    rotatefile = rotozoomSurface(Surf_Dest, angulo, zoom, smooth);
+
+    //get optimizing
+    Surf_Dest = SDL_DisplayFormat(rotatefile);
+
+    //free surface
+    SDL_FreeSurface( rotatefile );
+
     return true;
 }

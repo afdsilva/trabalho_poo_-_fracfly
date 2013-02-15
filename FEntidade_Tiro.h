@@ -2,6 +2,8 @@
   #define _FENTIDADE_TIRO_H
 
 #include "FEntidade.h"
+#include <iostream>
+#include <cmath>
 
 class FEntidade_Tiro : public FEntidade {
 	public:
@@ -9,15 +11,19 @@ class FEntidade_Tiro : public FEntidade {
 
 	public:
 		FEntidade_Tiro();
+		~FEntidade_Tiro();
 		virtual void NoLaco();
+		
+		bool Ativo;
 		
 		int X2;
 		int Y2;
 		
-		int AceleracaoX;
-		int AceleracaoY;
+		float AceleracaoX;
+		float AceleracaoY;
 
 		int Velocidade;
+		int Distancia;
 };
 
 #endif

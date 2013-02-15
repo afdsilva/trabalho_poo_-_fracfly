@@ -5,6 +5,7 @@
 
 #include "FAnimacao.h"
 #include "FSuperficie.h"
+#include <SDL/SDL_rotozoom.h>
 
 using namespace std;
 
@@ -38,6 +39,7 @@ class FEntidade {
 		
 	public:
 		virtual bool NoCarregar (char * Arquivo, int Width, int Height, int MaxFrames);
+		virtual bool Rotacionar(double angulo, double zoom, int smooth);
 		virtual void NoLaco();
 		virtual void NaRenderizacao(SDL_Surface * Plano_Exibicao);
 		virtual void NaLimpeza();

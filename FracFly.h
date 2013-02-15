@@ -2,6 +2,7 @@
 	#define _FRACFLY_H
 
 #include <SDL/SDL.h>
+#include <SDL/SDL_rotozoom.h>
 #include <iostream>
 #include <string>
 #include <string.h>

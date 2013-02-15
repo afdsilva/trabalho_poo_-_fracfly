@@ -11,8 +11,11 @@ void FracFly::NoLaco() {
 		if(!FEntidade::ListaEntidades[i]) continue;
 		FEntidade::ListaEntidades[i]->NoLaco();
 	}
+	//cout << "Tam: " << (int) FEntidade_Tiro::ListaTiros.size() << endl;
 	for(int i = 0;i < (int) FEntidade_Tiro::ListaTiros.size();i++) {
 		if(!FEntidade_Tiro::ListaTiros[i]) continue;
+		if (!FEntidade_Tiro::ListaTiros[i]->Ativo && (int) FEntidade_Tiro::ListaTiros.size() == i+1 ) //gambimodeon
+			FEntidade_Tiro::ListaTiros.pop_back();
 		FEntidade_Tiro::ListaTiros[i]->NoLaco();
 	}
 	//Reduz o consumo de CPU adicionando um delay

@@ -15,9 +15,13 @@ void FEntidade_Arma::Atirar(int X, int Y) {
 	FEntidade_Tiro * Tiro = new FEntidade_Tiro();
 
 	char Arquivo3[] = "res/ovo.png";
-	if((Tiro->NoCarregar(Arquivo3, 100, 120, 1)) == false) {
+	if((Tiro->NoCarregar(Arquivo3, 200, 240, 1)) == false) {
         return;
 	}
+	Tiro->Velocidade = 3;
+	Tiro->Distancia = sqrt(pow(X - this->X,2) + pow(Y - this->Y,2));
+	Tiro->AceleracaoX = Tiro->Velocidade * ((float)(X > this->X ? X - this->X : (-X + this->X) ) / (float) Tiro->Distancia);
+	Tiro->AceleracaoY = Tiro->Velocidade * ((float)(Y < this->Y ? Y - this->Y : (-Y + this->Y) ) / (float) Tiro->Distancia);
 	Tiro->X2 = X;
 	Tiro->Y2 = Y;
 	Tiro->X = this->X;
@@ -25,7 +29,5 @@ void FEntidade_Arma::Atirar(int X, int Y) {
 
 	printf("Atirou\n");
 	FEntidade_Tiro::ListaTiros.push_back(Tiro);
-	//if (!FEntidade_Tiro::ListaTiros.size())
-	//printf("Punheta mal batida...\n");
-	
+
 }

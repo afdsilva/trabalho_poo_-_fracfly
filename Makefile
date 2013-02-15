@@ -10,7 +10,7 @@ OBJETOS=FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o
 CPPFLAGS=-std=c++0x -Wall -g -lm `sdl-config --cflags`
 
 # Ligador flags - sdl
-LDFLAGS=`sdl-config --libs` -lSDL -lSDL_image
+LDFLAGS=`sdl-config --libs` -lSDL -lSDL_image -lSDL_gfx
 
 EXECUTAVEL=fracfly
 

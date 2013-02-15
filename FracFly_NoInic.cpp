@@ -23,11 +23,13 @@ bool FracFly::NoInic() {
 	if((Arma2.NoCarregar(Arquivo2, 64, 64, 8)) == false) {
         return false;
     }
-
+    
+    //Arma1.Surf_Entidade = FSuperficie::Rotacionar(Arma1.Surf_Entidade,0.5,1,0);
 	Arma1.X = 0;
 	Arma2.X = 640 - (Arma2.Width);
 	Arma1.Y = 480 - (Arma1.Height);
 	Arma2.Y = 480 - (Arma2.Height);
+    //Arma1.Rotacionar(90,2,0);
 	FEntidade::ListaEntidades.push_back(&Arma1);
 	FEntidade::ListaEntidades.push_back(&Arma2);
 

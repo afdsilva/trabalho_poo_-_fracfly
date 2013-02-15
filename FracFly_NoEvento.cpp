@@ -49,16 +49,10 @@ void FracFly::OnKeyUp(SDLKey sym, SDLMod mod, Uint16 unicode) {
 }
 void FracFly::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle) {
 	
-	/**
-	if (FEntidade_Arma Arma !=
-	FEntidade_Arma::Atirar(mX, mY);
-	int d = sqrt( pow(mX - auxX,2) + pow(mY - auxY,2));
-	//VelocidadeX = 
-	//VelocidadeY = 
-	//Tiro = true;
-	//FEntidade::ListaEntidades[0]->X = mX;
-	//FEntidade::ListaEntidades[0]->Y = mY;
-	**/
+	//double distancia = sqrt(pow(mX - Arma1.X, 2) + pow(mY - Arma1.Y, 2));
+	//double deltay = mY - (double) Arma1.Y;
+	//double angulo = deltay / distancia;
+	
 }
 
 void FracFly::OnLButtonDown(int mX, int mY) {
