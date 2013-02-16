@@ -17,7 +17,7 @@ bool FracFly::NoInic() {
 	char Arquivo[] = "res/yoshi.png";
 	char Arquivo2[] = "res/yoshi.png";
 
-	if((Arma1.NoCarregar(Arquivo, 64, 64, 8)) == false) {
+	if((Arma1.NoCarregar(Arquivo, 64, 64, 1)) == false) {
         return false;
     }
 	if((Arma2.NoCarregar(Arquivo2, 64, 64, 8)) == false) {
@@ -29,7 +29,9 @@ bool FracFly::NoInic() {
 	Arma2.X = 640 - (Arma2.Width);
 	Arma1.Y = 480 - (Arma1.Height);
 	Arma2.Y = 480 - (Arma2.Height);
-    //Arma1.Rotacionar(90,2,0);
+	
+	     
+
 	FEntidade::ListaEntidades.push_back(&Arma1);
 	FEntidade::ListaEntidades.push_back(&Arma2);
 

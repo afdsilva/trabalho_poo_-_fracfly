@@ -5,6 +5,7 @@ std::vector<FEntidade*> FEntidade::ListaEntidades;
 FEntidade::FEntidade() {
 
 	Surf_Entidade = NULL;
+	Surf_EntidadeOriginal = NULL;
 	X = Y = 0.0f;
 	
 	Width = Height = 0;
@@ -23,8 +24,16 @@ FEntidade::FEntidade() {
 FEntidade::~FEntidade() {
 }
 
+SDL_Surface *FEntidade::getSurface(){
+	return Surf_EntidadeOriginal;
+	}
+
+void FEntidade::setSurface(SDL_Surface *novo){
+	Surf_Entidade = novo;
+}	
+
 bool FEntidade::NoCarregar (char * Arquivo, int Width, int Height, int MaxFrames) {
-	if ((Surf_Entidade = FSuperficie::NoCarregar(Arquivo)) == NULL) {
+	if ((Surf_Entidade = Surf_EntidadeOriginal= FSuperficie::NoCarregar(Arquivo)) == NULL) {
 		return false;
 	}
 	FSuperficie::Transparencia(Surf_Entidade, 255, 0, 255);

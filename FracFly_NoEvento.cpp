@@ -47,11 +47,20 @@ void FracFly::OnKeyUp(SDLKey sym, SDLMod mod, Uint16 unicode) {
 			break;
 	}
 }
+
 void FracFly::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle) {
 	
-	//double distancia = sqrt(pow(mX - Arma1.X, 2) + pow(mY - Arma1.Y, 2));
-	//double deltay = mY - (double) Arma1.Y;
-	//double angulo = deltay / distancia;
+	double distancia = sqrt(pow(mX - Arma1.X, 2) + pow(mY - Arma1.Y, 2));
+	
+	double deltay =  (double) Arma1.Y-mY ;
+	
+	
+	double angulo = (double) 90*(deltay/distancia);
+    
+    /* Rotate */
+    SDL_Surface *extraSurface;
+    extraSurface = rotozoomSurface(Arma1.getSurface(), angulo, 1, 1); 
+    Arma1.setSurface(extraSurface); 			
 	
 }
 

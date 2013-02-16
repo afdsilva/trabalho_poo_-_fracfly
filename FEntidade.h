@@ -16,11 +16,13 @@ class FEntidade {
 	protected:
 		FAnimacao Anim_Control;
 		SDL_Surface * Surf_Entidade;
+		SDL_Surface * Surf_EntidadeOriginal;
 		
 	public:
 		float X;
 		float Y;
-
+		SDL_Surface * getSurface();
+		void setSurface(SDL_Surface *);
 		bool moveCima;
 		bool moveBaixo;
 		bool moveDireita;
