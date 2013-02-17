@@ -69,18 +69,20 @@ bool FSuperficie::Transparencia(SDL_Surface * Surf_Dest, int R, int G, int B) {
 
 //rotate image
 bool FSuperficie::Rotacionar(SDL_Surface * Surf_Orig, double angulo, double zoom, int smooth) {
-	cout << "Girando e rodando" << endl;
+	cout << "Girando e rodando: " << angulo << endl;
     //give initial for rotate image
+
     SDL_Surface * rotatefile;
 
     //get rotate here
+    //rotatefile = rotozoomSurface(Surf_Orig, angulo, zoom, smooth);
     rotatefile = rotozoomSurface(Surf_Orig, angulo, zoom, smooth);
 
     //get optimizing
     Surf_Orig = SDL_DisplayFormat(rotatefile);
 
     //free surface
-    SDL_FreeSurface(rotatefile );
+    SDL_FreeSurface(rotatefile);
 
     return true;
 }

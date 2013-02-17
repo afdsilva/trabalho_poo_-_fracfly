@@ -4,7 +4,7 @@
 CC=g++
 
 # Objects
-OBJETOS=FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FSuperficie.o FEvento.o FAnimacao.o FEntidade.o FEntidade_Tiro.o FEntidade_Arma.o FracFly.o 
+OBJETOS=FracFly_NaLimpeza.o FSuperficie.o FEvento.o FAnimacao.o FEntidade.o FAzulejo.o FMap.o FCamera.o FArea.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FEntidade_Tiro.o FEntidade_Arma.o FracFly.o 
 
 # Compilador flags - Warning, debug, sdl
 CPPFLAGS=-std=c++0x -Wall -g -lm `sdl-config --cflags`
@@ -43,9 +43,19 @@ FEntidade_Tiro: FEntidade_Tiro.h FEntidade_Tiro.cpp
 FEntidade_Arma: FEntidade_Arma.h FEntidade_Arma.cpp
 	$(CC) $(CPPFLAGS) -c FEntidade_Arma.cpp
 
+
+FCamera: FCamera.h FCamera.cpp
+	$(CC) $(CPPFLAGS) -c FCamera.cpp
+FArea: FMap.h FArea.h FArea.cpp
+	$(CC) $(CPPFLAGS) -c FArea.cpp
+FMap: FMap.h FMap.cpp
+	$(CC) $(CPPFLAGS) -c FMap.cpp
+FAzulejo: FAzulejo.h FAzulejo.cpp
+	$(CC) $(CPPFLAGS) -c FAzulejo.cpp
+
 #Instalar SDL
 pacotes:
-	sudo apt-get install libsdl-image1.2-dev libsdl-image1.2 libsdl-ttf2.0-0 libsdl-ttf2.0-dev libsdl1.2-dev libsdl1.2debian
+	sudo apt-get install libsdl-image1.2-dev libsdl-image1.2 libsdl-ttf2.0-0 libsdl-ttf2.0-dev libsdl1.2-dev libsdl1.2debian libsdl-gfx1.2-4 libsdl-gfx1.2-dev
 
 #limpeza
 clean:

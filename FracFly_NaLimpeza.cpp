@@ -2,6 +2,8 @@
 
 void FracFly::NaLimpeza() {
 
+	FArea::ControleArea.NaLimpeza();
+	
 	for(int i = 0;i < (int) FEntidade::ListaEntidades.size();i++) {
 		if(!FEntidade::ListaEntidades[i]) continue;
 		FEntidade::ListaEntidades[i]->NaLimpeza();

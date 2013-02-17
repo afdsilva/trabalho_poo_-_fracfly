@@ -8,12 +8,16 @@
 #include <string.h>
 #include <math.h>
 
+#include "Definicoes.h"
+ 
+#include "FArea.h"
+#include "FCamera.h"
 #include "FSuperficie.h"
 #include "FAnimacao.h"
 #include "FEvento.h"
-#include "FEntidade.h"
-#include "FEntidade_Arma.h"
 #include "FEntidade_Tiro.h"
+#include "FEntidade_Arma.h"
+#include "FEntidade.h"
 
 using namespace std;
 
@@ -27,7 +31,6 @@ class FracFly : public FEvento {
 	private:
 		FEntidade_Arma Arma1;
 		FEntidade_Arma Arma2;
-		FEntidade_Tiro Tiro;
 		
 	public:
 		FracFly();

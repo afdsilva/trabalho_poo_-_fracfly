@@ -13,7 +13,7 @@ class FEntidade_Arma : public FEntidade {
 		int FinalY;
 		
 		void Atirar(int X, int Y);
-		void Rotacionar();
+
 };
 
 #endif
