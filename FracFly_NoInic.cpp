@@ -28,11 +28,18 @@ bool FracFly::NoInic() {
 
 	char Arquivo[] = "res/yoshi.png";
 	char Arquivo2[] = "res/yoshi.png";
+	
 
 	if((Arma1.NoCarregar(Arquivo, 64, 64, 8)) == false) {
 		printf("NoInic: Não foi possivel carregar: %s\n", Arquivo);
         return false;
     }
+    
+	//~ if((fundoFractal.NoCarregar()) == false) {
+		//~ printf("NoInic: Não foi possivel carregar: %s\n", Arquivo);
+        //~ return false;
+    //~ }
+    
 	if((Arma2.NoCarregar(Arquivo2, 64, 64, 8)) == false) {
 		printf("NoInic: Não foi possivel carregar: %s\n", Arquivo2);
         return false;
