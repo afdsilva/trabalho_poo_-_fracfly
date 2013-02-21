@@ -1,6 +1,6 @@
 #include "FAzulejo.h"
 
 FAzulejo::FAzulejo() {
-	AzulejoID = 0;
-	TipoID = AZULEJO_TIPO_NONE;
+	azulejoId = 0;
+	tipoId = AZULEJO_TIPO_NONE;
 }

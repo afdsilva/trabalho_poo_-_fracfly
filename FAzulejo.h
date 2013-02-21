@@ -14,8 +14,8 @@ class FAzulejo {
 	public:
 		FAzulejo();
 	public:
-		int AzulejoID;
-		int TipoID;
+		int azulejoId;
+		int tipoId;
 };
 
 #endif

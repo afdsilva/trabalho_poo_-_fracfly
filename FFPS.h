@@ -22,8 +22,8 @@ class FFPS {
 		void NoLaco();
 		
 	public:
-		int getFPS();
-		float getFatorVelocidade();
+		int GetFPS();
+		float GetFatorVelocidade();
 };
 
 #endif

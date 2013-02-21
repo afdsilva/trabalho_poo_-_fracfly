@@ -5,24 +5,24 @@
  
 class FAnimacao {
 	private:
-		int    FrameAtual;
-		int     FrameInc;
+		int    frameAtual;
+		int     frameInc;
 
     private:
-        int     FrameRate;
-        long    AntTime;
+        int     frameRate;
+        long    antTime;
  
     public:
-        int    MaxFrames;
-        bool    Oscilacao;
+        int    maxFrames;
+        bool    oscilacao;
  
     public:
         FAnimacao();
         void NaAnimacao();
  
     public:
-        void SetFrameRate(int Rate);
-        void SetFrameAtual(int Frame);
+        void SetFrameRate(int rate);
+        void SetFrameAtual(int frame);
         int GetFrameAtual();
 };
 

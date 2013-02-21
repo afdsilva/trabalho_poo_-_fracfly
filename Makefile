@@ -4,7 +4,7 @@
 CC=g++
 
 # Objects
-OBJETOS=FracFly_NaLimpeza.o FSuperficie.o FEvento.o FAnimacao.o FEntidade.o FAzulejo.o FMap.o FCamera.o FArea.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FEntidade_Tiro.o FEntidade_Arma.o FracFly.o 
+OBJETOS=FSuperficie.o FEvento.o FAnimacao.o FEntidade.o FAzulejo.o FMap.o FCamera.o FFPS.o FArea.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FEntidade_Tiro.o FEntidade_Arma.o FracFly.o 
 
 # Compilador flags - Warning, debug, sdl
 CPPFLAGS=-std=c++0x -Wall -g -lm `sdl-config --cflags`
@@ -52,6 +52,8 @@ FMap: FMap.h FMap.cpp
 	$(CC) $(CPPFLAGS) -c FMap.cpp
 FAzulejo: FAzulejo.h FAzulejo.cpp
 	$(CC) $(CPPFLAGS) -c FAzulejo.cpp
+FFPS: FFPS.h FFPS.cpp
+	$(CC) $(CPPFLAGS) -c FFPS.cpp
 
 #Instalar SDL
 pacotes:

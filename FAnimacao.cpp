@@ -1,49 +1,49 @@
 #include "FAnimacao.h"
  
 FAnimacao::FAnimacao() {
-    FrameAtual = 0;
-    MaxFrames = 0;
-    FrameInc = 1;
+    frameAtual = 0;
+    maxFrames = 0;
+    frameInc = 1;
  
-    FrameRate = 100; //Milisegundos
-    AntTime = 0;
+    frameRate = 100; //Milisegundos
+    antTime = 0;
  
-    Oscilacao = false;
+    oscilacao = false;
 }
  
 void FAnimacao::NaAnimacao() {
-    if(AntTime + FrameRate > SDL_GetTicks()) {
+    if(antTime + frameRate > SDL_GetTicks()) {
         return;
     }
  
-    AntTime = SDL_GetTicks();
+    antTime = SDL_GetTicks();
  
-    FrameAtual += FrameInc;
-    if(Oscilacao) {
-        if(FrameInc > 0) {
-            if(FrameAtual >= MaxFrames) {
-                FrameInc = -FrameInc;
+    frameAtual += frameInc;
+    if(oscilacao) {
+        if(frameInc > 0) {
+            if(frameAtual >= maxFrames) {
+                frameInc = -frameInc;
             }
         }else{
-            if(FrameAtual <= 0) {
-                FrameInc = -FrameInc;
+            if(frameAtual <= 0) {
+                frameInc = -frameInc;
             }
         }
     }else{
-        if(FrameAtual >= MaxFrames) {
+        if(frameAtual >= maxFrames) {
             FrameAtual = 0;
         }
     }
 }
  
-void FAnimacao::SetFrameRate(int Rate) {
-    FrameRate = Rate;
+void FAnimacao::SetFrameRate(int rate) {
+    frameRate = rate;
 }
  
-void FAnimacao::SetFrameAtual(int Frame) {
-    if(Frame < 0 || Frame >= MaxFrames) return;
+void FAnimacao::SetFrameAtual(int frame) {
+    if(frame < 0 || frame >= maxFrames) return;
  
-    FrameAtual = Frame;
+    frameAtual = frame;
 }
  
 int FAnimacao::GetFrameAtual() {

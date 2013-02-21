@@ -25,10 +25,10 @@ void FFPS::NoLaco() {
 	Frames++;
 }
 
-int FFPS::getFPS() {
+int FFPS::GetFPS() {
 	return NumFrames;
 }
 
-float FFPS::getFatorVelocidade() {
+float FFPS::GetFatorVelocidade() {
 	return FatorVelocidade;
 }
