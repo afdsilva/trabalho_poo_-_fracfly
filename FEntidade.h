@@ -81,7 +81,6 @@ class FEntidade {
 		
 	public:
 		virtual bool NoCarregar (char * arquivo, int width, int height, int maxFrames);
-		virtual bool Rotacionar(double angulo, double zoom, int smooth);
 		virtual void NoLaco();
 		virtual void NaRenderizacao(SDL_Surface * planoExibicao);
 		virtual void NaLimpeza();
@@ -90,13 +89,14 @@ class FEntidade {
 
 		SDL_Surface * GetSuperficie();
 		void SetSuperficie(SDL_Surface *);
+		virtual bool Rotacionar(double angulo, double zoom, int smooth);
 		
 	public:
-		void	NoMovimento(float moveX, float moveY)
+		void	NoMovimento(float moveX, float moveY);
 		void	PararMovimento();
 
 	public:
-		Colisoes(int oX, int oY, int oW, int oH);
+		bool Colisoes(int oX, int oY, int oW, int oH);
 	
 	private:
 		bool PosValido(int novoX, int novoY);

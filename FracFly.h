@@ -10,34 +10,27 @@
 
 #include "Definicoes.h"
  
-#include "FArea.h"
-#include "FCamera.h"
-#include "FSuperficie.h"
-#include "FAnimacao.h"
 #include "FEvento.h"
-#include "FEntidade_Tiro.h"
-#include "FEntidade_Arma.h"
 #include "FEntidade.h"
 
 using namespace std;
 
 class FracFly : public FEvento {
 	private:
-		bool Rodando;
+		bool rodando;
 		
-		SDL_Surface * Plano_Exibicao;
-		SDL_Surface * Surf_bg;
+		//superficies
+		SDL_Surface * planoExibicao;
 		
 	private:
-		FEntidade_Arma Arma1;
-		FEntidade_Arma Arma2;
+		//entidades
 		
 	public:
 		FracFly();
 		int naExec();
 		
 		bool NoInic();
-		void NoEvento(SDL_Event * Evento);
+		void NoEvento(SDL_Event * evento);
 			void OnExit();
 			void OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode);
 			void OnKeyUp(SDLKey sym, SDLMod mod, Uint16 unicode);

@@ -1,101 +1,64 @@
 #include "FracFly.h"
 
+/**
+ * Metodo NoEvento, herdada da classe FEvento, permite o uso dos metodos virtuais
+ * implementado os eventos como teclas, movimento e clique do mouse
+ **/
 void FracFly::NoEvento(SDL_Event * Evento) {
 	FEvento::NoEvento(Evento);
 }
 
+/**
+ * Metodos de Eventos
+ **/
+
+//Evento de saida, seta a variavel rodando como falsa, finalizando o laço infinito
 void FracFly::OnExit() {
-	Rodando = false;
+	rodando = false;
 }
 
+//Evento de tecla pressionada
 void FracFly::OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode) {
 	switch(sym) {
-		case SDLK_ESCAPE:
+		case SDLK_ESCAPE: //Esc
 			OnExit();
 			break;
-		/**
-		case SDLK_UP:
-			FEntidade::ListaEntidades[1]->moveCima = true;
-			break;
-		case SDLK_DOWN:
-			FEntidade::ListaEntidades[1]->moveBaixo = true;
-			break;
-		case SDLK_RIGHT:
-			FEntidade::ListaEntidades[1]->moveDireita = true;
-			break;
-		case SDLK_LEFT:
-			FEntidade::ListaEntidades[1]->moveEsquerda = true;
-			break;
-        case SDLK_UP:
-			FCamera::ControleCamera.NoMovimento( 0,  5);
-			break;
-        case SDLK_DOWN:
-			FCamera::ControleCamera.NoMovimento( 0, -5);
-			break;
-        case SDLK_LEFT:
-			FCamera::ControleCamera.NoMovimento( 5,  0);
-			break;
-        case SDLK_RIGHT:
-			FCamera::ControleCamera.NoMovimento(-5,  0);
-			break;
-		**/
 		default:
 			break;
 	}
 }
+//Evento de soltar a tecla pressionada
 void FracFly::OnKeyUp(SDLKey sym, SDLMod mod, Uint16 unicode) {
 	switch(sym) {
-		case SDLK_UP:
-			FEntidade::ListaEntidades[1]->moveCima = false;
-			break;
-		case SDLK_DOWN:
-			FEntidade::ListaEntidades[1]->moveBaixo = false;
-			break;
-		case SDLK_RIGHT:
-			FEntidade::ListaEntidades[1]->moveDireita = false;
-			break;
-		case SDLK_LEFT:
-			FEntidade::ListaEntidades[1]->moveEsquerda = false;
-			break;
 		default:
 			break;
 	}
 }
 
+//Evento de movimentação do mouse e cliques enquanto se move
 void FracFly::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle) {
-/**	
-	double distancia = sqrt(pow(mX - Arma1.X, 2) + pow(mY - Arma1.Y, 2));
-	
-	double deltay =  (double) Arma1.Y-mY ;
-	
-	
-	double angulo = (double) 90*(deltay/distancia);
-**/    
-    /* Rotate */
-    //SDL_Surface *extraSurface;
-    //extraSurface = rotozoomSurface(Arma1.getSurface(), angulo, 1, 1); 
-    //Arma1.setSurface(extraSurface);
-    //SDL_FreeSurface(extraSurface);
-
-    //Arma1.Rotacionar(angulo,(double) 1,1);
-	
 }
-
+//Evento de pressionar o botao esquerdo do mouse
 void FracFly::OnLButtonDown(int mX, int mY) {
-	Arma1.Atirar(mX,mY);
+	//Arma1.Atirar(mX,mY);
 }
+//Evento de soltar o botao esquerdo do mouse
 void FracFly::OnLButtonUp(int mX, int mY) {
 	
 }
+//Evento de pressionar o botao direito do mouse
 void FracFly::OnRButtonDown(int mX, int mY) {
 	
 }
+//Evento de soltar o botao direito do mouse
 void FracFly::OnRButtonUp(int mX, int mY) {
 	
 }
+//Evento de pressionar o botao do meio do mouse
 void FracFly::OnMButtonDown(int mX, int mY) {
 	
 }
+//Evento de soltar o botao do meio do mouse
 void FracFly::OnMButtonUp(int mX, int mY) {
 	
 }

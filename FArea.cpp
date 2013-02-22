@@ -1,68 +1,116 @@
 #include "FArea.h"
 
-FArea FArea::ControleArea;
+/**
+ * Variavel estatica que controla todas areas 
+ **/
+FArea FArea::controleArea;
 
+/**
+ * Construtor de Area
+ **/
 FArea::FArea() {
-	TamArea = 0;
+	tamArea = 0;
 }
 
-bool FArea::NoCarregar(char * Arquivo) {
-	ListaMapas.clear();
-	FILE * arqMan = fopen(Arquivo, "r");
+/**
+ * Carrega a lista de mapas na area
+ **/
+bool FArea::NoCarregar(char * arquivo) {
+	listaMapas.clear();
+	FILE * arqMan = fopen(arquivo, "r");
 	if (arqMan == NULL) {
-		printf("FArea: Não foi possivel abrir %s\n", Arquivo);
+		printf("FArea: Não foi possivel abrir %s\n", arquivo);
 		return false;
 	}
-	char ConjAzulejoArquivo[255];
-	fscanf(arqMan, "%s\n", ConjAzulejoArquivo);
+	char conjAzulejoArquivo[255];
+	fscanf(arqMan, "%s\n", conjAzulejoArquivo);
 	
-	if((Surf_ConjAzulejo = FSuperficie::NoCarregar(ConjAzulejoArquivo)) == false)	{
+	if((superficieConjAzulejo = FSuperficie::NoCarregar(conjAzulejoArquivo)) == false)	{
 		fclose(arqMan);
-		printf("FArea: Não foi possivel abrir %s\n", ConjAzulejoArquivo);
+		printf("FArea: Não foi possivel abrir %s\n", conjAzulejoArquivo);
 		return false;
 	}
 	
-	fscanf(arqMan, "%d\n", &TamArea);
-	for(int X = 0; X < TamArea; X++) {
-		for(int Y = 0; Y < TamArea; Y++) {
-			char MapArquivo[255];
-			fscanf(arqMan, "%s ", MapArquivo);
+	fscanf(arqMan, "%d\n", &tamArea);
+	for(int x = 0; x < tamArea; x++) {
+		for(int y = 0; y < tamArea; y++) {
+			char mapArquivo[255];
+			fscanf(arqMan, "%s ", mapArquivo);
 			
 			FMap tempMap;
-			if(tempMap.NoCarregar(MapArquivo) == false) {
+			if(tempMap.NoCarregar(mapArquivo) == false) {
 				fclose(arqMan);
-				printf("FArea: Não foi possivel abrir %s\n", MapArquivo);
+				printf("FArea: Não foi possivel abrir %s\n", mapArquivo);
 				return false;
 			}
-			tempMap.Surf_ConjAzulejo = Surf_ConjAzulejo;
-			ListaMapas.push_back(tempMap);
+			tempMap.superficieConjAzulejo = superficieConjAzulejo;
+			listaMapas.push_back(tempMap);
 		}
 	}
 	return true;
 }
 
-void FArea::NaRenderizacao(SDL_Surface * Plano_Exibicao, int CameraX, int CameraY) {
-	int MapWidth = MAP_WIDTH * TAMANHO_AZULEJO;
-	int MapHeight = MAP_HEIGHT * TAMANHO_AZULEJO;
-	int PrimeiroID = -CameraX / MapWidth;
-		PrimeiroID = PrimeiroID + ((-CameraX / MapHeight) * TamArea);
+/**
+ * Renderiza a area
+ **/
+void FArea::NaRenderizacao(SDL_Surface * planoExibicao, int cameraX, int cameraY) {
+	int mapWidth = MAP_WIDTH * TAMANHO_AZULEJO;
+	int mapHeight = MAP_HEIGHT * TAMANHO_AZULEJO;
+	int primeiroId = -cameraX / mapWidth;
+		primeiroId = primeiroId + ((-cameraX / mapHeight) * tamArea);
 		
 	for(int i = 0; i < 4; i++) {
-		int ID = (PrimeiroID + (((i / 2) * TamArea) + (i % 2)));
-		if (ID = 0 || ID >= (int) ListaMapas.size()) continue;
+		int id = (primeiroId + (((i / 2) * tamArea) + (i % 2)));
 		
-		int X = ((ID % TamArea) * MapWidth) + CameraX;
-		int Y = ((ID / TamArea) * MapHeight) + CameraY;
+		if (id < 0 || id >= (int) listaMapas.size()) continue;
 		
-		ListaMapas[ID].NaRenderizacao(Plano_Exibicao, X, Y);
+		int x = ((id % tamArea) * mapWidth) + cameraX;
+		int y = ((id / tamArea) * mapHeight) + cameraY;
+		
+		listaMapas[id].NaRenderizacao(planoExibicao, x, y);
 		
 	}
 }
 
+/**
+ * coletor de lixo da area
+ **/
 void FArea::NaLimpeza() {
-	if (Surf_ConjAzulejo) {
-		SDL_FreeSurface(Surf_ConjAzulejo);
+	if (superficieConjAzulejo) {
+		SDL_FreeSurface(superficieConjAzulejo);
 	}
 	
-	ListaMapas.clear();
+	listaMapas.clear();
+}
+
+/**
+ * Retorna um mapa apartir de uma posicao
+ **/
+FMap * FArea::GetMap(int x, int y) {
+	int mapWidth = MAP_WIDTH * TAMANHO_AZULEJO;
+	int mapHeight = MAP_HEIGHT * TAMANHO_AZULEJO;
+	
+	int id = x / mapWidth;
+		id = id + (y / mapHeight) * tamArea;
+	
+	if (id < 0 || id >= (int) listaMapas.size()) {
+		return NULL;
+	}
+	return &listaMapas[id];
+
+}
+
+/**
+ * Retorna um azulejo apartir de uma posicao
+ **/
+FAzulejo * FArea::GetAzulejo(int x, int y) {
+	int mapWidth = MAP_WIDTH * TAMANHO_AZULEJO;
+	int mapHeight = MAP_HEIGHT * TAMANHO_AZULEJO;
+	
+	FMap * mapa = GetMap(x, y);
+	if (mapa == NULL) return NULL;
+	x = x % mapWidth;
+	y = y % mapHeight;
+	
+	return mapa->GetAzulejo(x, y);
 }

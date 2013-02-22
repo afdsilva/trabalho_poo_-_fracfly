@@ -1,23 +1,21 @@
 #include "FracFly.h"
-
+/**
+ * Metodo de Inicializacao de variaveis, configurações e de carregar recursos
+ **/
 bool FracFly::NoInic() {
+	//inicializa todos recursos do SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		printf("NoInic: Não foi possivel Inicializar SDL\n");
 		return false;
 	}
-	
-	if ((Plano_Exibicao = SDL_SetVideoMode(WWIDTH, WHEIGHT, 32, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL) {
+	//inicializa um plano de exibicao, todas outras superficies são criadas em cima dela
+	if ((planoExibicao = SDL_SetVideoMode(WWIDTH, WHEIGHT, 32, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL) {
 		printf("NoInic: Não foi possivel criar Plano Exibição\n");
 		return false;
 	}
 	
-	/**
-	char bg[] = "res/teste.bmp";
-	if ((Surf_bg = FSuperficie::NoCarregar(bg)) == NULL) {
-		return false;
-	}
-	**/
-
+	/** Areas serao carregas no estado correto (futura implementacao)
+	//carrega Area (areas sao conjuntos de mapas)
 	char Area[] = "maps/1.area";
 	if(FArea::ControleArea.NoCarregar(Area) == false) {
 		printf("NoInic: Não foi possivel carregar Area: %s\n", Area);
@@ -25,7 +23,10 @@ bool FracFly::NoInic() {
 	}
 	 
 	SDL_EnableKeyRepeat(1, SDL_DEFAULT_REPEAT_INTERVAL / 3);
+	**/
 
+	/**
+	 * Personagem devera ser carregado no estado de jogo
 	char Arquivo[] = "res/yoshi.png";
 	char Arquivo2[] = "res/yoshi.png";
 	
@@ -53,6 +54,6 @@ bool FracFly::NoInic() {
 
 	FEntidade::ListaEntidades.push_back(&Arma1);
 	FEntidade::ListaEntidades.push_back(&Arma2);
-
+	**/
 	return true;
 }

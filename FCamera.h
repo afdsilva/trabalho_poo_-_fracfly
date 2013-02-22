@@ -12,32 +12,32 @@ enum {
  
 class FCamera {
     public:
-        static FCamera ControleCamera;
+        static FCamera controleCamera;
  
     private:
-        int X;
-        int Y;
+        int x;
+        int y;
  
-        int* AlvoX;
-        int* AlvoY;
+        int * alvoX;
+        int * alvoY;
  
     public:
-        int ModoAlvo;
+        int modoAlvo;
  
     public:
         FCamera();
  
     public:
-        void NoMovimento(int MovX, int MovY);
+        void NoMovimento(int movX, int movY);
  
     public:
         int GetX();
         int GetY();
  
     public:
-        void SetPos(int X, int Y);
+        void SetPos(int x, int y);
  
-        void SetAlvo(int* X, int* Y);
+        void SetAlvo(int* x, int* y);
 };
  
 #endif

@@ -1,50 +1,50 @@
 #include "FCamera.h"
  
-FCamera FCamera::ControleCamera;
+FCamera FCamera::controleCamera;
  
 FCamera::FCamera() {
-    X = Y = 0;
+    x = y = 0;
  
-    AlvoX = AlvoY = NULL;
+    alvoX = alvoY = NULL;
  
-    ModoAlvo = MODO_ALVO_NORMAL;
+    modoAlvo = MODO_ALVO_NORMAL;
 }
  
-void FCamera::NoMovimento(int MovX, int MovY) {
-    X += MovX;
-    Y += MovY;
+void FCamera::NoMovimento(int movX, int movY) {
+    x += movX;
+    y += movY;
 }
  
 int FCamera::GetX() {
-    if(AlvoX != NULL) {
-        if(ModoAlvo == MODO_ALVO_CENTRO) {
-            return *AlvoX - (WWIDTH / 2);
+    if(alvoX != NULL) {
+        if(modoAlvo == MODO_ALVO_CENTRO) {
+            return * alvoX - (WWIDTH / 2);
         }
  
-        return * AlvoX;
+        return * alvoX;
     }
  
-    return X;
+    return x;
 }
  
 int FCamera::GetY() {
-    if(AlvoY != NULL) {
-        if(ModoAlvo == MODO_ALVO_CENTRO) {
-            return *AlvoY - (WHEIGHT / 2);
+    if(alvoY != NULL) {
+        if(modoAlvo == MODO_ALVO_CENTRO) {
+            return * alvoY - (WHEIGHT / 2);
         }
  
-        return *AlvoY;
+        return * alvoY;
     }
  
-    return Y;
+    return y;
 }
  
 void FCamera::SetPos(int X, int Y) {
-    this->X = X;
-    this->Y = Y;
+    this->x = x;
+    this->y = y;
 }
  
-void FCamera::SetAlvo(int* X, int* Y) {
-    AlvoX = X;
-    AlvoY = Y;
+void FCamera::SetAlvo(int * x, int * y) {
+    alvoX = x;
+    alvoY = y;
 }

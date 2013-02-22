@@ -1,22 +1,26 @@
 #include "FracFly.h"
-
+/**
+ * Metodo que faz a magica de desenhar as superficies na tela
+ **/
 void FracFly::NaRenderizacao() {
 	
-	FSuperficie::NoDesenhar(Plano_Exibicao, Surf_bg, 0, 0);
+	//FSuperficie::NoDesenhar(planoExibicao, Surf_bg, 0, 0);
 	
-	FArea::ControleArea.NaRenderizacao(Plano_Exibicao, FCamera::ControleCamera.GetX(), FCamera::ControleCamera.GetY());
+	FArea::controleArea.NaRenderizacao(planoExibicao, FCamera::controleCamera.GetX(), FCamera::controleCamera.GetY());
 	
 	//~ FundoFractal :: Exibir();
 	
-	for(int i = 0;i < (int) FEntidade::ListaEntidades.size();i++) {
-		if(!FEntidade::ListaEntidades[i]) continue;
-		FEntidade::ListaEntidades[i]->NaRenderizacao(Plano_Exibicao);
+	for(int i = 0;i < (int) FEntidade::listaEntidades.size();i++) {
+		if(!FEntidade::listaEntidades[i]) continue;
+		FEntidade::listaEntidades[i]->NaRenderizacao(planoExibicao);
 	}
-	for(int i = 0;i < (int) FEntidade_Tiro::ListaTiros.size();i++) {
-		if(!FEntidade_Tiro::ListaTiros[i]) continue;
-		FEntidade_Tiro::ListaTiros[i]->NaRenderizacao(Plano_Exibicao);
+	/**
+	for(int i = 0;i < (int) FEntidade_Tiro::listaEntidades.size();i++) {
+		if(!FEntidade_Tiro::listaEntidades[i]) continue;
+		FEntidade_Tiro::listaEntidades[i]->NaRenderizacao(planoExibicao);
 	}
+	**/
 	
 	
-	SDL_Flip(Plano_Exibicao);
+	SDL_Flip(planoExibicao);
 }

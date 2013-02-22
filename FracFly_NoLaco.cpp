@@ -5,64 +5,32 @@ Uint16 waittime = 1000.0f/FPS;
 Uint16 framestarttime = 0;
 Sint16 delaytime;
 
+/**
+ * Metodo que controla o laço (loop) do jogo, todas ações que requererem modificar dados das entidades
+ * é feita nesse metodo;
+ **/
 void FracFly::NoLaco() {
-	// CUIDANDO DO FUNDO
-		//~ if (CentreRe != AimRe) CentreRe = (AimRe+CentreRe)/2;
-		//~ if (CentreIm != AimIm) CentreIm = (AimIm+CentreIm)/2;
-//~ 
-		//~ if ( (CentreRe/AimRe) < 0.01 ) CentreRe = AimRe;
-		//~ if ( (CentreIm/AimIm) < 0.01 ) CentreIm = AimIm;
-//~ 
-		//~ MinRe = CentreRe - (Zoom/2.0); 
-		//~ MaxRe = CentreRe + (Zoom/2.0);
-		//~ MinIm = CentreIm + (((MaxRe-MinRe)*SCREEN_HEIGHT/SCREEN_WIDTH)/2);
-		//~ MaxIm = CentreIm - (((MaxRe-MinRe)*SCREEN_HEIGHT/SCREEN_WIDTH)/2);  
-//~ 
-		//~ ReFactor = (MaxRe-MinRe)/(SCREEN_WIDTH-1);	
-		//~ ImFactor = (MaxIm-MinIm)/(SCREEN_HEIGHT-1);
-//~ 
-		//~ if (AnimateK) 
-		//~ {
-			//~ double r = (1.0/1.0)*cos(6.0*AnimateN);
-						//~ 
-			//~ KRe = r*cos(AnimateN);
-			//~ KIm = r*sin(AnimateN);
-			//~ 
-			//~ AnimateN += 0.0002;
-		//~ }
-//~ 
-		//~ if (MaxIterations <= 0) MaxIterations = 10;
-//~ 
-		//~ if (FracType == 1 && ShowDot) plot(screen, KRe, KIm);
-//~ 
-		//~ if (ShowAxis) {
-			//~ for (y = -2.0; y <= 2.0; y += 0.003 ) plot(screen, 0, y);
-			//~ for (x = -2.0; x <= 2.0; x += 0.003 ) plot(screen, x, 0);
-		//~ }
-//~ 
-		//~ if (ShowGrid) {
-			//~ for (y = -2.0; y <= 2.0; y += 0.25 ) {
-				//~ for (x = -2.0; x <= 2.0; x += 0.25 ) {
-					//~ plot(screen, x, y);
-				//~ }
-			//~ }
-		//~ }
-		
-	// FIM FUNDO
-	
-	
-	
-	for(int i = 0;i < (int) FEntidade::ListaEntidades.size();i++) {
-		if(!FEntidade::ListaEntidades[i]) continue;
-		FEntidade::ListaEntidades[i]->NoLaco();
+	//chama cada entidade na lista de entidades, utilizando o metodo apripriado para as entidades no FEntidade.cpp
+	for(int i = 0;i < (int) FEntidade::listaEntidades.size();i++) {
+		//como a lista de entidades é um vetor, esse vetor pode ter buracos
+		//o if abaixo impede que seja feitas chamadas desnecessarias quando nao existe mais o objeto no vetor
+		if(!FEntidade::listaEntidades[i]) continue;
+		//reduz o tamanho do vetor se verifica que o ultimo estado da lista é morto, ajuda (espero) na limpeza de objetos
+		if (FEntidade::listaEntidades[i]->morto && (int) FEntidade::listaEntidades.size() == i+1) {
+			FEntidade::listaEntidades.pop_back();
+		}
+		//chama o metodo NoLaco() do objeto, definido no FEntidade.cpp
+		FEntidade::listaEntidades[i]->NoLaco();
 	}
-	//cout << "Tam: " << (int) FEntidade_Tiro::ListaTiros.size() << endl;
+	/** Tiros desabilitados ** /
 	for(int i = 0;i < (int) FEntidade_Tiro::ListaTiros.size();i++) {
 		if(!FEntidade_Tiro::ListaTiros[i]) continue;
+		//verifica se o estado esta ativo, mudar pra flag morto, 
 		if (!FEntidade_Tiro::ListaTiros[i]->Ativo && (int) FEntidade_Tiro::ListaTiros.size() == i+1 ) //gambimodeon
 			FEntidade_Tiro::ListaTiros.pop_back();
 		FEntidade_Tiro::ListaTiros[i]->NoLaco();
 	}
+	**/
 	//Reduz o consumo de CPU adicionando um delay
 	delaytime = waittime - (SDL_GetTicks() - framestarttime);
     if(delaytime > 0)

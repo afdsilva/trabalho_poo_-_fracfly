@@ -31,7 +31,7 @@ void FAnimacao::NaAnimacao() {
         }
     }else{
         if(frameAtual >= maxFrames) {
-            FrameAtual = 0;
+            frameAtual = 0;
         }
     }
 }
@@ -47,5 +47,5 @@ void FAnimacao::SetFrameAtual(int frame) {
 }
  
 int FAnimacao::GetFrameAtual() {
-    return FrameAtual;
+    return frameAtual;
 }

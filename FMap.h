@@ -9,17 +9,21 @@
 
 class FMap {
 	public:
-		SDL_Surface * Surf_ConjAzulejo;
+		SDL_Surface * superficieConjAzulejo;
 		
 	private:
-		std::vector<FAzulejo> ListaAzulejo;
+		std::vector<FAzulejo> listaAzulejo;
 		
 	public:
 		FMap();
 		
 	public:
-		bool NoCarregar(char * File);
-		void NaRenderizacao(SDL_Surface * Plano_Exibicao, int MapX, int MapY);
+		bool NoCarregar(char * arquivo);
+		void NaRenderizacao(SDL_Surface * planoExibicao, int mapX, int mapY);
+		
+	public:
+		FAzulejo * GetAzulejo(int x, int y);
+
 };
 
 #endif

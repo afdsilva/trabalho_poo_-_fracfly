@@ -8,13 +8,13 @@ class FFPS {
 		static FFPS FPSControle;
 		
 	private:
-		int TempoAntigo;
-		int UltimoTempo;
+		int tempoAntigo;
+		int ultimoTempo;
 		
-		float FatorVelocidade;
+		float fatorVelocidade;
 		
-		int NumFrames;
-		int Frames;
+		int numFrames;
+		int frames;
 		
 	public:
 		FFPS();

@@ -4,9 +4,8 @@
  * Construtor Da classe principal
  **/
 FracFly::FracFly() {
-	Surf_bg = NULL;
-	Plano_Exibicao = NULL;
-	Rodando = true;
+	planoExibicao = NULL;
+	rodando = true;
 }
 
 /**
@@ -18,14 +17,14 @@ int FracFly::naExec() {
 		return -1;
 	}
 	
-	SDL_Event Evento;
+	SDL_Event evento;
 	
 	//Permanece no loop infinito enquanto nao for especificado para sair
 	//cout << FEntidade_Tiro::ListaTiros.size() << endl;
-	while(Rodando) {
+	while(rodando) {
 		//checa por eventos e passa um por um para o NoEvento
-		while(SDL_PollEvent(&Evento)) {
-			NoEvento(&Evento);
+		while(SDL_PollEvent(&evento)) {
+			NoEvento(&evento);
 		}
 		
 		//move dados ou nao

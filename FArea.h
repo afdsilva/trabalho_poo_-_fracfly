@@ -5,19 +5,24 @@
 
 class FArea {
 	public:
-		static FArea ControleArea;
+		static FArea 		controleArea;
 	public:
-		std::vector<FMap> ListaMapas;
+		std::vector<FMap> 	listaMapas;
 		
 	private:
-		int TamArea;
-		SDL_Surface * Surf_ConjAzulejo;
+		int 			tamArea;
+		SDL_Surface * 	superficieConjAzulejo;
 		
 	public:
 		FArea();
-		bool NoCarregar(char * Arquivo);
-		void NaRenderizacao(SDL_Surface * Plano_Exibicao, int CameraX, int CameraY);
-		void NaLimpeza();
+		bool 	NoCarregar(char * arquivo);
+		void 	NaRenderizacao(SDL_Surface * planoExibicao, int cameraX, int cameraY);
+		void 	NaLimpeza();
+		
+	public:
+		FMap * 		GetMap(int x, int y);
+		FAzulejo * 	GetAzulejo(int x, int y);
+
 };
 
 #endif

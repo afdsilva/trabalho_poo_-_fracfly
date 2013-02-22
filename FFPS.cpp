@@ -3,32 +3,32 @@
 FFPS FFPS::FPSControle;
 
 FFPS::FFPS() {
-	TempoAntigo = 0;
-	UltimoTempo = 0;
+	tempoAntigo = 0;
+	ultimoTempo = 0;
 	
-	FatorVelocidade = 0;
+	fatorVelocidade = 0;
 	
-	Frames = 0;
-	NumFrames = 0;
+	frames = 0;
+	numFrames = 0;
 }
 
 void FFPS::NoLaco() {
-	if(TempoAntigo + 1000 < SDL_GetTicks()) {
-		TempoAntigo = SDL_GetTicks();
-		NumFrames = Frames;
-		Frames = 0;
+	if(tempoAntigo + 1000 < (int)SDL_GetTicks()) {
+		tempoAntigo = SDL_GetTicks();
+		numFrames = frames;
+		frames = 0;
 	}
-	FatorVelocidade = ((SDL_GetTicks() - UltimoTempo) / 1000.0f) * 32.0f;
+	fatorVelocidade = ((SDL_GetTicks() - ultimoTempo) / 1000.0f) * 32.0f;
 	
-	UltimoTempo = SDL_GetTicks();
+	ultimoTempo = SDL_GetTicks();
 	
-	Frames++;
+	frames++;
 }
 
 int FFPS::GetFPS() {
-	return NumFrames;
+	return numFrames;
 }
 
 float FFPS::GetFatorVelocidade() {
-	return FatorVelocidade;
+	return fatorVelocidade;
 }

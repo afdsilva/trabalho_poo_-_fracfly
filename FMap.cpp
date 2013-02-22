@@ -1,23 +1,29 @@
 #include "FMap.h"
 
+/**
+ * Construtor do mapa;
+ **/
 FMap::FMap() {
-	Surf_ConjAzulejo = NULL;
+	superficieConjAzulejo = NULL;
 }
 
-bool FMap::NoCarregar(char * Arquivo) {
-	ListaAzulejo.clear();
+/**
+ * Carrega um recurso de mapa
+ **/
+bool FMap::NoCarregar(char * arquivo) {
+	listaAzulejo.clear();
 	
-	FILE * arqMan = fopen(Arquivo, "r");
+	FILE * arqMan = fopen(arquivo, "r");
 	
 	if(arqMan == NULL) {
-		printf("FMap: Não foi possivel abrir %s\n", Arquivo);
+		printf("FMap: Não foi possivel abrir %s\n", arquivo);
 		return false;
 	}
-	for (int Y = 0; Y < MAP_HEIGHT; Y++) {
-		for (int X = 0; X < MAP_WIDTH; X++) {
+	for (int y = 0; y < MAP_HEIGHT; y++) {
+		for (int x = 0; x < MAP_WIDTH; x++) {
 			FAzulejo tmpAzulejo;
-			fscanf(arqMan, "%d:%d", &tmpAzulejo.AzulejoID, &tmpAzulejo.TipoID);
-			ListaAzulejo.push_back(tmpAzulejo);
+			fscanf(arqMan, "%d:%d", &tmpAzulejo.azulejoId, &tmpAzulejo.tipoId);
+			listaAzulejo.push_back(tmpAzulejo);
 		}
 		fscanf(arqMan, "\n");
 	}
@@ -26,27 +32,44 @@ bool FMap::NoCarregar(char * Arquivo) {
 	return true;
 }
 
-void FMap::NaRenderizacao(SDL_Surface * Plano_Exibicao, int MapX, int MapY) {
-	if (Surf_ConjAzulejo == NULL) return;
-	int ConjAzulejoWidth = Surf_ConjAzulejo->w / TAMANHO_AZULEJO;
-	//int ConjAzulejoHeight = Surf_ConjAzulejo->h / TAMANHO_AZULEJO;
+/**
+ * Renderiza o Mapa
+ **/
+void FMap::NaRenderizacao(SDL_Surface * planoExibicao, int mapX, int mapY) {
+	if (superficieConjAzulejo == NULL) return;
+	int conjAzulejoWidth = superficieConjAzulejo->w / TAMANHO_AZULEJO;
+	//int ConjAzulejoHeight = superficieConjAzulejo->h / TAMANHO_AZULEJO;
 	
-	int ID = 0;
-	for (int Y = 0; Y < MAP_HEIGHT;Y++) {
-		for (int X = 0; X < MAP_HEIGHT;X++) {
-			if(ListaAzulejo[ID].TipoID == AZULEJO_TIPO_NONE) {
-				ID++;
+	int id = 0;
+	for (int y = 0; y < MAP_HEIGHT;y++) {
+		for (int x = 0; x < MAP_HEIGHT;x++) {
+			if(listaAzulejo[id].tipoId == AZULEJO_TIPO_NONE) {
+				id++;
 				continue;
 			}
-			int tX = MapX + (X * TAMANHO_AZULEJO);
-			int tY = MapY + (Y * TAMANHO_AZULEJO);
+			int tX = mapX + (x * TAMANHO_AZULEJO);
+			int tY = mapY + (y * TAMANHO_AZULEJO);
 			
-			int ConjAzulejoX = (ListaAzulejo[ID].AzulejoID % ConjAzulejoWidth) * TAMANHO_AZULEJO;
-			int ConjAzulejoY = (ListaAzulejo[ID].AzulejoID / ConjAzulejoWidth) * TAMANHO_AZULEJO;
+			int conjAzulejoX = (listaAzulejo[id].azulejoId % conjAzulejoWidth) * TAMANHO_AZULEJO;
+			int conjAzulejoY = (listaAzulejo[id].azulejoId / conjAzulejoWidth) * TAMANHO_AZULEJO;
 			
-			FSuperficie::NoDesenhar(Plano_Exibicao, Surf_ConjAzulejo, tX, tY, ConjAzulejoX, ConjAzulejoY, TAMANHO_AZULEJO, TAMANHO_AZULEJO);
+			FSuperficie::NoDesenhar(planoExibicao, superficieConjAzulejo, tX, tY, conjAzulejoX, conjAzulejoY, TAMANHO_AZULEJO, TAMANHO_AZULEJO);
 			
-			ID++;
+			id++;
 		}
 	}
+}
+
+/**
+ * Retorna um azulejo apartir de uma posicao
+ **/
+FAzulejo * FMap::GetAzulejo(int x, int y) {
+	int id = 0;
+	id = x / TAMANHO_AZULEJO;
+	id = id + (MAP_WIDTH * (y / TAMANHO_AZULEJO));
+	if (id < 0 || id >= (int)listaAzulejo.size()) {
+		return NULL;
+	}
+	
+	return &listaAzulejo[id];
 }

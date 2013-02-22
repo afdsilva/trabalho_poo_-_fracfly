@@ -1,13 +1,23 @@
 #include "FEntidade.h"
 
+/**
+ * Inicializacao das Listas:
+ *  Entidades e Colisoes
+ **/
 std::vector<FEntidade*> FEntidade::listaEntidades;
 std::vector<FEntidadeColisao> FEntidadeColisao::listaEntidadesColisoes;
 
+/**
+ * Inicializa um objeto colisão entre 2 entidades
+ **/
 FEntidadeColisao::FEntidadeColisao() {
 		entidadeA = NULL;
 		entidadeB = NULL;
 }
 
+/**
+ * Inicializa uma entidade
+ **/
 FEntidade::FEntidade() {
 
 	superficieEntidade = NULL;
@@ -47,18 +57,33 @@ FEntidade::FEntidade() {
 
 }
 
+/**
+ * Destrutor de uma entidade
+ **/
 FEntidade::~FEntidade() {
 }
 
-SDL_Surface *FEntidade::getSurface(){
+/**
+ * retorna a superficie de uma entidade
+ * criado para o metodo rotate, porem agora sem um uso especifico
+ **/
+SDL_Surface * FEntidade::GetSuperficie(){
 	return superficieEntidade;
 	}
 
-void FEntidade::setSurface(SDL_Surface * novaSuperficie){
+/**
+ * Seta uma superficie de uma entidade
+ * criado para o metodo rotate, porem agora sem um uso especifico
+ **/
+void FEntidade::SetSuperficie(SDL_Surface * novaSuperficie){
 	superficieEntidade = novaSuperficie;
 }	
+
+/**
+ * Carrega um recurso na entidade (a princio imagem)
+ **/
 bool FEntidade::NoCarregar (char * arquivo, int width, int height, int maxFrames) {
-	if ((superficieEntidade = FSuperficie::NoCarregar(Arquivo)) == NULL) {
+	if ((superficieEntidade = FSuperficie::NoCarregar(arquivo)) == NULL) {
 		return false;
 	}
 	FSuperficie::Transparencia(superficieEntidade, 255, 0, 255);
@@ -71,6 +96,9 @@ bool FEntidade::NoCarregar (char * arquivo, int width, int height, int maxFrames
 	return true;
 }
 
+/**
+ * Controla o fluxo de dados da entidade durante o Laço
+ **/
 void FEntidade::NoLaco() {
 	if (moveEsquerda == false && moveDireita == false) {
 		PararMovimento();
@@ -78,7 +106,7 @@ void FEntidade::NoLaco() {
 	if (moveEsquerda)
 		acelX = -0.5;
 	else if (moveDireita)
-		acel = 0.5;
+		acelX = 0.5;
 	
 	if (flags & ENTIDADE_FLAG_GRAVIDADE) {
 		acelY = 0.75f;
@@ -95,12 +123,19 @@ void FEntidade::NoLaco() {
 	NoMovimento(velX, velY);
 }
 
+/**
+ * Controla a renderização na tela da entidade
+ **/
 void FEntidade::NaRenderizacao(SDL_Surface * planoExibicao) {
 	if (superficieEntidade == NULL || planoExibicao == NULL) return;
 	
-	FSuperficie::NoDesenhar(planoExibicao, superficieEntidade, X - FCamera::ControleCamera.GetX(), Y - FCamera::ControleCamera.GetY(), frameAtualCol * width, (frameAtualLinha + controleAnimacao.GetFrameAtual() * height, width, height);
-}
+	FSuperficie::NoDesenhar(	planoExibicao, 	superficieEntidade, 	x - FCamera::controleCamera.GetX(), 	y - FCamera::controleCamera.GetY(), 	frameAtualCol * width, 		(frameAtualLinha + controleAnimacao.GetFrameAtual()) * height, 	width, 	height);
+	//CSurface::OnDraw(			Surf_Display, 	Surf_Entity, 			X - CCamera::CameraControl.GetX(), 		Y - CCamera::CameraControl.GetY(), 		CurrentFrameCol * Width, 	(CurrentFrameRow + Anim_Control.GetCurrentFrame()) * Height, 	Width, 	Height);
 
+}
+/**
+ * Coletor de Lixo da entidade
+ **/
 void FEntidade::NaLimpeza() {
 	if(superficieEntidade) {
 		SDL_FreeSurface(superficieEntidade);
@@ -108,6 +143,9 @@ void FEntidade::NaLimpeza() {
 	superficieEntidade = NULL;
 }
 
+/**
+ * Controle de Animação da entidade
+ **/
 void FEntidade::NaAnimacao() {
 	if (moveEsquerda) {
 		frameAtualCol = 0;
@@ -117,11 +155,16 @@ void FEntidade::NaAnimacao() {
 	controleAnimacao.NaAnimacao();
 }
 
+/**
+ * Controle de Colisão da entidade
+ **/
 void FEntidade::NaColisao(FEntidade * entidade) {
-	
 }
 
-void NoMovimento(float moveX, float moveY) {
+/**
+ * Metodo para movimentar a entidade na tela
+ **/
+void FEntidade::NoMovimento(float moveX, float moveY) {
 	if (moveX == 0 && moveY == 0) return;
 	
 	double novoX = 0;
@@ -177,7 +220,9 @@ void NoMovimento(float moveX, float moveY) {
 	}
 	
 }
-
+/**
+ * Para o movimento de uma entidade gradualmente, reduzindo a aceleracao
+ **/
 void FEntidade::PararMovimento() {
 	if (velX > 0) {
 		acelX = -1;
@@ -191,7 +236,11 @@ void FEntidade::PararMovimento() {
 		velX = 0;
 	}
 }
-void FEntidade::Colisoes(int oX, int oY, int oW, int oH) {
+
+/**
+ * Verifica se há colisao entre a entidade com os argumentos passados (x,y,w,h)
+ **/
+bool FEntidade::Colisoes(int oX, int oY, int oW, int oH) {
 	int esquerda1, esquerda2;
 	int direita1, direita2;
 	int topo1, topo2;
@@ -221,19 +270,22 @@ void FEntidade::Colisoes(int oX, int oY, int oW, int oH) {
 	return true;
 	
 }
-
+/**
+ * Verifica a validade da nova posicao
+ * Se eh possivel se mover para proxima posicao
+ **/
 bool FEntidade::PosValido(int novoX, int novoY) {
 	bool retorno = true;
 	int inicioX = (novoX + colX) / TAMANHO_AZULEJO;
 	int inicioY = (novoY + colY) / TAMANHO_AZULEJO;
 	
-	int fimX = (novoX + colX) + width - colWidth - 1) / TAMANHO_AZULEJO;
-	int fimY = (novoY + colY) + height - colHeight - 1) / TAMANHO_AZULEJO;
+	int fimX = ((novoX + colX) + width - colWidth - 1) / TAMANHO_AZULEJO;
+	int fimY = ((novoY + colY) + height - colHeight - 1) / TAMANHO_AZULEJO;
 	
-	for (int iY = inicioY; iY <= endY; iY++) {
+	for (int iY = inicioY; iY <= fimY; iY++) {
 		for (int iX = inicioX; iX <= fimX; iX++) {
-			FAzulejo * Azulejo = FArea::ControleArea.GetAzulejo(iX * TAMANHO_AZULEJO, iY * TAMANHO_AZULEJO);
-			if (PosValidoAzulejo(Azulejo) == false) {
+			FAzulejo * azulejo = FArea::controleArea.GetAzulejo(iX * TAMANHO_AZULEJO, iY * TAMANHO_AZULEJO);
+			if (PosValidoAzulejo(azulejo) == false) {
 				retorno = false;
 			}
 		}
@@ -250,6 +302,9 @@ bool FEntidade::PosValido(int novoX, int novoY) {
 	return retorno;
 }
 
+/**
+ * Verifica a validade de um Azulejo (tile)
+ **/
 bool FEntidade::PosValidoAzulejo(FAzulejo * azulejo) {
 	if (azulejo == NULL) {
 		return true;
@@ -261,6 +316,29 @@ bool FEntidade::PosValidoAzulejo(FAzulejo * azulejo) {
 	return true;
 }
 
+/**
+ * Verifica se a posicao valida com outra entidade, caso nao seja cria uma colisao na lista
+ **/
+bool FEntidade::PosValidoEntidade(FEntidade * entidade, int novoX, int novoY) {
+	if (this != entidade && entidade != NULL && entidade->morto == false
+		&& entidade->flags ^ ENTIDADE_FLAG_SOMENTEMAPA 
+		&& entidade->Colisoes(novoX + colX, novoY + colY, width - colWidth - 1, height - colHeight - 1) == true) {
+			FEntidadeColisao entidadeColisao;
+			
+			entidadeColisao.entidadeA = this;
+			entidadeColisao.entidadeB = entidade;
+			
+			FEntidadeColisao::listaEntidadesColisoes.push_back(entidadeColisao);
+			return false;
+	}
+	
+	return true;
+}
+
+
+/**
+ * Metodo para rotacionar a entidade, nao utilizado mais (por enquanto)
+ **/
 bool FEntidade::Rotacionar(double angulo, double zoom, int smooth) {
 	if(superficieEntidade == NULL) {
 		return false;
