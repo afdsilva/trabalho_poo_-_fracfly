@@ -2,6 +2,7 @@
   #define _FENTIDADE_H
 
 #include <vector>
+#include <iostream>
 
 #include "FArea.h"
 #include "FAnimacao.h"
@@ -25,6 +26,7 @@ enum {
 	ENTIDADE_FLAG_GRAVIDADE		= 0x00000001,
 	ENTIDADE_FLAG_FANTASMA		= 0x00000002,
 	ENTIDADE_FLAG_SOMENTEMAPA	= 0x00000004,
+	ENTIDADE_FLAG_ESPACO		= 0x00000008,
 };
 
 class FEntidade {
@@ -57,8 +59,8 @@ class FEntidade {
 		float 	velX;
 		float 	velY;
 		
-		int 	acelX;
-		int 	acelY;
+		float 	acelX;
+		float 	acelY;
 		
 	public:
 		float 	velMaxX;
@@ -85,7 +87,7 @@ class FEntidade {
 		virtual void NaRenderizacao(SDL_Surface * planoExibicao);
 		virtual void NaLimpeza();
 		virtual void NaAnimacao();
-		virtual void NaColisao(FEntidade * entidade);
+		virtual bool NaColisao(FEntidade * entidade);
 
 		SDL_Surface * GetSuperficie();
 		void SetSuperficie(SDL_Surface *);

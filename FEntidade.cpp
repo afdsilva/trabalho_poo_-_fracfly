@@ -1,19 +1,8 @@
 #include "FEntidade.h"
-
 /**
- * Inicializacao das Listas:
- *  Entidades e Colisoes
+ * Inicializacao das Listas de Entidades
  **/
 std::vector<FEntidade*> FEntidade::listaEntidades;
-std::vector<FEntidadeColisao> FEntidadeColisao::listaEntidadesColisoes;
-
-/**
- * Inicializa um objeto colisão entre 2 entidades
- **/
-FEntidadeColisao::FEntidadeColisao() {
-		entidadeA = NULL;
-		entidadeB = NULL;
-}
 
 /**
  * Inicializa uma entidade
@@ -103,18 +92,20 @@ void FEntidade::NoLaco() {
 	if (moveEsquerda == false && moveDireita == false) {
 		PararMovimento();
 	}
-	if (moveEsquerda)
-		acelX = -0.5;
-	else if (moveDireita)
-		acelX = 0.5;
 	
+	if (moveEsquerda) {
+		acelX = -0.5;
+	}
+	else if (moveDireita) {
+		acelX = 0.5;
+	}
 	if (flags & ENTIDADE_FLAG_GRAVIDADE) {
 		acelY = 0.75f;
 	}
 	
 	velX += acelX * FFPS::FPSControle.GetFatorVelocidade();
 	velY += acelY * FFPS::FPSControle.GetFatorVelocidade();
-	
+
 	if (velX > velMaxX) velX = velMaxX;
 	if (velX < -velMaxX) velX = -velMaxX;
 	if (velY > velMaxY) velY = velMaxY;
@@ -130,8 +121,6 @@ void FEntidade::NaRenderizacao(SDL_Surface * planoExibicao) {
 	if (superficieEntidade == NULL || planoExibicao == NULL) return;
 	
 	FSuperficie::NoDesenhar(	planoExibicao, 	superficieEntidade, 	x - FCamera::controleCamera.GetX(), 	y - FCamera::controleCamera.GetY(), 	frameAtualCol * width, 		(frameAtualLinha + controleAnimacao.GetFrameAtual()) * height, 	width, 	height);
-	//CSurface::OnDraw(			Surf_Display, 	Surf_Entity, 			X - CCamera::CameraControl.GetX(), 		Y - CCamera::CameraControl.GetY(), 		CurrentFrameCol * Width, 	(CurrentFrameRow + Anim_Control.GetCurrentFrame()) * Height, 	Width, 	Height);
-
 }
 /**
  * Coletor de Lixo da entidade
@@ -158,7 +147,8 @@ void FEntidade::NaAnimacao() {
 /**
  * Controle de Colisão da entidade
  **/
-void FEntidade::NaColisao(FEntidade * entidade) {
+bool FEntidade::NaColisao(FEntidade * entidade) {
+	return true;
 }
 
 /**
@@ -169,7 +159,7 @@ void FEntidade::NoMovimento(float moveX, float moveY) {
 	
 	double novoX = 0;
 	double novoY = 0;
-	
+
 	moveX *= FFPS::FPSControle.GetFatorVelocidade();
 	moveY *= FFPS::FPSControle.GetFatorVelocidade();
 	
@@ -191,12 +181,14 @@ void FEntidade::NoMovimento(float moveX, float moveY) {
 		} else {
 			if(PosValido((int)(x + novoX), (int)(y))) {
 				x += novoX;
+				cout << "valido x" << endl;
 			} else {
 				velX = 0;
 			}
 			
 			if(PosValido((int)(x), (int)(y + novoY))) {
 				y += novoY;
+				cout << "valido y" << endl;
 			} else {
 				velY = 0;
 			}

@@ -18,8 +18,8 @@ class FCamera {
         int x;
         int y;
  
-        int * alvoX;
-        int * alvoY;
+        float * alvoX;
+        float * alvoY;
  
     public:
         int modoAlvo;
@@ -37,7 +37,7 @@ class FCamera {
     public:
         void SetPos(int x, int y);
  
-        void SetAlvo(int* x, int* y);
+        void SetAlvo(float * x, float * y);
 };
  
 #endif

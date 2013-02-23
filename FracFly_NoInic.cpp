@@ -14,16 +14,16 @@ bool FracFly::NoInic() {
 		return false;
 	}
 	
-	/** Areas serao carregas no estado correto (futura implementacao)
+	/** Areas serao carregas no estado correto (futura implementacao) **/
 	//carrega Area (areas sao conjuntos de mapas)
-	char Area[] = "maps/1.area";
-	if(FArea::ControleArea.NoCarregar(Area) == false) {
-		printf("NoInic: Não foi possivel carregar Area: %s\n", Area);
+	char area[] = "maps/1.area";
+	if(FArea::controleArea.NoCarregar(area) == false) {
+		printf("NoInic: Não foi possivel carregar Area: %s\n", area);
 		return false;
 	}
 	 
-	SDL_EnableKeyRepeat(1, SDL_DEFAULT_REPEAT_INTERVAL / 3);
-	**/
+	//SDL_EnableKeyRepeat(1, SDL_DEFAULT_REPEAT_INTERVAL / 3);
+	/* Fim area */
 
 	/**
 	 * Personagem devera ser carregado no estado de jogo
@@ -55,5 +55,17 @@ bool FracFly::NoInic() {
 	FEntidade::ListaEntidades.push_back(&Arma1);
 	FEntidade::ListaEntidades.push_back(&Arma2);
 	**/
+	char naveArquivo[] = "res/yoshi.png";
+	if (nave.NoCarregar(naveArquivo,64, 64, 8) == false) {
+		return false;
+	}
+	nave.flags = ENTIDADE_FLAG_ESPACO | ENTIDADE_FLAG_SOMENTEMAPA;
+	nave.x =  (WWIDTH / 2) - (nave.width / 2);
+	nave.y =  (WHEIGHT / 2) - (nave.height / 2);
+	
+	FEntidade::listaEntidades.push_back(&nave);
+	FCamera::controleCamera.modoAlvo = MODO_ALVO_CENTRO;
+	FCamera::controleCamera.SetAlvo(&nave.x, &nave.y);
+	
 	return true;
 }

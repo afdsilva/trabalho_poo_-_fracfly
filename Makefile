@@ -4,7 +4,7 @@
 CC=g++
 
 # Objects
-OBJETOS=FSuperficie.o FEvento.o FAnimacao.o FEntidade.o FAzulejo.o FMap.o FCamera.o FFPS.o FArea.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FracFly.o 
+OBJETOS=FSuperficie.o FEvento.o FAnimacao.o FEntidade.o FEntidadeColisao.o FAzulejo.o FMap.o FCamera.o FFPS.o FArea.o FNave.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FracFly.o 
 
 # Compilador flags - Warning, debug, sdl
 CPPFLAGS=-std=c++0x -Wall -g -lm `sdl-config --cflags`
@@ -38,10 +38,10 @@ FAnimacao: FAnimacao.h FAnimacao.cpp
 	$(CC) $(CPPFLAGS) -c FAnimacao.cpp
 FEntidade: FEntidade.h FEntidade.cpp
 	$(CC) $(CPPFLAGS) -c FEntidade.cpp
-#FEntidade_Tiro: FEntidade_Tiro.h FEntidade_Tiro.cpp
-#	$(CC) $(CPPFLAGS) -c FEntidade_Tiro.cpp
-#FEntidade_Arma: FEntidade_Arma.h FEntidade_Arma.cpp
-#	$(CC) $(CPPFLAGS) -c FEntidade_Arma.cpp
+FEntidadeColisao: FEntidade.h FEntidadeColisao.cpp
+	$(CC) $(CPPFLAGS) -c FEntidadeColisao.cpp
+FNave: FEntidade.h FNave.h FNave.cpp
+	$(CC) $(CPPFLAGS) -c FNave.cpp
 
 
 FCamera: FCamera.h FCamera.cpp

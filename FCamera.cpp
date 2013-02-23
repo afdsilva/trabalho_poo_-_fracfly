@@ -44,7 +44,7 @@ void FCamera::SetPos(int X, int Y) {
     this->y = y;
 }
  
-void FCamera::SetAlvo(int * x, int * y) {
+void FCamera::SetAlvo(float * x, float * y) {
     alvoX = x;
     alvoY = y;
 }

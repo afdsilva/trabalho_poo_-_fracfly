@@ -11,7 +11,9 @@ Sint16 delaytime;
  **/
 void FracFly::NoLaco() {
 	//chama cada entidade na lista de entidades, utilizando o metodo apripriado para as entidades no FEntidade.cpp
-	for(int i = 0;i < (int) FEntidade::listaEntidades.size();i++) {
+	FFPS::FPSControle.NoLaco();
+
+	for (int i = 0; i < (int) FEntidade::listaEntidades.size(); i++) {
 		//como a lista de entidades é um vetor, esse vetor pode ter buracos
 		//o if abaixo impede que seja feitas chamadas desnecessarias quando nao existe mais o objeto no vetor
 		if(!FEntidade::listaEntidades[i]) continue;
@@ -22,6 +24,19 @@ void FracFly::NoLaco() {
 		//chama o metodo NoLaco() do objeto, definido no FEntidade.cpp
 		FEntidade::listaEntidades[i]->NoLaco();
 	}
+	
+	for (int i = 0; i < (int) FEntidadeColisao::listaEntidadesColisoes.size(); i++) {
+		FEntidade * entidadeA = FEntidadeColisao::listaEntidadesColisoes[i].entidadeA;
+		FEntidade * entidadeB = FEntidadeColisao::listaEntidadesColisoes[i].entidadeB;
+		
+		if (entidadeA == NULL || entidadeB == NULL) continue;
+		
+		if (entidadeA->NaColisao(entidadeB)) {
+			entidadeB->NaColisao(entidadeA);
+		}
+	}
+	FEntidadeColisao::listaEntidadesColisoes.clear();
+	
 	/** Tiros desabilitados ** /
 	for(int i = 0;i < (int) FEntidade_Tiro::ListaTiros.size();i++) {
 		if(!FEntidade_Tiro::ListaTiros[i]) continue;

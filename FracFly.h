@@ -12,6 +12,7 @@
  
 #include "FEvento.h"
 #include "FEntidade.h"
+#include "FNave.h"
 
 using namespace std;
 
@@ -24,6 +25,7 @@ class FracFly : public FEvento {
 		
 	private:
 		//entidades
+		FNave	nave;
 		
 	public:
 		FracFly();

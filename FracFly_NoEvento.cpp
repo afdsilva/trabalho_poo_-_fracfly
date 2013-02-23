@@ -23,6 +23,14 @@ void FracFly::OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode) {
 		case SDLK_ESCAPE: //Esc
 			OnExit();
 			break;
+		case SDLK_a:
+			nave.moveEsquerda = true;
+		case SDLK_d:
+			nave.moveDireita = true;
+		case SDLK_w:
+			nave.moveCima = true;
+		case SDLK_s:
+			nave.moveBaixo = true;
 		default:
 			break;
 	}
@@ -30,6 +38,14 @@ void FracFly::OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode) {
 //Evento de soltar a tecla pressionada
 void FracFly::OnKeyUp(SDLKey sym, SDLMod mod, Uint16 unicode) {
 	switch(sym) {
+		case SDLK_a:
+			nave.moveEsquerda = false;
+		case SDLK_d:
+			nave.moveDireita = false;
+		case SDLK_w:
+			nave.moveCima = false;
+		case SDLK_s:
+			nave.moveBaixo = false;
 		default:
 			break;
 	}
