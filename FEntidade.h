@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <cmath>
 
 #include "FArea.h"
 #include "FAnimacao.h"
@@ -40,6 +41,10 @@ class FEntidade {
 	public:
 		float	x;
 		float 	y;
+		
+		//entidades especiais que se movem para determinadas posicoes
+		float movePraX;
+		float movePraY;
 
 		int 	width; //nomes da variavel em ingles
 		int 	height; //pra facilitar o entendimento Width = largura, Height = altura
@@ -96,7 +101,10 @@ class FEntidade {
 	public:
 		void	NoMovimento(float moveX, float moveY);
 		void	PararMovimento();
-
+		void	SetAcel(float x, float y);
+		float	GetAcelX();
+		float	GetAcelY();
+		
 	public:
 		bool Colisoes(int oX, int oY, int oW, int oH);
 	

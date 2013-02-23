@@ -14,6 +14,9 @@ FEntidade::FEntidade() {
 	x = 0;
 	y = 0;
 	
+	movePraX = 0;
+	movePraY = 0;
+	
 	width = 0;
 	height = 0;
 	
@@ -25,13 +28,13 @@ FEntidade::FEntidade() {
 	tipo = TIPO_ENTIDADE_GENERICO;
 	
 	morto = false;
-	flags = ENTIDADE_FLAG_GRAVIDADE;
+	flags = ENTIDADE_FLAG_ESPACO;
 	
 	velX = 0;
 	velY = 0;
 	
-	acelX = 0;
-	acelY = 0;
+	acelX = 1;
+	acelY = 1;
 	
 	velMaxX = 5;
 	velMaxY = 5;
@@ -89,8 +92,15 @@ bool FEntidade::NoCarregar (char * arquivo, int width, int height, int maxFrames
  * Controla o fluxo de dados da entidade durante o Laço
  **/
 void FEntidade::NoLaco() {
+	float distancia = 0;
+	//se for tiro nao vai ter movimento arbitrario
 	if (moveEsquerda == false && moveDireita == false) {
-		PararMovimento();
+		if ((tipo & TIPO_ENTIDADE_TIRO)) {
+			//printf("acelX: %f acelY: %f\n",acelX,acelY);
+			//printf("ainda dando tiro!\n");
+		} else {
+			PararMovimento();
+		}
 	}
 	
 	if (moveEsquerda) {
@@ -102,16 +112,72 @@ void FEntidade::NoLaco() {
 	if (flags & ENTIDADE_FLAG_GRAVIDADE) {
 		acelY = 0.75f;
 	}
-	
+
 	velX += acelX * FFPS::FPSControle.GetFatorVelocidade();
 	velY += acelY * FFPS::FPSControle.GetFatorVelocidade();
 
-	if (velX > velMaxX) velX = velMaxX;
-	if (velX < -velMaxX) velX = -velMaxX;
-	if (velY > velMaxY) velY = velMaxY;
-	if (velY < -velMaxY) velY = -velMaxY;
+	if (tipo & TIPO_ENTIDADE_TIRO) {
+		/**/
+		distancia = sqrt((float)pow( (this->x < movePraX ? movePraX - this->x : -movePraX + this->x) ,2) + (float)pow((this->y > movePraY ? movePraY - this->y : -movePraY + this->y),2));
+
+		//printf("distancia: %f\n", distancia);
+		acelX = (this->x < movePraX ? 1 : -1) * ((float)(x > movePraX ? x - movePraX : (-x + movePraX)) / (float) distancia);
+		//acelX = (x - movePraX) / distancia;
+		acelY = (this->y > movePraY ? 1 : -1) * ((float)(y < movePraY ? y - movePraY : (-y + movePraY)) / (float) distancia);
+		/**/
+
+	} else {
+		velX += acelX * FFPS::FPSControle.GetFatorVelocidade();
+		velY += acelY * FFPS::FPSControle.GetFatorVelocidade();
+
+		if (velX > velMaxX) {
+			velX = velMaxX;
+			//velY -= velMaxY;
+		}
+		if (velX < -velMaxX) {
+			velX = -velMaxX;
+			//velY += velMaxY;
+		}
+		if (velY > velMaxY) {
+			velY = velMaxY;
+			//velX -= velMaxX;
+		}
+		if (velY < -velMaxY) {
+			velY = -velMaxY;
+			//velX = velMaxX;
+		}
+
+	}
+	
 	NaAnimacao();
 	NoMovimento(velX, velY);
+	if (tipo & TIPO_ENTIDADE_TIRO) {
+		//printf("distancia = %f | this->x = %f | this->width = %d | this->y = %f | this->height = %d\n", distancia, this->x, this->width, this->y, this->height);
+		//distancia <= (this->x + this->width) || distancia <= (this->y + this->height) || 
+		//se velocidade for positiva objeto esta se movemendo para direita
+		if (velX > 0) {
+			//this->x nao pode ser maior que this->movePraX
+			if (this->x >= this->movePraX)
+				this->morto = true;
+		} else if (velX < 0) {
+			//se for negativa esta se movemendo para esquerda
+			if (this->x <= this->movePraX)
+				this->morto = true;
+		}
+		if (velY > 0) {
+			//se velocidade Y for positiva significa que esta indo para baixo;
+			if (this->y >= this->movePraY)
+				this->morto = true;
+		} else if (velY < 0) {
+			//se for negativa esta subindo
+			if (this->y <= this->movePraY)
+				this->morto = true;
+		}
+		//testa bordas
+		if (this->morto) {
+			this->NaLimpeza();
+		}
+	}
 }
 
 /**
@@ -225,6 +291,18 @@ void FEntidade::PararMovimento() {
 		acelX = 0;
 		velX = 0;
 	}
+}
+
+
+void FEntidade::SetAcel(float acelX, float acelY) {
+		this->acelX = acelX;
+		this->acelY = acelY;
+}
+float FEntidade::GetAcelX() {
+	return this->acelX;
+}
+float FEntidade::GetAcelY() {
+	return this->acelY;
 }
 
 /**

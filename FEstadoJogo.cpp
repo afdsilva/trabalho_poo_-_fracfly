@@ -15,10 +15,32 @@ void FEstadoJogo::NaAtivacao() {
 	if (cursor.NoCarregar(cursorArquivo,48,48,0) == false) {
 		return;
 	}
-	
+
+	char armaArquivo[] =  "res/arma.png";
+	if (arma1.NoCarregar(armaArquivo,80,537,0) == false) {
+		return;
+	}
+	if (arma2.NoCarregar(armaArquivo,80,537,0) == false) {
+		return;
+	}
+	arma1.x = 90;
+	arma1.y = WHEIGHT - (arma1.height / 2);
+
+	arma2.x = WWIDTH - 170;
+	arma2.y = WHEIGHT - (arma2.height / 2);
+
+	cursor.flags = ENTIDADE_FLAG_ESPACO;
+	arma1.flags = ENTIDADE_FLAG_ESPACO;
+	arma2.flags = ENTIDADE_FLAG_ESPACO;
+	jogador.flags = ENTIDADE_FLAG_ESPACO;
+
+
 	//Coloca o cursor na lista de entidades, mas ele sera tratado de forma independente
-	FEntidade::listaEntidades.push_back(&jogador);
 	FEntidade::listaEntidades.push_back(&cursor);
+
+	FEntidade::listaEntidades.push_back(&arma1);
+	FEntidade::listaEntidades.push_back(&arma2);
+	FEntidade::listaEntidades.push_back(&jogador);
 	//jogador.x = jogador.x + (1024 / 2);
 	FCamera::controleCamera.modoAlvo = MODO_ALVO_NORMAL;
 	FCamera::controleCamera.SetAlvo(&(jogador.x), &jogador.y);
@@ -138,6 +160,7 @@ void FEstadoJogo::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool
 //Evento de pressionar o botao esquerdo do mouse
 void FEstadoJogo::OnLButtonDown(int mX, int mY) {
 	//Arma1.Atirar(mX,mY);
+	jogador.Atirar(&arma1, mX, mY);
 }
 //Evento de soltar o botao esquerdo do mouse
 void FEstadoJogo::OnLButtonUp(int mX, int mY) {
@@ -145,7 +168,7 @@ void FEstadoJogo::OnLButtonUp(int mX, int mY) {
 }
 //Evento de pressionar o botao direito do mouse
 void FEstadoJogo::OnRButtonDown(int mX, int mY) {
-	
+	jogador.Atirar(&arma2, mX, mY);
 }
 //Evento de soltar o botao direito do mouse
 void FEstadoJogo::OnRButtonUp(int mX, int mY) {

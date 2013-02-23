@@ -13,6 +13,9 @@ class FNave: public FEntidade {
 		void NaLimpeza();
 		void NaAnimacao();
 		bool NaColisao(FEntidade * entidade);
+		
+	public:
+		bool Atirar(FEntidade * entidade, int aX, int aY);
 };
 
 
