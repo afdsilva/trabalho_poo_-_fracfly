@@ -91,7 +91,7 @@ class FEntidade {
 
 		SDL_Surface * GetSuperficie();
 		void SetSuperficie(SDL_Surface *);
-		virtual bool Rotacionar(double angulo, double zoom, int smooth);
+		//virtual bool Rotacionar(double angulo, double zoom, int smooth);
 		
 	public:
 		void	NoMovimento(float moveX, float moveY);

@@ -68,6 +68,7 @@ bool FSuperficie::Transparencia(SDL_Surface * Surf_Dest, int R, int G, int B) {
 }
 
 //rotate image
+/**
 bool FSuperficie::Rotacionar(SDL_Surface * Surf_Orig, double angulo, double zoom, int smooth) {
 	cout << "Girando e rodando: " << angulo << endl;
     //give initial for rotate image
@@ -86,3 +87,4 @@ bool FSuperficie::Rotacionar(SDL_Surface * Surf_Orig, double angulo, double zoom
 
     return true;
 }
+**/

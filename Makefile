@@ -4,7 +4,7 @@
 CC=g++
 
 # Objects
-OBJETOS=FSuperficie.o FEvento.o FAnimacao.o FEntidade.o FEntidadeColisao.o FAzulejo.o FMap.o FCamera.o FFPS.o FArea.o FNave.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FracFly.o 
+OBJETOS=FSuperficie.o FEvento.o FAnimacao.o FEntidade.o FGerenciadorEstados.o FEntidadeColisao.o FEstado.o FEstadoIntro.o FEstadoJogo.o FAzulejo.o FMap.o FCamera.o FFPS.o FArea.o FNave.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FracFly.o 
 
 # Compilador flags - Warning, debug, sdl
 CPPFLAGS=-std=c++0x -Wall -g -lm `sdl-config --cflags`
@@ -26,7 +26,7 @@ NoEvento: FracFly.h FracFly_NoEvento.cpp
 	$(CC) $(CPPFLAGS) -c FracFly_NoEvento.cpp
 NoLaco: FracFly.h FracFly_NoLaco.cpp
 	$(CC) $(CPPFLAGS) -c FracFly_NoLaco.cpp
-NaRenderezicao: FracFly.h FracFly_NaRenderizacao.cpp
+NaRenderizacao: FracFly.h FracFly_NaRenderizacao.cpp
 	$(CC) $(CPPFLAGS) -c FracFly_NaRenderizacao.cpp
 NaLimpeza: FracFly.h FracFly_NaLimpeza.cpp
 	$(CC) $(CPPFLAGS) -c FracFly_NaLimpeza.cpp
@@ -43,7 +43,6 @@ FEntidadeColisao: FEntidade.h FEntidadeColisao.cpp
 FNave: FEntidade.h FNave.h FNave.cpp
 	$(CC) $(CPPFLAGS) -c FNave.cpp
 
-
 FCamera: FCamera.h FCamera.cpp
 	$(CC) $(CPPFLAGS) -c FCamera.cpp
 FArea: FMap.h FArea.h FArea.cpp
@@ -54,6 +53,17 @@ FAzulejo: FAzulejo.h FAzulejo.cpp
 	$(CC) $(CPPFLAGS) -c FAzulejo.cpp
 FFPS: FFPS.h FFPS.cpp
 	$(CC) $(CPPFLAGS) -c FFPS.cpp
+
+FGerenciadorEstados: FGerenciadorEstados.h FGerenciadorEstados.cpp
+	$(CC) $(CPPFLAGS) -c FGerenciadorEstados.cpp
+FEstado: FEstado.h FEstado.cpp
+	$(CC) $(CPPFLAGS) -c FGerenciadorEstados.cpp
+FEstadoIntro: FEstado.h FEstadoIntro.h FEstadoIntro.cpp
+	$(CC) $(CPPFLAGS) -c FEstadoIntro.cpp
+#FEstadoMenu: FEstado.h FEstadoMenu.h FEstadoMenu.cpp
+#	$(CC) $(CPPFLAGS) -c FEstadoMenu.cpp
+FEstadoJogo: FEstado.h FEstadoJogo.h FEstadoJogo.cpp
+	$(CC) $(CPPFLAGS) -c FEstadoJogo.cpp
 
 #Instalar SDL
 pacotes:

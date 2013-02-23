@@ -181,14 +181,12 @@ void FEntidade::NoMovimento(float moveX, float moveY) {
 		} else {
 			if(PosValido((int)(x + novoX), (int)(y))) {
 				x += novoX;
-				cout << "valido x" << endl;
 			} else {
 				velX = 0;
 			}
 			
 			if(PosValido((int)(x), (int)(y + novoY))) {
 				y += novoY;
-				cout << "valido y" << endl;
 			} else {
 				velY = 0;
 			}
@@ -330,7 +328,7 @@ bool FEntidade::PosValidoEntidade(FEntidade * entidade, int novoX, int novoY) {
 
 /**
  * Metodo para rotacionar a entidade, nao utilizado mais (por enquanto)
- **/
+ ** /
 bool FEntidade::Rotacionar(double angulo, double zoom, int smooth) {
 	if(superficieEntidade == NULL) {
 		return false;
@@ -338,3 +336,4 @@ bool FEntidade::Rotacionar(double angulo, double zoom, int smooth) {
 	FSuperficie::Rotacionar(superficieEntidade, angulo, zoom, smooth);
 	return true;
 }
+**/

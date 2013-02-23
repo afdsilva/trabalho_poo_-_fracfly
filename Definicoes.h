@@ -6,7 +6,7 @@
  
 #define TAMANHO_AZULEJO    16
  
-#define WWIDTH        640
-#define WHEIGHT        480
+#define WWIDTH        1024
+#define WHEIGHT        768
  
 #endif
