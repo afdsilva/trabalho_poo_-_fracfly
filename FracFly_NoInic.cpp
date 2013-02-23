@@ -13,7 +13,12 @@ bool FracFly::NoInic() {
 
 	// Print out some information
 	// WARNING: myPointer is not NULL here
-	std::cout << "Current video resolution is " << myPointer->current_w << "x" << myPointer->current_h << " pixels" << std::endl;	//inicializa um plano de exibicao, todas outras superficies são criadas em cima dela
+	std::cout << "Current video resolution is " << myPointer->current_w << "x" << myPointer->current_h << " pixels" << std::endl;
+	
+	
+	SDL_ShowCursor(SDL_DISABLE);
+	
+	//inicializa um plano de exibicao, todas outras superficies são criadas em cima dela
 	if ((planoExibicao = SDL_SetVideoMode(WWIDTH, WHEIGHT, 32, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL) {
 		printf("NoInic: Não foi possivel criar Plano Exibição\n");
 		return false;

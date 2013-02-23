@@ -19,12 +19,11 @@ void FNave::NaLimpeza() {
 	FEntidade::NaLimpeza();
 }
 void FNave::NaAnimacao() {
-	if (velX != 0) {
-		controleAnimacao.maxFrames = 8;
-	} else {
-		controleAnimacao.maxFrames = 0;
-	}
-	FEntidade::NaAnimacao();
+	//por emquanto a nave na tem animação nenhuma
+	controleAnimacao.maxFrames = 0;
+	//FEntidade::NaAnimacao();
+	FEntidade::controleAnimacao.NaAnimacao();
+
 }
 bool FNave::NaColisao(FEntidade * entidade) {
 	return true;

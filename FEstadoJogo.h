@@ -15,6 +15,7 @@ class FEstadoJogo : public FEstado {
 		static FEstadoJogo instancia;
 		
 		FNave 		jogador;
+		FEntidade	cursor;
 		
 	private:
 		FEstadoJogo();

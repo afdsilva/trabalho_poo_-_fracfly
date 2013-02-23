@@ -8,13 +8,19 @@ FEstadoJogo::FEstadoJogo() {
 void FEstadoJogo::NaAtivacao() {
 	//carrega a cabine da nave
 	char naveArquivo[] = "res/cabine1024x768.png";
-	if (jogador.NoCarregar(naveArquivo, 1024, 768, 1) == false) {
+	if (jogador.NoCarregar(naveArquivo, 1024, 768, 0) == false) {
+		return;
+	}
+	char cursorArquivo[] =  "res/mira1.png";
+	if (cursor.NoCarregar(cursorArquivo,48,48,0) == false) {
 		return;
 	}
 	
+	//Coloca o cursor na lista de entidades, mas ele sera tratado de forma independente
 	FEntidade::listaEntidades.push_back(&jogador);
+	FEntidade::listaEntidades.push_back(&cursor);
 	//jogador.x = jogador.x + (1024 / 2);
-	//FCamera::controleCamera.modoAlvo = MODO_ALVO_CENTRO;
+	FCamera::controleCamera.modoAlvo = MODO_ALVO_NORMAL;
 	FCamera::controleCamera.SetAlvo(&(jogador.x), &jogador.y);
 
 }
@@ -32,6 +38,8 @@ void FEstadoJogo::NaDesativacao() {
 }
 
 void FEstadoJogo::NoLaco() {
+	//Controla o cursor do mouse
+
 	//chama cada entidade na lista de entidades, utilizando o metodo apropriado para as entidades no FEntidade.cpp
 	for (int i = 0; i < (int) FEntidade::listaEntidades.size(); i++) {
 		//como a lista de entidades é um vetor, esse vetor pode ter buracos
@@ -44,6 +52,7 @@ void FEstadoJogo::NoLaco() {
 		//chama o metodo NoLaco() do objeto, definido no FEntidade.cpp
 		FEntidade::listaEntidades[i]->NoLaco();
 	}
+	
 	
 	for (int i = 0; i < (int) FEntidadeColisao::listaEntidadesColisoes.size(); i++) {
 		FEntidade * entidadeA = FEntidadeColisao::listaEntidadesColisoes[i].entidadeA;
@@ -71,7 +80,6 @@ void FEstadoJogo::NaRenderizacao(SDL_Surface * planoExibicao) {
 	SDL_FillRect(planoExibicao, &rect, 0);
 	
 	FArea::controleArea.NaRenderizacao(planoExibicao, -FCamera::controleCamera.GetX(), -FCamera::controleCamera.GetY());
-	
 	
 	for(int i = 0;i < (int) FEntidade::listaEntidades.size();i++) {
 		if(!FEntidade::listaEntidades[i]) continue;
@@ -120,6 +128,12 @@ void FEstadoJogo::OnKeyUp(SDLKey sym, SDLMod mod, Uint16 unicode) {
 
 //Evento de movimentação do mouse e cliques enquanto se move
 void FEstadoJogo::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle) {
+	if (mX) {
+		cursor.x = mX;
+	}
+	if (mY) {
+		cursor.y = mY;
+	}
 }
 //Evento de pressionar o botao esquerdo do mouse
 void FEstadoJogo::OnLButtonDown(int mX, int mY) {
