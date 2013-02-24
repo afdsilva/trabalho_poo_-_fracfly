@@ -1,6 +1,7 @@
 #ifndef _FAREA_H_
 	#define _FAREA_H_
 
+#include "male_libs.h"
 #include "FMap.h"
 
 class FArea {

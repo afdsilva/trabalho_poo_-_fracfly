@@ -1,15 +1,16 @@
 #ifndef _FESTADOMENU_H_
 	#define _FESTADOMENU_H_
 
+#include "Definicoes.h"
+
 #include "FEstado.h"
+
+#include "FCamera.h"
+#include "FEntidade.h"
 #include "FSuperficie.h"
 #include "FFonte.h"
 
 #include "FundoInteiro.hpp"
-
-
-
-#include "Definicoes.h"
 
 class FEstadoMenu : public FEstado {
 	private:
@@ -17,6 +18,7 @@ class FEstadoMenu : public FEstado {
 		
 	private:
 		TTF_Font * fonte;
+		FEntidade cursor;
 		FundoInteiro fundo;
 		
 	private:
@@ -31,9 +33,9 @@ class FEstadoMenu : public FEstado {
 	public:
 		void OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode);
 		//void OnKeyUp(SDLKey sym, SDLMod mod, Uint16 unicode);
-		//void OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle);
-		//void OnLButtonDown(int mX, int mY);
-		//void OnLButtonUp(int mX, int mY);
+		void OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle);
+		void OnLButtonDown(int mX, int mY);
+		void OnLButtonUp(int mX, int mY);
 		//void OnRButtonDown(int mX, int mY);
 		//void OnRButtonUp(int mX, int mY);
 		

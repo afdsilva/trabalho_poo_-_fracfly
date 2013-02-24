@@ -13,6 +13,8 @@ FEntidade::FEntidade() {
 	
 	x = 0;
 	y = 0;
+	texto.clear();
+	corTexto = {255, 255, 255};
 	
 	movePraX = 0;
 	movePraY = 0;
@@ -28,13 +30,13 @@ FEntidade::FEntidade() {
 	tipo = TIPO_ENTIDADE_GENERICO;
 	
 	morto = false;
-	flags = ENTIDADE_FLAG_ESPACO;
+	flags = ENTIDADE_FLAG_NONE;
 	
 	velX = 0;
 	velY = 0;
 	
-	acelX = 1;
-	acelY = 1;
+	acelX = 0;
+	acelY = 0;
 	
 	velMaxX = 5;
 	velMaxY = 5;
@@ -72,7 +74,50 @@ void FEntidade::SetSuperficie(SDL_Surface * novaSuperficie){
 }	
 
 /**
- * Carrega um recurso na entidade (a princio imagem)
+ * Carrega um recurso na entidade (uma fonte)
+ **/
+bool FEntidade::NoCarregar (char * arquivo, string texto, int tam, SDL_Color corTexto) {
+	try {
+		if ((fonteEntidade = FFonte::NoCarregar(arquivo, tam)) == NULL)
+			throw;
+		try {
+			if (!FEntidade::NoCarregar(fonteEntidade,texto,corTexto))
+				throw;
+		} catch (...) {
+			debug("FEntidade::Recurso de fonte nulo",84);
+		}
+	} catch (...) {
+		debug("FEntidade::Não foi possivel carregar fonte",81);
+		return false;
+	}
+	return true;
+}
+bool FEntidade::NoCarregar (TTF_Font * fonte, string texto, SDL_Color corTexto) {
+	try {
+		if ((fonteEntidade = fonte) == NULL)
+			throw;
+	} catch (...) {
+		debug("FEntidade::Recurso de fonte nulo",100);
+		return false;
+	}
+	try {
+		if (TTF_SizeText(fonteEntidade, texto.c_str(), &this->width, &this->height) == -1)
+			throw;
+	} catch(...) {
+		string msgErro = "FEntidade::";
+		msgErro += SDL_GetError();
+		debug(msgErro,109);
+		return false;
+	}
+	this->tipo = TIPO_ENTIDADE_TEXTO;
+	this->flags = ENTIDADE_FLAG_TEXTO;
+    this->texto = texto;
+	this->corTexto = corTexto;
+	return true;
+}
+
+/**
+ * Carrega um recurso na entidade (uma imagem)
  **/
 bool FEntidade::NoCarregar (char * arquivo, int width, int height, int maxFrames) {
 	if ((superficieEntidade = FSuperficie::NoCarregar(arquivo)) == NULL) {
@@ -95,7 +140,7 @@ void FEntidade::NoLaco() {
 	float distancia = 0;
 	//se for tiro nao vai ter movimento arbitrario
 	if (moveEsquerda == false && moveDireita == false) {
-		if ((tipo & TIPO_ENTIDADE_TIRO)) {
+		if ((tipo == TIPO_ENTIDADE_TIRO)) {
 			//printf("acelX: %f acelY: %f\n",acelX,acelY);
 			//printf("ainda dando tiro!\n");
 		} else {
@@ -116,66 +161,50 @@ void FEntidade::NoLaco() {
 	velX += acelX * FFPS::FPSControle.GetFatorVelocidade();
 	velY += acelY * FFPS::FPSControle.GetFatorVelocidade();
 
-	if (tipo & TIPO_ENTIDADE_TIRO) {
-		/**/
+	if (tipo == TIPO_ENTIDADE_TIRO) {
 		distancia = sqrt((float)pow( (this->x < movePraX ? movePraX - this->x : -movePraX + this->x) ,2) + (float)pow((this->y > movePraY ? movePraY - this->y : -movePraY + this->y),2));
 
 		//printf("distancia: %f\n", distancia);
 		acelX = (this->x < movePraX ? 1 : -1) * ((float)(x > movePraX ? x - movePraX : (-x + movePraX)) / (float) distancia);
 		//acelX = (x - movePraX) / distancia;
 		acelY = (this->y > movePraY ? 1 : -1) * ((float)(y < movePraY ? y - movePraY : (-y + movePraY)) / (float) distancia);
-		/**/
 
 	} else {
-		velX += acelX * FFPS::FPSControle.GetFatorVelocidade();
-		velY += acelY * FFPS::FPSControle.GetFatorVelocidade();
 
-		if (velX > velMaxX) {
-			velX = velMaxX;
-			//velY -= velMaxY;
-		}
-		if (velX < -velMaxX) {
-			velX = -velMaxX;
-			//velY += velMaxY;
-		}
-		if (velY > velMaxY) {
-			velY = velMaxY;
-			//velX -= velMaxX;
-		}
-		if (velY < -velMaxY) {
-			velY = -velMaxY;
-			//velX = velMaxX;
-		}
+		if (velX > velMaxX) 	velX = velMaxX;
+		if (velX < -velMaxX) 	velX = -velMaxX;
+		if (velY > velMaxY)		velY = velMaxY;
+		if (velY < -velMaxY)	velY = -velMaxY;
 
 	}
 	
 	NaAnimacao();
 	NoMovimento(velX, velY);
-	if (tipo & TIPO_ENTIDADE_TIRO) {
+	if (tipo == TIPO_ENTIDADE_TIRO) {
 		//printf("distancia = %f | this->x = %f | this->width = %d | this->y = %f | this->height = %d\n", distancia, this->x, this->width, this->y, this->height);
 		//distancia <= (this->x + this->width) || distancia <= (this->y + this->height) || 
 		//se velocidade for positiva objeto esta se movemendo para direita
 		if (velX > 0) {
 			//this->x nao pode ser maior que this->movePraX
-			if (this->x >= this->movePraX)
-				this->morto = true;
+			if (x >= movePraX)
+				morto = true;
 		} else if (velX < 0) {
 			//se for negativa esta se movemendo para esquerda
-			if (this->x <= this->movePraX)
-				this->morto = true;
+			if (x <= movePraX)
+				morto = true;
 		}
 		if (velY > 0) {
 			//se velocidade Y for positiva significa que esta indo para baixo;
-			if (this->y >= this->movePraY)
-				this->morto = true;
+			if (y >= movePraY)
+				morto = true;
 		} else if (velY < 0) {
 			//se for negativa esta subindo
-			if (this->y <= this->movePraY)
-				this->morto = true;
+			if (y <= movePraY)
+				morto = true;
 		}
 		//testa bordas
-		if (this->morto) {
-			this->NaLimpeza();
+		if (morto) {
+			NaLimpeza();
 		}
 	}
 }
@@ -184,9 +213,14 @@ void FEntidade::NoLaco() {
  * Controla a renderização na tela da entidade
  **/
 void FEntidade::NaRenderizacao(SDL_Surface * planoExibicao) {
-	if (superficieEntidade == NULL || planoExibicao == NULL) return;
-	
-	FSuperficie::NoDesenhar(	planoExibicao, 	superficieEntidade, 	x - FCamera::controleCamera.GetX(), 	y - FCamera::controleCamera.GetY(), 	frameAtualCol * width, 		(frameAtualLinha + controleAnimacao.GetFrameAtual()) * height, 	width, 	height);
+	if (tipo == TIPO_ENTIDADE_TEXTO) {
+		//if (!(superficieEntidade == NULL || fonteEntidade == NULL) || planoExibicao == NULL) return;
+		FFonte::NoEscrever(planoExibicao,fonteEntidade,texto,x,y,corTexto);
+	}
+	else {
+		if (superficieEntidade == NULL || planoExibicao == NULL) return;
+		FSuperficie::NoDesenhar(	planoExibicao, 	superficieEntidade, 	x - FCamera::controleCamera.GetX(), 	y - FCamera::controleCamera.GetY(), 	frameAtualCol * width, 		(frameAtualLinha + controleAnimacao.GetFrameAtual()) * height, 	width, 	height);
+	}
 }
 /**
  * Coletor de Lixo da entidade
