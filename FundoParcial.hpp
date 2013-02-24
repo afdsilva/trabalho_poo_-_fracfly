@@ -10,6 +10,7 @@ public:
 	static double MinRe, MaxIm, ReFactor, ImFactor;
 	static unsigned short MaxIterations;
 	static unsigned short int FracType,ColR, ColG, ColB;
+	static unsigned SCREEN_WIDTH;
 	
 	static int exit;
 	

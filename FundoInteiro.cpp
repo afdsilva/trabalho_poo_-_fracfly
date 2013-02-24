@@ -14,6 +14,9 @@ double FundoParcial:: MaxIm = 0;
 double FundoParcial:: ReFactor = 0; 
 double FundoParcial:: ImFactor = 0; 
 
+unsigned FundoParcial :: SCREEN_WIDTH=1024;
+
+
 SDL_Surface * FundoParcial:: screen; 
 	
 int FundoParcial:: exit=0;
@@ -52,12 +55,12 @@ FundoInteiro :: FundoInteiro(){
 		
 				
 		
-		const SDL_VideoInfo * videoInfo;	
+		//~ const SDL_VideoInfo * videoInfo;	
 	
-		videoInfo = SDL_GetVideoInfo();	
-		
-		SCREEN_HEIGHT = 480;	
-		SCREEN_WIDTH = 720;	
+		//~ videoInfo = SDL_GetVideoInfo();	
+		 
+		SCREEN_HEIGHT = 768;	
+		SCREEN_WIDTH = 1024;	
 		//~ SCREEN_HEIGHT = videoInfo->current_h;	
 		//~ SCREEN_WIDTH = videoInfo->current_w;	
 		
@@ -83,7 +86,6 @@ FundoInteiro :: FundoInteiro(){
 		i = rc = frame = id = tmp =0;
 		
 		inc_y = (int)floor((SCREEN_HEIGHT/NUM_THREADS));
-		inc_x = (int)floor((SCREEN_WIDTH/NUM_THREADS));
 		
 		y = x =0;
 		
@@ -99,20 +101,15 @@ FundoInteiro :: FundoInteiro(){
 	void FundoInteiro:: NoInic() {
 		
 		for(int i = 0; i < NUM_THREADS; i++) {
-			for(int j=0; j< NUM_THREADS; j++){
 				FundoParcial * tFrac = new FundoParcial();
 				
-				tFrac->setStart_x(i*inc_x);
-				tFrac->setStop_x((j+1)*inc_x);
-				
 				tFrac->setStart_y(i*inc_y);
-				tFrac->setStop_y((j+1)*inc_y);
+				tFrac->setStop_y((i+1)*inc_y);
 				
 				tFrac->setScreen(screen);
 				tFrac->Start();
 			}
 		}
-	}
 	
 		void FundoInteiro :: ExecutarFractal(){
 		

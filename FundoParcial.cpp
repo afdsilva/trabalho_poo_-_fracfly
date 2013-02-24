@@ -39,7 +39,7 @@
 				for (y = start_y; y < stop_y; ++y) {
 					c_im = MaxIm - y*ImFactor;
 
-					for (x = start_x; x < stop_x; ++x) {
+					for (x = 0; x < SCREEN_WIDTH; ++x) {
 						c_re = MinRe + x*ReFactor;
 						isInside = 1;
 

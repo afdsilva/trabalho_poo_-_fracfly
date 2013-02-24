@@ -22,7 +22,7 @@ void FEstadoMenu::NaDesativacao() {
 }
 
 void FEstadoMenu::NoLaco() {
-	fundo.ExecutarFractal();
+	//~ fundo.ExecutarFractal();
 }
 
 void FEstadoMenu::NaRenderizacao(SDL_Surface * planoExibicao) {
