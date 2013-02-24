@@ -137,6 +137,8 @@ FundoInteiro :: FundoInteiro(){
 
 			if(todasThreadsCalcularam()){
 				SDL_Flip(screen);
+				Zoom = Zoom*ZoomStep;
+				resumeThreads(); 
 				
 			}
 			
@@ -189,9 +191,25 @@ FundoInteiro :: FundoInteiro(){
 					FundoParcial::ColB = rand() % 256;
 				}	
 				
-				if (event.key.keysym.sym == SDLK_a) AnimateK = !AnimateK;
+				//~ if (event.key.keysym.sym == SDLK_a) AnimateK = !AnimateK;
 
-				//~ if (event.key.keysym.sym == SDLK_w) contador=contador+100;
+
+				if (event.key.keysym.sym == SDLK_s) {
+					AimIm +=0.1;
+					resumeThreads();
+				}
+				if (event.key.keysym.sym == SDLK_w) {
+					AimIm -=0.1;
+					resumeThreads();
+				}
+				if (event.key.keysym.sym == SDLK_d) {
+					AimRe +=0.1;
+					resumeThreads();
+				}
+				if (event.key.keysym.sym == SDLK_a) {
+					AimRe -=0.1;
+					resumeThreads();
+				}
 
 			}
 
@@ -201,13 +219,13 @@ FundoInteiro :: FundoInteiro(){
 			} 
 
 			if (event.type == SDL_MOUSEBUTTONDOWN && MouseMode == 0 ) {
-				resumeThreads(); 
+				
 				AimIm = FundoParcial::MaxIm - event.button.y*FundoParcial::ImFactor; // calcula um novo centro 
 				AimRe = FundoParcial::MinRe + event.button.x*FundoParcial::ReFactor;  // calcula um novo centro 
 
-				if (event.button.button == SDL_BUTTON_LEFT) Zoom = Zoom*ZoomStep;
+				if (event.button.button == SDL_BUTTON_LEFT) {resumeThreads(); Zoom = Zoom*ZoomStep;}
 				if (event.button.button == SDL_BUTTON_RIGHT) {
-					
+					resumeThreads(); 
 					Zoom = Zoom*1.2;
 					printf( "%f \n",Zoom);
 					}

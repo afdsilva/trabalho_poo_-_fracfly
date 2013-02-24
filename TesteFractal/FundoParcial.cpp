@@ -77,14 +77,13 @@
 					}
 					m_running = false;
 				}
-				cout << "Running" << m_running << GetId() << endl;
 				pauseThread();
 			}
 	}
 
 	void FundoParcial :: pauseThread(){
 		 while (!m_running)
-			sleep(1);
+			usleep(50);
 	}
 	bool FundoParcial :: getRunning(){
 		return m_running;
