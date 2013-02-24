@@ -10,6 +10,8 @@
 #include "FSuperficie.h"
 #include "FFonte.h"
 
+#include "FundoInteiro.hpp"
+
 class FEstadoMenu : public FEstado {
 	private:
 		static FEstadoMenu instancia;
@@ -17,6 +19,7 @@ class FEstadoMenu : public FEstado {
 	private:
 		TTF_Font * fonte;
 		FEntidade cursor;
+		FundoInteiro fundo;
 		
 	private:
 		FEstadoMenu();

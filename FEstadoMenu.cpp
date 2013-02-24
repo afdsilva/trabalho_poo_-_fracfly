@@ -66,7 +66,8 @@ void FEstadoMenu::NaAtivacao() {
 	cursor.flags = ENTIDADE_FLAG_ESPACO;
 	FEntidade::listaEntidades.push_back(&cursor);
 
-
+	srand((int)time(NULL));
+	fundo.NoInic();	
 }	
 
 void FEstadoMenu::NaDesativacao() {
@@ -85,6 +86,8 @@ void FEstadoMenu::NoLaco() {
 		}
 		FEntidade::listaEntidades[i]->NoLaco();
 	}
+
+	fundo.ExecutarFractal();
 }
 
 void FEstadoMenu::NaRenderizacao(SDL_Surface * planoExibicao) {
