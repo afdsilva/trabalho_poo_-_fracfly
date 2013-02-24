@@ -4,13 +4,13 @@
 CC=g++
 
 # Objects
-OBJETOS=FSuperficie.o FEvento.o FAnimacao.o FEntidade.o FGerenciadorEstados.o FEntidadeColisao.o FEstado.o FEstadoIntro.o FEstadoJogo.o FAzulejo.o FMap.o FCamera.o FFPS.o FArea.o FNave.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FracFly.o 
+OBJETOS=FSuperficie.o FFonte.o FEvento.o FAnimacao.o FEntidade.o FGerenciadorEstados.o FEntidadeColisao.o FEstado.o FEstadoIntro.o FEstadoJogo.o FEstadoMenu.o FAzulejo.o FMap.o FCamera.o FFPS.o FArea.o FNave.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FracFly.o 
 
 # Compilador flags - Warning, debug, sdl
 CPPFLAGS=-std=c++0x -Wall -g -lm `sdl-config --cflags`
 
 # Ligador flags - sdl
-LDFLAGS=`sdl-config --libs` -lSDL -lSDL_image -lSDL_gfx
+LDFLAGS=`sdl-config --libs` -lSDL -lSDL_image -lSDL_gfx -lSDL_ttf -lSDL_mixer
 
 EXECUTAVEL=fracfly
 
@@ -32,6 +32,8 @@ NaLimpeza: FracFly.h FracFly_NaLimpeza.cpp
 	$(CC) $(CPPFLAGS) -c FracFly_NaLimpeza.cpp
 FSuperficie: FSuperficie.h FSuperficie.cpp
 	$(CC) $(CPPFLAGS) -c FSuperficie.cpp
+FFonte: FFonte.h FFonte.cpp
+	$(CC) $(CPPFLAGS) -c FFonte.cpp
 FEvento: FEvento.h FEvento.cpp
 	$(CC) $(CPPFLAGS) -c FEvento.cpp
 FAnimacao: FAnimacao.h FAnimacao.cpp
@@ -60,15 +62,25 @@ FEstado: FEstado.h FEstado.cpp
 	$(CC) $(CPPFLAGS) -c FGerenciadorEstados.cpp
 FEstadoIntro: FEstado.h FEstadoIntro.h FEstadoIntro.cpp
 	$(CC) $(CPPFLAGS) -c FEstadoIntro.cpp
-#FEstadoMenu: FEstado.h FEstadoMenu.h FEstadoMenu.cpp
-#	$(CC) $(CPPFLAGS) -c FEstadoMenu.cpp
+FEstadoMenu: FEstado.h FEstadoMenu.h FEstadoMenu.cpp
+	$(CC) $(CPPFLAGS) -c FEstadoMenu.cpp
 FEstadoJogo: FEstado.h FEstadoJogo.h FEstadoJogo.cpp
 	$(CC) $(CPPFLAGS) -c FEstadoJogo.cpp
 
 #Instalar SDL
 pacotes:
-	sudo apt-get install libsdl-image1.2-dev libsdl-image1.2 libsdl-ttf2.0-0 libsdl-ttf2.0-dev libsdl1.2-dev libsdl1.2debian libsdl-gfx1.2-4 libsdl-gfx1.2-dev
+	sudo apt-get install libsdl-image1.2-dev libsdl-image1.2 libsdl-ttf2.0-0 libsdl-ttf2.0-dev libsdl1.2-dev libsdl1.2debian libsdl-gfx1.2-4 libsdl-gfx1.2-dev libsdl-mixer1.2
 
+#dribledavaca:
+#	wget <end>
+#	tar xvzf <arq>
+#	cd <dir>
+#	./configure
+#	make
+#	sudo make install
+
+runtime:
+	sudo apt-get install libsdl1.2debian libsdl-gfx1.2-4 libsdl-mixer1.2 libsdl-image1.2 libsdl-ttf2.0-0 
 #limpeza
 clean:
 	rm -rf $(OBJETOS)

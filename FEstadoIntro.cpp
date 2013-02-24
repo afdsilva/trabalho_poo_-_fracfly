@@ -23,7 +23,7 @@ void FEstadoIntro::NaDesativacao() {
 
 void FEstadoIntro::NoLaco() {
 	if (tempoInicio + 1500 < (int) SDL_GetTicks()) {
-		FGerenciadorEstados::SetEstadoAtivo(ESTADO_JOGO);
+		FGerenciadorEstados::SetEstadoAtivo(ESTADO_MENU);
 	}
 }
 

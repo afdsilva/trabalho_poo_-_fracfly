@@ -38,7 +38,7 @@ class FEstadoJogo : public FEstado {
 		void NaDesativacao();
 		void NoLaco();
 		void NaRenderizacao(SDL_Surface * planoExibicao);
-		
+
 	public:
 		static FEstadoJogo * GetInstancia();
 };

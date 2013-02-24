@@ -8,7 +8,7 @@ enum {
 	ESTADO_INTRO,
 	ESTADO_MENU,
 	ESTADO_MENU_OPTIONS,
-	ESTADO_JOGO,
+	ESTADO_JOGO
 };
 
 class FGerenciadorEstados {
@@ -21,8 +21,12 @@ class FGerenciadorEstados {
 		static void NaRenderizacao(SDL_Surface * planoExibicao);
 	
 	public:
+		void OnExit();
+	
+	public:
 		static void SetEstadoAtivo(int estadoId);
 		static FEstado * GetEstadoAtivo();
+		static int GetEstadoAtivoId();
 };
 
 #endif

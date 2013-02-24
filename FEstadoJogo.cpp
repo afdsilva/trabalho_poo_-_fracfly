@@ -1,4 +1,5 @@
 #include "FEstadoJogo.h"
+#include "FGerenciadorEstados.h"
 
 FEstadoJogo FEstadoJogo::instancia;
 
@@ -118,16 +119,20 @@ FEstadoJogo * FEstadoJogo::GetInstancia() {
 void FEstadoJogo::OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode) {
 	switch(sym) {
 		case SDLK_ESCAPE: //Esc
-			OnExit();
+			FGerenciadorEstados::SetEstadoAtivo(ESTADO_MENU);
 			break;
 		case SDLK_a:
 			jogador.moveEsquerda = true;
+			break;
 		case SDLK_d:
 			jogador.moveDireita = true;
+			break;
 		case SDLK_w:
 			jogador.moveCima = true;
+			break;
 		case SDLK_s:
 			jogador.moveBaixo = true;
+			break;
 		default:
 			break;
 	}
@@ -137,12 +142,16 @@ void FEstadoJogo::OnKeyUp(SDLKey sym, SDLMod mod, Uint16 unicode) {
 	switch(sym) {
 		case SDLK_a:
 			jogador.moveEsquerda = false;
+			break;
 		case SDLK_d:
 			jogador.moveDireita = false;
+			break;
 		case SDLK_w:
 			jogador.moveCima = false;
+			break;
 		case SDLK_s:
 			jogador.moveBaixo = false;
+			break;
 		default:
 			break;
 	}

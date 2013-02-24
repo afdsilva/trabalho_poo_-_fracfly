@@ -10,6 +10,7 @@
 #include "FCamera.h"
 #include "FFPS.h"
 #include "FSuperficie.h"
+#include "FFonte.h"
 
 using namespace std;
 

@@ -9,12 +9,11 @@ bool FracFly::NoInic() {
 		return false;
 	}
 	//* Resolucao da tela
-	const SDL_VideoInfo* myPointer = SDL_GetVideoInfo();
+	//const SDL_VideoInfo* myPointer = SDL_GetVideoInfo();
 
 	// Print out some information
 	// WARNING: myPointer is not NULL here
-	std::cout << "Current video resolution is " << myPointer->current_w << "x" << myPointer->current_h << " pixels" << std::endl;
-	
+	//std::cout << "Current video resolution is " << myPointer->current_w << "x" << myPointer->current_h << " pixels" << std::endl;
 	
 	SDL_ShowCursor(SDL_DISABLE);
 	
@@ -23,8 +22,13 @@ bool FracFly::NoInic() {
 		printf("NoInic: Não foi possivel criar Plano Exibição\n");
 		return false;
 	}
+
+    if( TTF_Init() == -1 ) {
+		cout << "Erro TTF_Init " << SDL_GetError() << endl;
+        return false;
+    }
 	
-	SDL_EnableKeyRepeat(1, SDL_DEFAULT_REPEAT_INTERVAL / 3);
+	//SDL_EnableKeyRepeat(1, SDL_DEFAULT_REPEAT_INTERVAL / 3);
 	
 	FGerenciadorEstados::SetEstadoAtivo(ESTADO_INTRO);
 

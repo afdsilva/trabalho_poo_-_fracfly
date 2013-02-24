@@ -8,6 +8,8 @@ void FracFly::NoEvento(SDL_Event * evento) {
 	FEvento::NoEvento(evento);
 	
 	FGerenciadorEstados::NoEvento(evento);
+	
+	if (FGerenciadorEstados::GetEstadoAtivoId() == ESTADO_NENHUM) OnExit();
 }
 
 /**
