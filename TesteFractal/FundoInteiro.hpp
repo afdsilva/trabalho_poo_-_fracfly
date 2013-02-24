@@ -4,9 +4,11 @@
 #include "FundoParcial.hpp"
 
 class FundoInteiro{	
+	
+	
 	SDL_Surface *screen;
 	SDL_Event event;
-	static std::vector<FundoParcial*> listaParciais;
+	
 
 	
 	int SCREEN_WIDTH;
@@ -24,12 +26,15 @@ class FundoInteiro{
 	double y, x;
 
 public:
+	static std::vector<FundoParcial*> listaParciais;
+
+public:
 	FundoInteiro();
-	void NoInic();
+	void startThreads();
 	void ExecutarFractal();
-	void Evento();
+	bool Evento();
 	
-	bool todasThreadsCalcularam();
-	void resumeThreads();
+	void calculoParametros();
+	
 };
 #endif

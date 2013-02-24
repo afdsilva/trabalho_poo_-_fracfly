@@ -16,7 +16,6 @@ void *Thread::entryPoint(void *pthis) {
 }
 
 void Thread::Start() {
-		m_running = true;
         if (pthread_create(&m_threadId, NULL, entryPoint, this) != 0) {
              
         }

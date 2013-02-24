@@ -18,7 +18,8 @@ unsigned FundoParcial :: SCREEN_WIDTH=1024;
 
 SDL_Surface * FundoParcial:: screen; 
 
-vector<FundoParcial*> FundoInteiro:: listaParciais;
+
+vector <FundoParcial*> FundoInteiro:: listaParciais;
 
 	
 int FundoParcial:: exit=0;
@@ -69,27 +70,17 @@ FundoInteiro :: FundoInteiro(){
 		
 		screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_HWSURFACE | SDL_DOUBLEBUF );
 		
-		//~ SDL_WM_SetCaption("Fractal", "puzzle.png" ); // Barra te titulo
 		
-		//~ SDL_WM_GrabInput(SDL_GRAB_ON);  // Mouse só dentro da tela.
-		
-	}
-	void FundoInteiro ::  resumeThreads(){
-		for(int i=0; i < NUM_THREADS ; i++){
-			FundoInteiro:: listaParciais[i]->setRunning(true) ;
-		}
-	}
-	 
-	bool FundoInteiro ::  todasThreadsCalcularam() {
-		for(int i=0; i< NUM_THREADS ; i++){
-			if(FundoInteiro:: listaParciais[i]->getRunning() == true){
-				return false;
-			}
-		}
-		return true;
 	}
 	
-	void FundoInteiro:: NoInic() {
+	void joinThreads(){
+		for(int i = 0; i < NUM_THREADS; i++) {
+			 FundoInteiro:: listaParciais[i]->Join();
+		}
+		 FundoInteiro:: listaParciais.clear();
+	}
+	
+	void FundoInteiro:: startThreads() {
 		FundoParcial:: screen = screen;
 		for(int i = 0; i < NUM_THREADS; i++) {
 				FundoParcial * tFrac = new FundoParcial();
@@ -104,58 +95,25 @@ FundoInteiro :: FundoInteiro(){
 		void FundoInteiro :: ExecutarFractal(){
 		
 		while(!FundoParcial::exit){
-			if (CentreRe != AimRe) CentreRe = 
-				(AimRe+CentreRe)/2;
-			if (CentreIm != AimIm) 
-				CentreIm = (AimIm+CentreIm)/2;
-
-			if ( (CentreRe/AimRe) < 0.01 ) 
-				CentreRe = AimRe;
-			if ( (CentreIm/AimIm) < 0.01 ) 
-				CentreIm = AimIm;
-
-			FundoParcial::MinRe = CentreRe - (Zoom/2.0); 
-			MaxRe = CentreRe + (Zoom/2.0);
-			MinIm = CentreIm + (((MaxRe-FundoParcial::MinRe)*SCREEN_HEIGHT/SCREEN_WIDTH)/2);
-			FundoParcial::MaxIm = CentreIm - (((MaxRe-FundoParcial::MinRe)*SCREEN_HEIGHT/SCREEN_WIDTH)/2);  //
-
-			FundoParcial::ReFactor = (MaxRe-FundoParcial::MinRe)/(SCREEN_WIDTH-1);	
-			FundoParcial::ImFactor = (FundoParcial::MaxIm-MinIm)/(SCREEN_HEIGHT-1);
-
-			if (AnimateK) // Animacao 
-			{
-				double r = (1.0/1.0)*cos(6.0*AnimateN);
+			
+			if( Evento() ){
 							
-				FundoParcial::KRe = r*cos(AnimateN);
-				FundoParcial::KIm = r*sin(AnimateN);
+				calculoParametros();
 				
+				startThreads();
 				
-				AnimateN += 0.0002;
-			}
-
-			if (FundoParcial::MaxIterations <= 0) FundoParcial::MaxIterations = 10;
-
-			if(todasThreadsCalcularam()){
+				joinThreads();
+				
 				SDL_Flip(screen);
-				Zoom = Zoom*ZoomStep;
-				resumeThreads(); 
-				
 			}
 			
-			
-			//~ contador++;
-			//~ if(contador == 1000){ // ALGO MUDA AQUI MAS é TIPO ISSo
-				//~ Zoom = Zoom*ZoomStep;
-				//~ contador=0;
-				//~ }
-				
-			Evento();
-			}
-			
+		}		
 	}
-	
-	void FundoInteiro :: Evento(){
+			
 
+	
+	bool FundoInteiro :: Evento(){
+		bool retorno=false;
 		while(SDL_PollEvent(&event)) {
 			
 			Uint8 mousestate;
@@ -191,24 +149,21 @@ FundoInteiro :: FundoInteiro(){
 					FundoParcial::ColB = rand() % 256;
 				}	
 				
-				//~ if (event.key.keysym.sym == SDLK_a) AnimateK = !AnimateK;
+				if (event.key.keysym.sym == SDLK_k) AnimateK = !AnimateK;
 
 
-				if (event.key.keysym.sym == SDLK_s) {
-					AimIm +=0.1;
-					resumeThreads();
-				}
 				if (event.key.keysym.sym == SDLK_w) {
-					AimIm -=0.1;
-					resumeThreads();
+					AimIm +=0.1;
+					
 				}
-				if (event.key.keysym.sym == SDLK_d) {
-					AimRe +=0.1;
-					resumeThreads();
+				if (event.key.keysym.sym == SDLK_s) {
+					AimIm -=0.1;
 				}
 				if (event.key.keysym.sym == SDLK_a) {
+					AimRe +=0.1;
+				}
+				if (event.key.keysym.sym == SDLK_d) {
 					AimRe -=0.1;
-					resumeThreads();
 				}
 
 			}
@@ -223,16 +178,50 @@ FundoInteiro :: FundoInteiro(){
 				AimIm = FundoParcial::MaxIm - event.button.y*FundoParcial::ImFactor; // calcula um novo centro 
 				AimRe = FundoParcial::MinRe + event.button.x*FundoParcial::ReFactor;  // calcula um novo centro 
 
-				if (event.button.button == SDL_BUTTON_LEFT) {resumeThreads(); Zoom = Zoom*ZoomStep;}
+				if (event.button.button == SDL_BUTTON_LEFT)  Zoom = Zoom*ZoomStep;
 				if (event.button.button == SDL_BUTTON_RIGHT) {
-					resumeThreads(); 
 					Zoom = Zoom*1.2;
 					printf( "%f \n",Zoom);
 					}
 			}
-			
-		
+			retorno = true;
 		}
 		
+		return retorno;
+		
+	}
+	
+	
+	void FundoInteiro :: calculoParametros (){
+		if (CentreRe != AimRe) 
+			CentreRe = (AimRe+CentreRe)/2;
+		if (CentreIm != AimIm) 
+			CentreIm = (AimIm+CentreIm)/2;
+
+		if ( (CentreRe/AimRe) < 0.01 ) 
+			CentreRe = AimRe;
+		if ( (CentreIm/AimIm) < 0.01 ) 
+			CentreIm = AimIm;
+
+		FundoParcial::MinRe = CentreRe - (Zoom/2.0); 
+		MaxRe = CentreRe + (Zoom/2.0);
+		MinIm = CentreIm + (((MaxRe-FundoParcial::MinRe)*SCREEN_HEIGHT/SCREEN_WIDTH)/2);
+		FundoParcial::MaxIm = CentreIm - (((MaxRe-FundoParcial::MinRe)*SCREEN_HEIGHT/SCREEN_WIDTH)/2);  //
+
+		FundoParcial::ReFactor = (MaxRe-FundoParcial::MinRe)/(SCREEN_WIDTH-1);	
+		FundoParcial::ImFactor = (FundoParcial::MaxIm-MinIm)/(SCREEN_HEIGHT-1);
+
+		if (AnimateK) // Animacao 
+		{
+			double r = (1.0/1.0)*cos(6.0*AnimateN);
+						
+			FundoParcial::KRe = r*cos(AnimateN);
+			FundoParcial::KIm = r*sin(AnimateN);
+			
+			
+			AnimateN += 0.0002;
+		}
+
+		if (FundoParcial::MaxIterations <= 0) FundoParcial::MaxIterations = 10;
 		
 	}

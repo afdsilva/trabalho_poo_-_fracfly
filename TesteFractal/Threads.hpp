@@ -18,7 +18,7 @@ using namespace std;
 
 
 
-#define NUM_THREADS 8
+#define NUM_THREADS 100
 
 
 class Thread {
@@ -40,7 +40,6 @@ class Thread {
 	protected:
 		static void *entryPoint(void *pthis);
 		virtual void run() = 0;
-		bool m_running;
 
 
 };

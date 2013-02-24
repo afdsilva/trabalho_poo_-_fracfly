@@ -32,8 +32,6 @@
 			unsigned	y,x,n;
 			double tmp, c_im, c_re, Z_re, Z_im, Z_re2, Z_im2;
 			
-			while(!exit) {
-				while(m_running){	
 					for (y = start_y; y < stop_y; ++y) {
 						c_im = MaxIm - y*ImFactor;
 
@@ -75,19 +73,5 @@
 								setpixel( screen, x, y, 25, 255, 150); 
 						}
 					}
-					m_running = false;
-				}
-				pauseThread();
-			}
 	}
 
-	void FundoParcial :: pauseThread(){
-		 while (!m_running)
-			usleep(50);
-	}
-	bool FundoParcial :: getRunning(){
-		return m_running;
-	}
-	void FundoParcial :: setRunning(bool m_running ){
-		this->m_running = m_running ;
-	}

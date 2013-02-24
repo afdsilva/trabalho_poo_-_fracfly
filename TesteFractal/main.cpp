@@ -11,7 +11,6 @@ int main(){
 	
 	
 	srand((int)time(NULL));
-	fundo.NoInic();
 	
 	fundo.ExecutarFractal();
 	
