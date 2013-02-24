@@ -2,6 +2,7 @@
 	#define _FGERENCIADORESTADOS_H_
 
 #include "FEstado.h"
+#include "Definicoes.h"
 
 enum {
 	ESTADO_NENHUM,

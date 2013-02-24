@@ -4,7 +4,7 @@
 CC=g++
 
 # Objects
-OBJETOS=FSuperficie.o FFonte.o FEvento.o FAnimacao.o FEntidade.o FGerenciadorEstados.o FEntidadeColisao.o FEstado.o FEstadoIntro.o FEstadoJogo.o FEstadoMenu.o FAzulejo.o FMap.o FCamera.o FFPS.o FArea.o FNave.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FracFly.o 
+OBJETOS=male_libs.o FSuperficie.o FFonte.o FEvento.o FAnimacao.o FEntidade.o FGerenciadorEstados.o FEntidadeColisao.o FEstado.o FEstadoIntro.o FEstadoJogo.o FEstadoMenu.o FAzulejo.o FMap.o FCamera.o FFPS.o FArea.o FNave.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FracFly.o
 
 # Compilador flags - Warning, debug, sdl
 CPPFLAGS=-std=c++0x -Wall -g -lm `sdl-config --cflags`
@@ -20,6 +20,8 @@ jogo: $(OBJETOS) FracFly.h FracFly.cpp
 	$(CC) $(OBJETOS) $(CPPFLAGS) $(LDFLAGS) -o $(EXECUTAVEL)
 FracFly: $(OBJETOS) FracFly.h FracFly.cpp
 	$(CC) $(CPPFLAGS) -c FracFly.cpp
+male_libs: male_libs.h male_libs.cpp
+	$(CC) $(CPPFLAGS) -c male_libs.cpp
 NoInic: FracFly.h FracFly_NoInic.cpp
 	$(CC) $(CPPFLAGS) -c FracFly_NoInic.cpp
 NoEvento: FracFly.h FracFly_NoEvento.cpp
@@ -66,18 +68,64 @@ FEstadoMenu: FEstado.h FEstadoMenu.h FEstadoMenu.cpp
 	$(CC) $(CPPFLAGS) -c FEstadoMenu.cpp
 FEstadoJogo: FEstado.h FEstadoJogo.h FEstadoJogo.cpp
 	$(CC) $(CPPFLAGS) -c FEstadoJogo.cpp
-
 #Instalar SDL
 pacotes:
 	sudo apt-get install libsdl-image1.2-dev libsdl-image1.2 libsdl-ttf2.0-0 libsdl-ttf2.0-dev libsdl1.2-dev libsdl1.2debian libsdl-gfx1.2-4 libsdl-gfx1.2-dev libsdl-mixer1.2
 
-#dribledavaca:
-#	wget <end>
-#	tar xvzf <arq>
-#	cd <dir>
-#	./configure
-#	make
-#	sudo make install
+dependencias:
+	@echo "Dependencias"
+	#verifica se m4 esta instalado
+	#M4=m4 --version | grep GNU | sed 's/GNU M4 \(.*\)/\1/'
+	#cd /tmp 
+	#wget http://ftp.gnu.org/gnu/m4/m4-1.4.6.tar.gz
+	#tar xvzf m4-1.4.6.tar.gz
+	#cd /tmp/m4-1.4.6/
+	#./configure
+	#make
+	#sudo make install
+
+	#AUTOCONF=autoconf --version | grep autoconf | grep GNU | sed 's/.*) \(.*\)/\1/'
+	#cd /tmp 
+	#wget http://ftpmirror.gnu.org/autoconf/autoconf-2.69.tar.gz
+	#tar xvzf autoconf-2.69.tar.gz
+	#cd /tmp/autoconf-2.69/
+	#./configure
+	#make
+	#sudo make install
+
+	#cd /tmp 
+	#wget ftp://ftp.gnu.org/gnu/automake/automake-1.13.tar.gz
+	#tar xvzf automake-1.13.tar.xz
+	#cd /tmp/automake-1.13/
+	#./configure
+	#make
+	#sudo make install
+
+
+	#cd /tmp 
+	#wget http://download.savannah.gnu.org/releases/freetype/freetype-2.4.11.tar.gz
+	#tar xvzf freetype-2.4.11.tar.gz
+	#cd /tmp/freetype-2.4.11/
+	#./configure
+	#make
+	#sudo make install
+
+
+	#cd /tmp 
+	#wget http://www.libsdl.org/projects/SDL_ttf/release/SDL_ttf-2.0.11.tar.gz
+	#tar xvzf SDL_ttf-2.0.11.tar.gz
+	#cd /tmp/SDL_ttf-2.0.11/
+	#./configure
+	#make
+	#sudo make install
+
+	#cd /tmp 
+	#wget http://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-1.2.12.tar.gz
+	#tar xvzf SDL_mixer-1.2.12.tar.gz
+	#cd /tmp/SDL_mixer-1.2.12/
+	#./configure
+	#make
+	#sudo make install
 
 runtime:
 	sudo apt-get install libsdl1.2debian libsdl-gfx1.2-4 libsdl-mixer1.2 libsdl-image1.2 libsdl-ttf2.0-0 

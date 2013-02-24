@@ -28,6 +28,14 @@ void FEstadoIntro::NoLaco() {
 }
 
 void FEstadoIntro::NaRenderizacao(SDL_Surface * planoExibicao) {
+	SDL_Rect rect;
+	rect.x = 0;
+	rect.y = 0;
+	rect.w = WWIDTH;
+	rect.h = WHEIGHT;
+	
+	SDL_FillRect(planoExibicao, &rect, 0);
+
 	if (logo) {
 		FSuperficie::NoDesenhar(planoExibicao, logo, ((1024 / 2) - (640 / 2)), ((768 / 2) - (480 / 2)));
 	}

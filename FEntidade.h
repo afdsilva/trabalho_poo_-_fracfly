@@ -1,9 +1,10 @@
 #ifndef _FENTIDADE_H
   #define _FENTIDADE_H
 
-#include <vector>
-#include <iostream>
-#include <cmath>
+//#include <vector>
+//#include <iostream>
+//#include <cmath>
+#include "male_libs.h"
 
 #include "FArea.h"
 #include "FAnimacao.h"
@@ -14,14 +15,16 @@
 
 using namespace std;
 
-
+//tipo
 enum {
 	TIPO_ENTIDADE_GENERICO = 0,
 	TIPO_ENTIDADE_JOGADOR,
+	TIPO_ENTIDADE_TEXTO,
 	TIPO_ENTIDADE_TIRO
 	
 };
 
+//flags
 enum {
 	ENTIDADE_FLAG_NONE = 0,
 	
@@ -29,6 +32,8 @@ enum {
 	ENTIDADE_FLAG_FANTASMA		= 0x00000002,
 	ENTIDADE_FLAG_SOMENTEMAPA	= 0x00000004,
 	ENTIDADE_FLAG_ESPACO		= 0x00000008,
+	ENTIDADE_FLAG_TEXTO			= 0x00000010
+	
 };
 
 class FEntidade {
@@ -38,10 +43,13 @@ class FEntidade {
 	protected:
 		FAnimacao 			controleAnimacao;
 		SDL_Surface * 		superficieEntidade;
+		TTF_Font * 			fonteEntidade;
 
 	public:
 		float	x;
 		float 	y;
+		string	texto;
+		SDL_Color corTexto;
 		
 		//entidades especiais que se movem para determinadas posicoes
 		float movePraX;
@@ -89,6 +97,8 @@ class FEntidade {
 		
 	public:
 		virtual bool NoCarregar (char * arquivo, int width, int height, int maxFrames);
+		virtual bool NoCarregar (char * arquivo, string texto, int tam, SDL_Color corTexto);
+		virtual bool NoCarregar (TTF_Font * fonte, string texto, SDL_Color corTexto);
 		virtual void NoLaco();
 		virtual void NaRenderizacao(SDL_Surface * planoExibicao);
 		virtual void NaLimpeza();
