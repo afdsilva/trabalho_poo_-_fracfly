@@ -1,6 +1,6 @@
 #include "FundoInteiro.hpp"
 
-unsigned short FundoParcial::MaxIterations=500;
+unsigned short FundoParcial::MaxIterations=50;
 
 unsigned short int FundoParcial:: FracType = 1;
 unsigned short int FundoParcial:: ColR = rand()%256;
@@ -49,7 +49,7 @@ FundoInteiro :: FundoInteiro(){
 
 		//~ Zoom =979.847712;
 		Zoom =3.0;
-		ZoomStep = 0.9;
+		ZoomStep = 0.99;
 		AimStep = 0.0001;
 
 		AimRe = -0.5;
@@ -175,8 +175,8 @@ FundoInteiro :: FundoInteiro(){
 
 			if (event.type == SDL_MOUSEBUTTONDOWN && MouseMode == 0 ) {
 				
-				AimIm = FundoParcial::MaxIm - event.button.y*FundoParcial::ImFactor; // calcula um novo centro 
-				AimRe = FundoParcial::MinRe + event.button.x*FundoParcial::ReFactor;  // calcula um novo centro 
+				//~ AimIm = FundoParcial::MaxIm - event.button.y*FundoParcial::ImFactor; // calcula um novo centro 
+				//~ AimRe = FundoParcial::MinRe + event.button.x*FundoParcial::ReFactor;  // calcula um novo centro 
 
 				if (event.button.button == SDL_BUTTON_LEFT)  Zoom = Zoom*ZoomStep;
 				if (event.button.button == SDL_BUTTON_RIGHT) {
@@ -193,6 +193,15 @@ FundoInteiro :: FundoInteiro(){
 	
 	
 	void FundoInteiro :: calculoParametros (){
+		Zoom = Zoom*ZoomStep;
+		FundoParcial::MinRe = CentreRe - (Zoom/2.0); 
+		MaxRe = CentreRe + (Zoom/2.0);
+		MinIm = CentreIm + (((MaxRe-FundoParcial::MinRe)*SCREEN_HEIGHT/SCREEN_WIDTH)/2);
+		FundoParcial::MaxIm = CentreIm - (((MaxRe-FundoParcial::MinRe)*SCREEN_HEIGHT/SCREEN_WIDTH)/2);  //
+
+		FundoParcial::ReFactor = (MaxRe-FundoParcial::MinRe)/(SCREEN_WIDTH-1);	
+		FundoParcial::ImFactor = (FundoParcial::MaxIm-MinIm)/(SCREEN_HEIGHT-1);
+		
 		if (CentreRe != AimRe) 
 			CentreRe = (AimRe+CentreRe)/2;
 		if (CentreIm != AimIm) 
@@ -203,13 +212,6 @@ FundoInteiro :: FundoInteiro(){
 		if ( (CentreIm/AimIm) < 0.01 ) 
 			CentreIm = AimIm;
 
-		FundoParcial::MinRe = CentreRe - (Zoom/2.0); 
-		MaxRe = CentreRe + (Zoom/2.0);
-		MinIm = CentreIm + (((MaxRe-FundoParcial::MinRe)*SCREEN_HEIGHT/SCREEN_WIDTH)/2);
-		FundoParcial::MaxIm = CentreIm - (((MaxRe-FundoParcial::MinRe)*SCREEN_HEIGHT/SCREEN_WIDTH)/2);  //
-
-		FundoParcial::ReFactor = (MaxRe-FundoParcial::MinRe)/(SCREEN_WIDTH-1);	
-		FundoParcial::ImFactor = (FundoParcial::MaxIm-MinIm)/(SCREEN_HEIGHT-1);
 
 		if (AnimateK) // Animacao 
 		{
