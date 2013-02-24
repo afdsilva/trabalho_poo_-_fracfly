@@ -4,13 +4,13 @@
 CC=g++
 
 # Objects
-OBJETOS=FSuperficie.o FFonte.o FEvento.o FAnimacao.o FEntidade.o FGerenciadorEstados.o FEntidadeColisao.o FEstado.o FEstadoIntro.o FEstadoJogo.o FEstadoMenu.o FAzulejo.o FMap.o FCamera.o FFPS.o FArea.o FNave.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FracFly.o 
+OBJETOS=FSuperficie.o FFonte.o FEvento.o FAnimacao.o FEntidade.o FGerenciadorEstados.o FEntidadeColisao.o FEstado.o FEstadoIntro.o FEstadoJogo.o FEstadoMenu.o FAzulejo.o FMap.o FCamera.o FFPS.o FArea.o FNave.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FracFly.o FundoParcial.o FundoInteiro.o Threads.o
 
 # Compilador flags - Warning, debug, sdl
 CPPFLAGS=-std=c++0x -Wall -g -lm `sdl-config --cflags`
 
 # Ligador flags - sdl
-LDFLAGS=`sdl-config --libs` -lSDL -lSDL_image -lSDL_gfx -lSDL_ttf -lSDL_mixer
+LDFLAGS=`sdl-config --libs` -lSDL -lSDL_image -lSDL_gfx -lSDL_ttf 
 
 EXECUTAVEL=fracfly
 
@@ -44,6 +44,17 @@ FEntidadeColisao: FEntidade.h FEntidadeColisao.cpp
 	$(CC) $(CPPFLAGS) -c FEntidadeColisao.cpp
 FNave: FEntidade.h FNave.h FNave.cpp
 	$(CC) $(CPPFLAGS) -c FNave.cpp
+
+
+Threads: Threads.hpp Threads.cpp 
+	$(CC) $(CPPFLAGS) -c Threads.cpp
+	
+FundoInteiro: FundoInteiro.hpp FundoInteiro.cpp 
+	$(CC) $(CPPFLAGS) -c FundoInteiro.cpp
+	
+FundoParcial: FundoParcial.cpp   FundoParcial.hpp  
+	$(CC) $(CPPFLAGS) -c FundoParcial.cpp
+
 
 FCamera: FCamera.h FCamera.cpp
 	$(CC) $(CPPFLAGS) -c FCamera.cpp

@@ -5,6 +5,10 @@
 #include "FSuperficie.h"
 #include "FFonte.h"
 
+#include "FundoInteiro.hpp"
+
+
+
 #include "Definicoes.h"
 
 class FEstadoMenu : public FEstado {
@@ -13,6 +17,7 @@ class FEstadoMenu : public FEstado {
 		
 	private:
 		TTF_Font * fonte;
+		FundoInteiro fundo;
 		
 	private:
 		FEstadoMenu();

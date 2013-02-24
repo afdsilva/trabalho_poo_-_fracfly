@@ -12,12 +12,17 @@ void FEstadoMenu::NaAtivacao() {
 	if ((fonte = FFonte::NoCarregar(fonteArq, 100)) == NULL) {
 		return;
 	}
+	
+	
+	srand((int)time(NULL));
+	fundo.NoInic();	
 }	
 
 void FEstadoMenu::NaDesativacao() {
 }
 
 void FEstadoMenu::NoLaco() {
+	fundo.ExecutarFractal();
 }
 
 void FEstadoMenu::NaRenderizacao(SDL_Surface * planoExibicao) {
