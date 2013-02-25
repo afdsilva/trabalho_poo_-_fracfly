@@ -30,19 +30,15 @@ FundoInteiro :: FundoInteiro(){
 		ShowAxis =  0;
 		ShowGrid = 0;
 		ShowDot = 0;
-
+		stepDirection=9;
 		AnimateK = 0;
-		MouseMode = 0;
-		epoch_current = 0;
-		frame_last = 0;
-		PauseFrame = 0;
-		epoch_last = (int)time(NULL);
+		
 		
 		KStep =  0.02;
 
 		MaxRe = 0; 
 		MinIm = 0; 
-		fps = 0;
+	
 		CentreIm = 0;
 		CentreRe = 0;
 		AimIm = 0;
@@ -53,7 +49,7 @@ FundoInteiro :: FundoInteiro(){
 		AimStep = 0.0001;
 
 		AimRe = -0.5;
-		AnimateN = 0;			
+		AnimateN = 1;			
 
 		
 		 
@@ -96,16 +92,16 @@ FundoInteiro :: FundoInteiro(){
 		
 		while(!FundoParcial::exit){
 			
-			if( Evento() ){
+			Evento() ;
 							
-				calculoParametros();
-				
-				startThreads();
-				
-				joinThreads();
-				
-				SDL_Flip(screen);
-			}
+			calculoParametros();
+			
+			startThreads();
+			
+			joinThreads();
+			
+			SDL_Flip(screen);
+			
 			
 		}		
 	}
@@ -115,16 +111,16 @@ FundoInteiro :: FundoInteiro(){
 	bool FundoInteiro :: Evento(){
 		bool retorno=false;
 		while(SDL_PollEvent(&event)) {
+				
 			
-			Uint8 mousestate;
-			mousestate = SDL_GetMouseState(NULL, NULL);
+			if (event.key.keysym.sym == SDLK_k) AnimateK = !AnimateK;
 
 			if (event.type == SDL_QUIT ) FundoParcial::exit = 1;
 			
 			if (event.type == SDL_KEYDOWN) {
 				if (event.key.keysym.sym == SDLK_SPACE) {
-					AimRe = -0.5; // Centro x do mouse
-					AimIm = 0.0; // centro y do mouse
+					AimRe = -0.5;
+					AimIm = 0.0; 
 					FundoParcial::MaxIterations = 30;
 					Zoom = 3.0;
 				}
@@ -149,41 +145,22 @@ FundoInteiro :: FundoInteiro(){
 					FundoParcial::ColB = rand() % 256;
 				}	
 				
-				if (event.key.keysym.sym == SDLK_k) AnimateK = !AnimateK;
-
-
-				if (event.key.keysym.sym == SDLK_w) {
-					AimIm +=0.1;
-					
-				}
 				if (event.key.keysym.sym == SDLK_s) {
-					AimIm -=0.1;
+					AimIm -= stepDirection * FundoParcial::ImFactor;
+				}
+				if (event.key.keysym.sym == SDLK_w) {
+					AimIm += stepDirection * FundoParcial::ImFactor;
 				}
 				if (event.key.keysym.sym == SDLK_a) {
-					AimRe +=0.1;
+					AimRe -= stepDirection * FundoParcial::ReFactor;
 				}
 				if (event.key.keysym.sym == SDLK_d) {
-					AimRe -=0.1;
+					AimRe += stepDirection* FundoParcial::ReFactor;
 				}
-
-			}
-
-			if(mousestate & SDL_BUTTON(1) && MouseMode == 1){
-    			FundoParcial::KIm =FundoParcial::MaxIm - event.button.y*FundoParcial::ImFactor;
-				FundoParcial::KRe = FundoParcial::MinRe + event.button.x*FundoParcial::ReFactor;
-			} 
-
-			if (event.type == SDL_MOUSEBUTTONDOWN && MouseMode == 0 ) {
 				
-				//~ AimIm = FundoParcial::MaxIm - event.button.y*FundoParcial::ImFactor; // calcula um novo centro 
-				//~ AimRe = FundoParcial::MinRe + event.button.x*FundoParcial::ReFactor;  // calcula um novo centro 
-
-				if (event.button.button == SDL_BUTTON_LEFT)  Zoom = Zoom*ZoomStep;
-				if (event.button.button == SDL_BUTTON_RIGHT) {
-					Zoom = Zoom*1.2;
-					printf( "%f \n",Zoom);
-					}
+				
 			}
+			
 			retorno = true;
 		}
 		
