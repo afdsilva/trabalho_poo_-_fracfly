@@ -15,14 +15,14 @@ class FundoInteiro{
 	int SCREEN_HEIGHT;
 	
 	unsigned short int epoch_last, epoch_current, frame_last,PauseFrame;
-	unsigned short int ShowAxis, ShowGrid, ShowDot, AnimateK, MouseMode;
+	unsigned short int ShowAxis, ShowGrid, ShowDot, AnimateK;
 	
-	double MaxRe, MinIm, fps, Zoom, CentreIm, CentreRe, AimIm, AimRe, ZoomStep, AimStep;
-	double KStep;
+	double MaxRe, MinIm, Zoom, CentreIm, CentreRe, AimIm, AimRe, ZoomStep, AimStep;
+	double KStep,stepDirection;
 	double AnimateN, AnimateReStep, AnimateImStep;
 
 	
-	int i, inc_x, inc_y, rc, frame, id, tmp;
+	int i, inc_x, inc_y;
 	double y, x;
 
 public:
