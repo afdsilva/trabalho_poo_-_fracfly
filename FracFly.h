@@ -15,8 +15,10 @@ class FracFly : public FEvento {
 	private:
 		bool rodando;
 		
-		//superficies
 		SDL_Surface * planoExibicao;
+	
+	public:
+		FEntidade cursor;
 		
 	public:
 		FracFly();
@@ -26,6 +28,9 @@ class FracFly : public FEvento {
 		bool NoInic();
 		void NoEvento(SDL_Event * evento);
 			void OnExit();
+			void OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle);
+			void OnLButtonDown(int mX, int mY);
+			void OnLButtonUp(int mX, int mY);
 			
 		void NoLaco();
 		void NaRenderizacao();

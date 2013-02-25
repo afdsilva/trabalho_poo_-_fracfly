@@ -17,6 +17,8 @@ void FracFly::NoLaco() {
 	char buffer[255];
 	sprintf(buffer, "Fracfly - FPS: %d", FFPS::FPSControle.GetFPS());
 	SDL_WM_SetCaption(buffer, buffer);
+
+	cursor.NoLaco();
 	
 	//Reduz o consumo de CPU adicionando um delay
 	delaytime = waittime - (SDL_GetTicks() - framestarttime);

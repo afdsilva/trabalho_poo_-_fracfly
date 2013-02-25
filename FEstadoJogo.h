@@ -1,12 +1,15 @@
 #ifndef _FESTADOJOGO_H_
 	#define _FESTADOJOGO_H_
 
+#include "Definicoes.h"
+
 #include "FEstado.h"
 
 #include "FArea.h"
 #include "FCamera.h"
 #include "FEntidade.h"
 #include "FSuperficie.h"
+#include "FFonte.h"
 
 #include "FNave.h"
 
@@ -15,7 +18,6 @@ class FEstadoJogo : public FEstado {
 		static FEstadoJogo instancia;
 		
 		FNave 		jogador;
-		FEntidade	cursor;
 		FEntidade	arma1;
 		FEntidade	arma2;
 		

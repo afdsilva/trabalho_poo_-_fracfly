@@ -7,6 +7,8 @@ void FracFly::NaLimpeza() {
 
 	FGerenciadorEstados::SetEstadoAtivo(ESTADO_NENHUM);
 	
+	cursor.NaLimpeza();
+	
 	SDL_FreeSurface(planoExibicao);
 	SDL_Quit();
 }

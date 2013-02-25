@@ -1,6 +1,7 @@
 #include "FNave.h"
 
 FNave::FNave() {
+	tipo = TIPO_ENTIDADE_JOGADOR;
 }
 
 bool FNave::NoCarregar(char * arquivo, int width, int height, int maxFrames) {

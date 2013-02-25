@@ -12,10 +12,6 @@ void FEstadoJogo::NaAtivacao() {
 	if (jogador.NoCarregar(naveArquivo, 1024, 768, 0) == false) {
 		return;
 	}
-	char cursorArquivo[] =  "res/mira1.png";
-	if (cursor.NoCarregar(cursorArquivo,48,48,0) == false) {
-		return;
-	}
 
 	char armaArquivo[] =  "res/arma.png";
 	if (arma1.NoCarregar(armaArquivo,80,537,0) == false) {
@@ -30,19 +26,17 @@ void FEstadoJogo::NaAtivacao() {
 	arma2.x = WWIDTH - 170;
 	arma2.y = WHEIGHT - (arma2.height / 2);
 
-	cursor.flags = ENTIDADE_FLAG_ESPACO;
 	arma1.flags = ENTIDADE_FLAG_ESPACO;
 	arma2.flags = ENTIDADE_FLAG_ESPACO;
 	jogador.flags = ENTIDADE_FLAG_ESPACO;
 
 
 	//Coloca o cursor na lista de entidades, mas ele sera tratado de forma independente
-	FEntidade::listaEntidades.push_back(&cursor);
+	FEntidade::listaEntidades.push_back(&jogador);
 
 	FEntidade::listaEntidades.push_back(&arma1);
 	FEntidade::listaEntidades.push_back(&arma2);
-	FEntidade::listaEntidades.push_back(&jogador);
-	//jogador.x = jogador.x + (1024 / 2);
+
 	FCamera::controleCamera.modoAlvo = MODO_ALVO_NORMAL;
 	FCamera::controleCamera.SetAlvo(&(jogador.x), &jogador.y);
 
@@ -65,14 +59,10 @@ void FEstadoJogo::NoLaco() {
 
 	//chama cada entidade na lista de entidades, utilizando o metodo apropriado para as entidades no FEntidade.cpp
 	for (int i = 0; i < (int) FEntidade::listaEntidades.size(); i++) {
-		//como a lista de entidades é um vetor, esse vetor pode ter buracos
-		//o if abaixo impede que seja feitas chamadas desnecessarias quando nao existe mais o objeto no vetor
 		if(!FEntidade::listaEntidades[i]) continue;
-		//reduz o tamanho do vetor se verifica que o ultimo estado da lista é morto, ajuda (espero) na limpeza de objetos
-		if (FEntidade::listaEntidades[i]->morto && (int) FEntidade::listaEntidades.size() == i+1) {
+		if (FEntidade::listaEntidades[i]->morto && (int)FEntidade::listaEntidades.size() == i+1) {
 			FEntidade::listaEntidades.pop_back();
 		}
-		//chama o metodo NoLaco() do objeto, definido no FEntidade.cpp
 		FEntidade::listaEntidades[i]->NoLaco();
 	}
 	
@@ -102,12 +92,13 @@ void FEstadoJogo::NaRenderizacao(SDL_Surface * planoExibicao) {
 	
 	SDL_FillRect(planoExibicao, &rect, 0);
 	
-	FArea::controleArea.NaRenderizacao(planoExibicao, -FCamera::controleCamera.GetX(), -FCamera::controleCamera.GetY());
-	
-	for(int i = 0;i < (int) FEntidade::listaEntidades.size();i++) {
+	for(int i = (int) FEntidade::listaEntidades.size()-1;i >= 0;i--) {
 		if(!FEntidade::listaEntidades[i]) continue;
 		FEntidade::listaEntidades[i]->NaRenderizacao(planoExibicao);
 	}
+
+	FArea::controleArea.NaRenderizacao(planoExibicao, -FCamera::controleCamera.GetX(), -FCamera::controleCamera.GetY());
+
 }
 
 FEstadoJogo * FEstadoJogo::GetInstancia() {
@@ -159,12 +150,6 @@ void FEstadoJogo::OnKeyUp(SDLKey sym, SDLMod mod, Uint16 unicode) {
 
 //Evento de movimentação do mouse e cliques enquanto se move
 void FEstadoJogo::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle) {
-	if (mX) {
-		cursor.x = mX;
-	}
-	if (mY) {
-		cursor.y = mY;
-	}
 }
 //Evento de pressionar o botao esquerdo do mouse
 void FEstadoJogo::OnLButtonDown(int mX, int mY) {

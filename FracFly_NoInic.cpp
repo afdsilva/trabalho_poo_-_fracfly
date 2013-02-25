@@ -4,8 +4,22 @@
  **/
 bool FracFly::NoInic() {
 	//inicializa todos recursos do SDL
-	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-		printf("NoInic: Não foi possivel Inicializar SDL\n");
+	try {
+		if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
+			throw;
+	} catch (...) {
+		string msgErro = "FracFly::NoInic: Erro SDL_Init ";
+		msgErro += SDL_GetError();
+		debug(msgErro);
+		return false;
+	}
+	try {
+		if( TTF_Init() == -1 )
+			throw;
+	} catch (...) {
+		string msgErro = "FracFly::NoInic: Erro TTF_Init ";
+		msgErro += SDL_GetError();
+		debug(msgErro);
 		return false;
 	}
 	//* Resolucao da tela
@@ -18,19 +32,30 @@ bool FracFly::NoInic() {
 	SDL_ShowCursor(SDL_DISABLE);
 	
 	//inicializa um plano de exibicao, todas outras superficies são criadas em cima dela
-	if ((planoExibicao = SDL_SetVideoMode(WWIDTH, WHEIGHT, 32, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL) {
-		printf("NoInic: Não foi possivel criar Plano Exibição\n");
+	try {
+		if ((planoExibicao = SDL_SetVideoMode(WWIDTH, WHEIGHT, 32, SDL_HWSURFACE | SDL_DOUBLEBUF)) == NULL)
+			throw;
+	} catch (...) {
+		string msgErro = "FracFly::NoInic: Não foi possivel criar Plano Exibição ";
+		msgErro += SDL_GetError();
+		debug(msgErro);
 		return false;
 	}
 
-    if( TTF_Init() == -1 ) {
-		cout << "Erro TTF_Init " << SDL_GetError() << endl;
-        return false;
-    }
 	
 	//SDL_EnableKeyRepeat(1, SDL_DEFAULT_REPEAT_INTERVAL / 3);
 	
 	FGerenciadorEstados::SetEstadoAtivo(ESTADO_INTRO);
 
+	char cursorArquivo[] =  "res/mira1.png";
+	try {
+		if (cursor.NoCarregar(cursorArquivo,48,48,0) == false)
+			throw;
+		cursor.flags = ENTIDADE_FLAG_CURSOR | ENTIDADE_FLAG_FANTASMA;
+		cursor.tipo = TIPO_ENTIDADE_MOUSE;
+	} catch (...) {
+		debug("FracFly::NoInic: Nao foi possivel carregar cursor",39);
+	}
+	
 	return true;
 }

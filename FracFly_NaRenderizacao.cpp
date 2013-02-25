@@ -5,6 +5,8 @@
 void FracFly::NaRenderizacao() {
 	
 	FGerenciadorEstados::NaRenderizacao(planoExibicao);
+
+	cursor.NaRenderizacao(planoExibicao);
 	
 	SDL_Flip(planoExibicao);
 

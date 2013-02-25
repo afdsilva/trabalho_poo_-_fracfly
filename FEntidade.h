@@ -18,10 +18,11 @@ using namespace std;
 //tipo
 enum {
 	TIPO_ENTIDADE_GENERICO = 0,
-	TIPO_ENTIDADE_JOGADOR,
 	TIPO_ENTIDADE_TEXTO,
+	TIPO_ENTIDADE_BOTAO,
+	TIPO_ENTIDADE_MOUSE,
+	TIPO_ENTIDADE_JOGADOR,
 	TIPO_ENTIDADE_TIRO
-	
 };
 
 //flags
@@ -32,8 +33,12 @@ enum {
 	ENTIDADE_FLAG_FANTASMA		= 0x00000002,
 	ENTIDADE_FLAG_SOMENTEMAPA	= 0x00000004,
 	ENTIDADE_FLAG_ESPACO		= 0x00000008,
-	ENTIDADE_FLAG_TEXTO			= 0x00000010
-	
+	ENTIDADE_FLAG_CURSOR		= 0x00000010,
+	ENTIDADE_FLAG_BOTAO_HOVER	= 0x00000020,
+	ENTIDADE_FLAG_BOTAO_JOGO	= 0x00000040,
+	ENTIDADE_FLAG_BOTAO_OPTIONS = 0x00000080,
+	ENTIDADE_FLAG_BOTAO_SAIR	= 0x00000100,
+	ENTIDADE_FLAG_BOTAO_CLICK	= 0x00000200
 };
 
 class FEntidade {
@@ -119,8 +124,9 @@ class FEntidade {
 	public:
 		bool Colisoes(int oX, int oY, int oW, int oH);
 	
-	private:
+	public:
 		bool PosValido(int novoX, int novoY);
+	private:
 		bool PosValidoAzulejo(FAzulejo * azulejo);
 		bool PosValidoEntidade(FEntidade * entidade, int novoX, int novoY);
 		

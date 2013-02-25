@@ -1,4 +1,8 @@
 #include "FEntidade.h"
+
+#include "FGerenciadorEstados.h"
+
+
 /**
  * Inicializacao das Listas de Entidades
  **/
@@ -110,7 +114,7 @@ bool FEntidade::NoCarregar (TTF_Font * fonte, string texto, SDL_Color corTexto) 
 		return false;
 	}
 	this->tipo = TIPO_ENTIDADE_TEXTO;
-	this->flags = ENTIDADE_FLAG_TEXTO;
+	//this->flags = ENTIDADE_FLAG_TEXTO;
     this->texto = texto;
 	this->corTexto = corTexto;
 	return true;
@@ -137,89 +141,72 @@ bool FEntidade::NoCarregar (char * arquivo, int width, int height, int maxFrames
  * Controla o fluxo de dados da entidade durante o Laço
  **/
 void FEntidade::NoLaco() {
-	float distancia = 0;
-	//se for tiro nao vai ter movimento arbitrario
-	if (moveEsquerda == false && moveDireita == false) {
-		if ((tipo == TIPO_ENTIDADE_TIRO)) {
-			//printf("acelX: %f acelY: %f\n",acelX,acelY);
-			//printf("ainda dando tiro!\n");
-		} else {
-			PararMovimento();
-		}
-	}
-	
-	if (moveEsquerda) {
-		acelX = -0.5;
-	}
-	else if (moveDireita) {
-		acelX = 0.5;
-	}
-	if (flags & ENTIDADE_FLAG_GRAVIDADE) {
-		acelY = 0.75f;
+	switch(tipo) {
+		case TIPO_ENTIDADE_GENERICO:
+			if (flags & ENTIDADE_FLAG_GRAVIDADE) {
+				acelY = 0.75f;
+			}
+		
+			break;
+		case TIPO_ENTIDADE_JOGADOR:
+			break;
+		case TIPO_ENTIDADE_TEXTO:
+			break;
+		case TIPO_ENTIDADE_MOUSE:
+			break;
+		case TIPO_ENTIDADE_TIRO:
+			float distancia = 0;
+			
+			distancia = sqrt((float)pow( (this->x < movePraX ? movePraX - this->x : -movePraX + this->x) ,2) + (float)pow((this->y > movePraY ? movePraY - this->y : -movePraY + this->y),2));
+
+			//printf("distancia: %f\n", distancia);
+			acelX = (this->x < movePraX ? 1 : -1) * ((float)(x > movePraX ? x - movePraX : (-x + movePraX)) / (float) distancia);
+			//acelX = (x - movePraX) / distancia;
+			acelY = (this->y > movePraY ? 1 : -1) * ((float)(y < movePraY ? y - movePraY : (-y + movePraY)) / (float) distancia);
+
+			if (velX > 0) {
+				if (x >= movePraX) morto = true;
+			} else if (velX < 0) {
+				if (x <= movePraX) morto = true;
+			}
+			if (velY > 0) {
+				if (y >= movePraY) morto = true;
+			} else if (velY < 0) {
+				if (y <= movePraY) morto = true;
+			}
+			break;
 	}
 
 	velX += acelX * FFPS::FPSControle.GetFatorVelocidade();
 	velY += acelY * FFPS::FPSControle.GetFatorVelocidade();
 
-	if (tipo == TIPO_ENTIDADE_TIRO) {
-		distancia = sqrt((float)pow( (this->x < movePraX ? movePraX - this->x : -movePraX + this->x) ,2) + (float)pow((this->y > movePraY ? movePraY - this->y : -movePraY + this->y),2));
-
-		//printf("distancia: %f\n", distancia);
-		acelX = (this->x < movePraX ? 1 : -1) * ((float)(x > movePraX ? x - movePraX : (-x + movePraX)) / (float) distancia);
-		//acelX = (x - movePraX) / distancia;
-		acelY = (this->y > movePraY ? 1 : -1) * ((float)(y < movePraY ? y - movePraY : (-y + movePraY)) / (float) distancia);
-
-	} else {
-
-		if (velX > velMaxX) 	velX = velMaxX;
-		if (velX < -velMaxX) 	velX = -velMaxX;
-		if (velY > velMaxY)		velY = velMaxY;
-		if (velY < -velMaxY)	velY = -velMaxY;
-
-	}
+	if (velX > velMaxX) 	velX = velMaxX;
+	if (velX < -velMaxX) 	velX = -velMaxX;
+	if (velY > velMaxY)		velY = velMaxY;
+	if (velY < -velMaxY)	velY = -velMaxY;
 	
 	NaAnimacao();
 	NoMovimento(velX, velY);
-	if (tipo == TIPO_ENTIDADE_TIRO) {
-		//printf("distancia = %f | this->x = %f | this->width = %d | this->y = %f | this->height = %d\n", distancia, this->x, this->width, this->y, this->height);
-		//distancia <= (this->x + this->width) || distancia <= (this->y + this->height) || 
-		//se velocidade for positiva objeto esta se movemendo para direita
-		if (velX > 0) {
-			//this->x nao pode ser maior que this->movePraX
-			if (x >= movePraX)
-				morto = true;
-		} else if (velX < 0) {
-			//se for negativa esta se movemendo para esquerda
-			if (x <= movePraX)
-				morto = true;
-		}
-		if (velY > 0) {
-			//se velocidade Y for positiva significa que esta indo para baixo;
-			if (y >= movePraY)
-				morto = true;
-		} else if (velY < 0) {
-			//se for negativa esta subindo
-			if (y <= movePraY)
-				morto = true;
-		}
-		//testa bordas
-		if (morto) {
-			NaLimpeza();
-		}
-	}
+
+	if (morto)
+		NaLimpeza();
 }
 
 /**
  * Controla a renderização na tela da entidade
  **/
 void FEntidade::NaRenderizacao(SDL_Surface * planoExibicao) {
-	if (tipo == TIPO_ENTIDADE_TEXTO) {
-		//if (!(superficieEntidade == NULL || fonteEntidade == NULL) || planoExibicao == NULL) return;
-		FFonte::NoEscrever(planoExibicao,fonteEntidade,texto,x,y,corTexto);
-	}
-	else {
-		if (superficieEntidade == NULL || planoExibicao == NULL) return;
-		FSuperficie::NoDesenhar(	planoExibicao, 	superficieEntidade, 	x - FCamera::controleCamera.GetX(), 	y - FCamera::controleCamera.GetY(), 	frameAtualCol * width, 		(frameAtualLinha + controleAnimacao.GetFrameAtual()) * height, 	width, 	height);
+	switch(tipo) {
+		case TIPO_ENTIDADE_TEXTO:
+			if (fonteEntidade == NULL || planoExibicao == NULL) return;
+			if (!(flags & ENTIDADE_FLAG_BOTAO_HOVER))
+				corTexto = {255,255,255};
+			FFonte::NoEscrever(planoExibicao,fonteEntidade,texto,x,y,corTexto);
+			break;
+		default:
+			if (superficieEntidade == NULL || planoExibicao == NULL) return;
+				FSuperficie::NoDesenhar(	planoExibicao, 	superficieEntidade, 	x - FCamera::controleCamera.GetX(), 	y - FCamera::controleCamera.GetY(), 	frameAtualCol * width, 		(frameAtualLinha + controleAnimacao.GetFrameAtual()) * height, 	width, 	height);
+			break;
 	}
 }
 /**
@@ -248,6 +235,19 @@ void FEntidade::NaAnimacao() {
  * Controle de Colisão da entidade
  **/
 bool FEntidade::NaColisao(FEntidade * entidade) {
+	
+		if (flags & ENTIDADE_FLAG_BOTAO_HOVER) {
+			corTexto =  { 255, 0, 0 };
+		}
+		if (flags & ENTIDADE_FLAG_BOTAO_CLICK) {
+			FGerenciadorEstados::SetEstadoAtivo(ESTADO_JOGO);
+		}
+		if (flags & ENTIDADE_FLAG_BOTAO_CLICK) {
+			FGerenciadorEstados::SetEstadoAtivo(ESTADO_OPTIONS);
+		}
+		if (flags & ENTIDADE_FLAG_BOTAO_CLICK) {
+			FGerenciadorEstados::SetEstadoAtivo(ESTADO_NENHUM);
+		}
 	return true;
 }
 
@@ -378,6 +378,7 @@ bool FEntidade::Colisoes(int oX, int oY, int oW, int oH) {
  **/
 bool FEntidade::PosValido(int novoX, int novoY) {
 	bool retorno = true;
+	/**
 	int inicioX = (novoX + colX) / TAMANHO_AZULEJO;
 	int inicioY = (novoY + colY) / TAMANHO_AZULEJO;
 	
@@ -392,11 +393,20 @@ bool FEntidade::PosValido(int novoX, int novoY) {
 			}
 		}
 	}
+	**/
 	if (flags & ENTIDADE_FLAG_SOMENTEMAPA) {
 	} else {
-		for (int i = 0;i < (int)listaEntidades.size();i++) {
-			if (PosValidoEntidade(listaEntidades[i], novoX, novoY) == false) {
-				retorno = false;
+		if (tipo == TIPO_ENTIDADE_MOUSE) {
+			for (int i = 0;i < (int)listaEntidades.size();i++) {
+				if(PosValidoEntidade(listaEntidades[i], novoX, novoY))
+					return false;
+			}
+		}
+		else {
+			for (int i = 0;i < (int)listaEntidades.size();i++) {
+				if (PosValidoEntidade(listaEntidades[i], novoX, novoY) == false) {
+					retorno = false;
+				}
 			}
 		}
 	}

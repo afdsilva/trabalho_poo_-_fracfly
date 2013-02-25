@@ -34,7 +34,7 @@ void FGerenciadorEstados::SetEstadoAtivo(int estadoId) {
 			estadoAtivo = FEstadoMenu::GetInstancia();
 			break;
 /**
-		case ESTADO_MENU_OPTIONS:
+		case ESTADO_OPTIONS:
 			estadoAtivo = FEstadoOptions::GetInstancia();
 			break;
 **/

@@ -1,8 +1,6 @@
 #include "FEstadoMenu.h"
 #include "FGerenciadorEstados.h"
 
-
-
 FEstadoMenu FEstadoMenu::instancia;
 
 FEstadoMenu::FEstadoMenu() {
@@ -26,30 +24,30 @@ void FEstadoMenu::NaAtivacao() {
 		FEntidade * titulo = new FEntidade();
 		if (titulo->NoCarregar(lazyFontTitulo,"Menu",branco)) {
 			titulo->x = 10;
-			titulo->y = 300;
+			titulo->y = 150;
 			FEntidade::listaEntidades.push_back(titulo);
 		}
 		FEntidade * iniciar = new FEntidade();
 		if (iniciar->NoCarregar(lazyFontItens,"Iniciar",branco)) {
 			iniciar->x = titulo->x + 20;
-			iniciar->y = titulo->y + titulo->height + 10;
+			iniciar->y = titulo->y + titulo->height + 40;
+			iniciar->flags = ENTIDADE_FLAG_BOTAO | ENTIDADE_FLAG_BOTAO_JOGO ;
 			FEntidade::listaEntidades.push_back(iniciar);
 		}
 		FEntidade * options = new FEntidade();
 		if (options->NoCarregar(lazyFontItens,"Opcoes",branco)) {
 			options->x = titulo->x + 20;
-			options->y = iniciar->y + iniciar->height + 10;
+			options->y = iniciar->y + iniciar->height + 30;
+			options->flags = ENTIDADE_FLAG_BOTAO | ENTIDADE_FLAG_BOTAO_OPTIONS;
 			FEntidade::listaEntidades.push_back(options);
 		}
 		FEntidade * sair = new FEntidade();
 		if (sair->NoCarregar(lazyFontItens,"Sair",branco)) {
 			sair->x = titulo->x + 20;
-			sair->y = options->y + options->height + 10;
+			sair->y = options->y + options->height + 30;
+			sair->flags = ENTIDADE_FLAG_BOTAO | ENTIDADE_FLAG_BOTAO_SAIR;
 			FEntidade::listaEntidades.push_back(sair);
 		}
-
-
-
 	} catch (int e) {
 		switch(e) {
 			case 1:
@@ -61,15 +59,8 @@ void FEstadoMenu::NaAtivacao() {
 		return;
 	}
 	
-	char cursorArquivo[] =  "res/mira1.png";
-	if (cursor.NoCarregar(cursorArquivo,48,48,0) == false) {
-		return;
-	}
-	cursor.flags = ENTIDADE_FLAG_ESPACO;
-	FEntidade::listaEntidades.push_back(&cursor);
-
-	srand((int)time(NULL));
-	fundo.NoInic();	
+	//srand((int)time(NULL));
+	//fundo.NoInic();	
 }	
 
 void FEstadoMenu::NaDesativacao() {
@@ -81,9 +72,7 @@ void FEstadoMenu::NaDesativacao() {
 }
 
 void FEstadoMenu::NoLaco() {
-<<<<<<< HEAD
 	//~ fundo.ExecutarFractal();
-=======
 	for (int i = 0; i < (int) FEntidade::listaEntidades.size(); i++) {
 		if(!FEntidade::listaEntidades[i]) continue;
 		if (FEntidade::listaEntidades[i]->morto && (int) FEntidade::listaEntidades.size() == i+1) {
@@ -92,8 +81,19 @@ void FEstadoMenu::NoLaco() {
 		FEntidade::listaEntidades[i]->NoLaco();
 	}
 
-	fundo.ExecutarFractal();
->>>>>>> 277610c2f3ebf5dfbd554672dff79d5c111a9965
+	for (int i = 0; i < (int) FEntidadeColisao::listaEntidadesColisoes.size(); i++) {
+		FEntidade * entidadeA = FEntidadeColisao::listaEntidadesColisoes[i].entidadeA;
+		FEntidade * entidadeB = FEntidadeColisao::listaEntidadesColisoes[i].entidadeB;
+		
+		if (entidadeA == NULL || entidadeB == NULL) continue;
+		
+		if (entidadeA->NaColisao(entidadeB)) {
+			entidadeB->NaColisao(entidadeA);
+		}
+	}
+	FEntidadeColisao::listaEntidadesColisoes.clear();
+
+	//fundo.ExecutarFractal();
 }
 
 void FEstadoMenu::NaRenderizacao(SDL_Surface * planoExibicao) {
@@ -131,20 +131,11 @@ void FEstadoMenu::OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode) {
 
 //Evento de movimentação do mouse e cliques enquanto se move
 void FEstadoMenu::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle) {
-	if (mX) {
-		cursor.x = mX;
-	}
-	if (mY) {
-		cursor.y = mY;
-	}
 }
 
 //Evento de pressionar o botao esquerdo do mouse
 void FEstadoMenu::OnLButtonDown(int mX, int mY) {
-	
-	
 }
 //Evento de soltar o botao esquerdo do mouse
 void FEstadoMenu::OnLButtonUp(int mX, int mY) {
-	
 }

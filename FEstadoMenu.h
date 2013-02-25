@@ -18,7 +18,6 @@ class FEstadoMenu : public FEstado {
 		
 	private:
 		TTF_Font * fonte;
-		FEntidade cursor;
 		FundoInteiro fundo;
 		
 	private:
