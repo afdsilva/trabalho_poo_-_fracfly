@@ -199,15 +199,17 @@ void FEntidade::NoLaco() {
 
 	if (morto)
 		NaLimpeza();
-		
-	OrdenaProfundidade();
 }
 
 void FEntidade::OrdenaProfundidade() {
 	//Reordena as entidades pelo atributo Z
+	/**
+	 * bubble fedorento, depois implementar um algoritmo decente...
+	 **/
+	//debug("Ordenando");
 	FEntidade * entidadeAux;
-	for (int i = 0; i < (int) FEntidade::listaEntidades.size(); i++) {
-		for (int j = i; j < (int) FEntidade::listaEntidades.size(); j++) {
+	for (int i = 0; i < (int) FEntidade::listaEntidades.size()-1; i++) {
+		for (int j = i+1; j < (int) FEntidade::listaEntidades.size()-1; j++) {
 			if (FEntidade::listaEntidades[i]->z > FEntidade::listaEntidades[j]->z) {
 				//inverte
 				entidadeAux = FEntidade::listaEntidades[i];

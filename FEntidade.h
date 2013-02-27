@@ -51,7 +51,7 @@ class FEntidade {
 	public:
 		float	x;
 		float 	y;
-		float 	z:
+		float 	z;
 		string	texto;
 		SDL_Color corTexto;
 		

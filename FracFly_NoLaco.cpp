@@ -10,6 +10,9 @@ Sint16 delaytime;
  * é feita nesse metodo;
  **/
 void FracFly::NoLaco() {
+
+	FEntidade::OrdenaProfundidade();
+	
 	FGerenciadorEstados::NoLaco();
 	
 	FFPS::FPSControle.NoLaco();

@@ -21,6 +21,7 @@ void FEstadoMenu::NaAtivacao() {
 		//carregou com sucesso a fonte cria entidades que serao os itens do menu
 		SDL_Color vermelho = {255,0,0};
 		SDL_Color branco = {255,255,255};
+
 		FEntidade * titulo = new FEntidade();
 		if (titulo->NoCarregar(lazyFontTitulo,"Menu",branco)) {
 			titulo->x = 10;
