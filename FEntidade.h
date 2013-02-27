@@ -41,6 +41,7 @@ enum {
 class FEntidade {
 	public:
 		static vector<FEntidade*> listaEntidades;
+		static void OrdenaProfundidade();
 		
 	protected:
 		FAnimacao 			controleAnimacao;
@@ -50,6 +51,7 @@ class FEntidade {
 	public:
 		float	x;
 		float 	y;
+		float 	z:
 		string	texto;
 		SDL_Color corTexto;
 		

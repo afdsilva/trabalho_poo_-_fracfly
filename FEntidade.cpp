@@ -16,6 +16,8 @@ FEntidade::FEntidade() {
 	fonteEntidade = NULL;
 	x = 0;
 	y = 0;
+	z = 1000;
+	
 	texto.clear();
 	corTexto = {255, 255, 255};
 	
@@ -197,6 +199,23 @@ void FEntidade::NoLaco() {
 
 	if (morto)
 		NaLimpeza();
+		
+	OrdenaProfundidade();
+}
+
+void FEntidade::OrdenaProfundidade() {
+	//Reordena as entidades pelo atributo Z
+	FEntidade * entidadeAux;
+	for (int i = 0; i < (int) FEntidade::listaEntidades.size(); i++) {
+		for (int j = i; j < (int) FEntidade::listaEntidades.size(); j++) {
+			if (FEntidade::listaEntidades[i]->z > FEntidade::listaEntidades[j]->z) {
+				//inverte
+				entidadeAux = FEntidade::listaEntidades[i];
+				FEntidade::listaEntidades[i] = FEntidade::listaEntidades[i+1];
+				FEntidade::listaEntidades[i+1] = entidadeAux;
+			}
+		}
+	}
 }
 
 /**
