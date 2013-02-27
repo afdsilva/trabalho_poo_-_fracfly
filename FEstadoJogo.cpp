@@ -93,7 +93,7 @@ void FEstadoJogo::NaRenderizacao(SDL_Surface * planoExibicao) {
 	SDL_FillRect(planoExibicao, &rect, 0);
 	
 	for(int i = (int) FEntidade::listaEntidades.size()-1;i >= 0;i--) {
-		if(!FEntidade::listaEntidades[i]) continue;
+		if(FEntidade::listaEntidades[i]->morto) continue;
 		FEntidade::listaEntidades[i]->NaRenderizacao(planoExibicao);
 	}
 

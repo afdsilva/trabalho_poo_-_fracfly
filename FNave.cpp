@@ -49,6 +49,8 @@ bool FNave::Atirar(FEntidade * entidade, int aX, int aY) {
 	tiro->y = y;
 	tiro->movePraX = aX;
 	tiro->movePraY = aY;
+	tiro->velMaxX = 100;
+	tiro->velMaxY = 100;
 
 	float distancia = sqrt((float)pow( (x < aX ? aX - x : -aX + x) ,2) + (float)pow((y > aY ? aY - y : -aY + y),2));
 

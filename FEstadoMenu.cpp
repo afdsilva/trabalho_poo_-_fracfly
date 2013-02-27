@@ -19,7 +19,7 @@ void FEstadoMenu::NaAtivacao() {
 			throw 1;
 			
 		//carregou com sucesso a fonte cria entidades que serao os itens do menu
-
+		SDL_Color vermelho = {255,0,0};
 		SDL_Color branco = {255,255,255};
 		FEntidade * titulo = new FEntidade();
 		if (titulo->NoCarregar(lazyFontTitulo,"Menu",branco)) {
@@ -27,25 +27,35 @@ void FEstadoMenu::NaAtivacao() {
 			titulo->y = 150;
 			FEntidade::listaEntidades.push_back(titulo);
 		}
-		FEntidade * iniciar = new FEntidade();
+
+		FEntidadeBotao * iniciar = new FEntidadeBotao();
 		if (iniciar->NoCarregar(lazyFontItens,"Iniciar",branco)) {
 			iniciar->x = titulo->x + 20;
 			iniciar->y = titulo->y + titulo->height + 40;
-			iniciar->flags = ENTIDADE_FLAG_BOTAO | ENTIDADE_FLAG_BOTAO_JOGO ;
+			iniciar->flags = ENTIDADE_FLAG_CURSOR ;
+			iniciar->AoPassarPorCima(vermelho,1,1);
+			iniciar->AoClicarDireito(ESTADO_JOGO);
+			iniciar->AoClicarEsquerdo(ESTADO_JOGO);
 			FEntidade::listaEntidades.push_back(iniciar);
 		}
-		FEntidade * options = new FEntidade();
+		FEntidadeBotao * options = new FEntidadeBotao();
 		if (options->NoCarregar(lazyFontItens,"Opcoes",branco)) {
 			options->x = titulo->x + 20;
 			options->y = iniciar->y + iniciar->height + 30;
-			options->flags = ENTIDADE_FLAG_BOTAO | ENTIDADE_FLAG_BOTAO_OPTIONS;
+			options->flags = ENTIDADE_FLAG_CURSOR;
+			options->AoPassarPorCima(vermelho,1,1);
+			options->AoClicarDireito(ESTADO_OPTIONS);
+			options->AoClicarEsquerdo(ESTADO_OPTIONS);
 			FEntidade::listaEntidades.push_back(options);
 		}
-		FEntidade * sair = new FEntidade();
+		FEntidadeBotao * sair = new FEntidadeBotao();
 		if (sair->NoCarregar(lazyFontItens,"Sair",branco)) {
 			sair->x = titulo->x + 20;
 			sair->y = options->y + options->height + 30;
-			sair->flags = ENTIDADE_FLAG_BOTAO | ENTIDADE_FLAG_BOTAO_SAIR;
+			sair->flags = ENTIDADE_FLAG_CURSOR;
+			sair->AoPassarPorCima(vermelho,1,1);
+			sair->AoClicarDireito(ESTADO_NENHUM);
+			sair->AoClicarEsquerdo(ESTADO_NENHUM);
 			FEntidade::listaEntidades.push_back(sair);
 		}
 	} catch (int e) {
@@ -122,7 +132,6 @@ void FEstadoMenu::OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode) {
 			FGerenciadorEstados::SetEstadoAtivo(ESTADO_NENHUM);
 			break;
 		case SDLK_RETURN:
-			FGerenciadorEstados::SetEstadoAtivo(ESTADO_JOGO);
 			break;
 		default:
 			break;

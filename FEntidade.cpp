@@ -1,7 +1,6 @@
 #include "FEntidade.h"
-
 #include "FGerenciadorEstados.h"
-
+#include "SDL/SDL.h"
 
 /**
  * Inicializacao das Listas de Entidades
@@ -14,7 +13,7 @@ std::vector<FEntidade*> FEntidade::listaEntidades;
 FEntidade::FEntidade() {
 
 	superficieEntidade = NULL;
-	
+	fonteEntidade = NULL;
 	x = 0;
 	y = 0;
 	texto.clear();
@@ -33,6 +32,7 @@ FEntidade::FEntidade() {
 	
 	tipo = TIPO_ENTIDADE_GENERICO;
 	
+	clique = false;
 	morto = false;
 	flags = ENTIDADE_FLAG_NONE;
 	
@@ -78,6 +78,28 @@ void FEntidade::SetSuperficie(SDL_Surface * novaSuperficie){
 }	
 
 /**
+ * Carrega um recurso na entidade (uma imagem)
+ **/
+bool FEntidade::NoCarregar (char * arquivo, int width, int height, int maxFrames) {
+	try {
+		if ((superficieEntidade = FSuperficie::NoCarregar(arquivo)) == NULL) throw;
+		FSuperficie::Transparencia(superficieEntidade, 255, 0, 255);
+		this->width = width;
+		this->height = height;
+	
+		controleAnimacao.maxFrames = maxFrames;
+	} catch (...) {
+		string msgErro = "FEntidade::NoCarregar: Superficie nao pode ser carregada";
+		msgErro += SDL_GetError();
+		debug(msgErro,109);
+		return false;
+	}
+	
+	return true;
+}
+
+
+/**
  * Carrega um recurso na entidade (uma fonte)
  **/
 bool FEntidade::NoCarregar (char * arquivo, string texto, int tam, SDL_Color corTexto) {
@@ -101,14 +123,14 @@ bool FEntidade::NoCarregar (TTF_Font * fonte, string texto, SDL_Color corTexto) 
 		if ((fonteEntidade = fonte) == NULL)
 			throw;
 	} catch (...) {
-		debug("FEntidade::Recurso de fonte nulo",100);
+		debug("FEntidade::NoCarregar: Recurso de fonte nulo",100);
 		return false;
 	}
 	try {
 		if (TTF_SizeText(fonteEntidade, texto.c_str(), &this->width, &this->height) == -1)
 			throw;
 	} catch(...) {
-		string msgErro = "FEntidade::";
+		string msgErro = "FEntidade::NoCarregar";
 		msgErro += SDL_GetError();
 		debug(msgErro,109);
 		return false;
@@ -120,27 +142,12 @@ bool FEntidade::NoCarregar (TTF_Font * fonte, string texto, SDL_Color corTexto) 
 	return true;
 }
 
-/**
- * Carrega um recurso na entidade (uma imagem)
- **/
-bool FEntidade::NoCarregar (char * arquivo, int width, int height, int maxFrames) {
-	if ((superficieEntidade = FSuperficie::NoCarregar(arquivo)) == NULL) {
-		return false;
-	}
-	FSuperficie::Transparencia(superficieEntidade, 255, 0, 255);
-	
-	this->width = width;
-	this->height = height;
-	
-	controleAnimacao.maxFrames = maxFrames;
-	
-	return true;
-}
 
 /**
  * Controla o fluxo de dados da entidade durante o Laço
  **/
 void FEntidade::NoLaco() {
+	//PararMovimento();
 	switch(tipo) {
 		case TIPO_ENTIDADE_GENERICO:
 			if (flags & ENTIDADE_FLAG_GRAVIDADE) {
@@ -152,7 +159,7 @@ void FEntidade::NoLaco() {
 			break;
 		case TIPO_ENTIDADE_TEXTO:
 			break;
-		case TIPO_ENTIDADE_MOUSE:
+		case TIPO_ENTIDADE_CURSOR:
 			break;
 		case TIPO_ENTIDADE_TIRO:
 			float distancia = 0;
@@ -196,17 +203,37 @@ void FEntidade::NoLaco() {
  * Controla a renderização na tela da entidade
  **/
 void FEntidade::NaRenderizacao(SDL_Surface * planoExibicao) {
-	switch(tipo) {
-		case TIPO_ENTIDADE_TEXTO:
-			if (fonteEntidade == NULL || planoExibicao == NULL) return;
-			if (!(flags & ENTIDADE_FLAG_BOTAO_HOVER))
-				corTexto = {255,255,255};
-			FFonte::NoEscrever(planoExibicao,fonteEntidade,texto,x,y,corTexto);
-			break;
-		default:
-			if (superficieEntidade == NULL || planoExibicao == NULL) return;
-				FSuperficie::NoDesenhar(	planoExibicao, 	superficieEntidade, 	x - FCamera::controleCamera.GetX(), 	y - FCamera::controleCamera.GetY(), 	frameAtualCol * width, 		(frameAtualLinha + controleAnimacao.GetFrameAtual()) * height, 	width, 	height);
-			break;
+	try {
+		bool retorno = false;
+		if (planoExibicao == NULL) throw 1;
+		if (fonteEntidade == NULL && superficieEntidade == NULL) throw 2;
+		if (superficieEntidade != NULL) {
+			if (( retorno = FSuperficie::NoDesenhar(planoExibicao,
+			superficieEntidade, x - FCamera::controleCamera.GetX(),
+			y - FCamera::controleCamera.GetY(),
+			frameAtualCol * width,
+			(frameAtualLinha + controleAnimacao.GetFrameAtual()) * height, width, height)
+			) == false) throw 3;
+		}
+		if (fonteEntidade != NULL) {
+			if ((retorno = FFonte::NoEscrever(planoExibicao,fonteEntidade,texto,x,y,corTexto)) == false) throw 3;
+		}
+	} catch (int e) {
+		string msgErro;
+		switch(e) {
+			case 1:
+				msgErro = "FEntidade::NaRenderizacao: Plano de exibicao nao existe";
+				break;
+			case 2:
+				msgErro = "FEntidade::NaRenderizacao: Superficie nao existe";
+				break;
+			case 3:
+				msgErro = "FEntidade::NaRenderizacao: Recurso nao pode ser carregado";
+				break;
+		}
+		msgErro += SDL_GetError();
+		debug(msgErro);
+		return;
 	}
 }
 /**
@@ -235,19 +262,6 @@ void FEntidade::NaAnimacao() {
  * Controle de Colisão da entidade
  **/
 bool FEntidade::NaColisao(FEntidade * entidade) {
-	
-		if (flags & ENTIDADE_FLAG_BOTAO_HOVER) {
-			corTexto =  { 255, 0, 0 };
-		}
-		if (flags & ENTIDADE_FLAG_BOTAO_CLICK) {
-			FGerenciadorEstados::SetEstadoAtivo(ESTADO_JOGO);
-		}
-		if (flags & ENTIDADE_FLAG_BOTAO_CLICK) {
-			FGerenciadorEstados::SetEstadoAtivo(ESTADO_OPTIONS);
-		}
-		if (flags & ENTIDADE_FLAG_BOTAO_CLICK) {
-			FGerenciadorEstados::SetEstadoAtivo(ESTADO_NENHUM);
-		}
 	return true;
 }
 
@@ -255,7 +269,7 @@ bool FEntidade::NaColisao(FEntidade * entidade) {
  * Metodo para movimentar a entidade na tela
  **/
 void FEntidade::NoMovimento(float moveX, float moveY) {
-	if (moveX == 0 && moveY == 0) return;
+	if (moveX == 0 && moveY == 0 && tipo != TIPO_ENTIDADE_CURSOR) return;
 	
 	double novoX = 0;
 	double novoY = 0;
@@ -272,7 +286,6 @@ void FEntidade::NoMovimento(float moveX, float moveY) {
 		if (moveY >= 0) novoY = FFPS::FPSControle.GetFatorVelocidade();
 		else novoY = -FFPS::FPSControle.GetFatorVelocidade();
 	}
-
 	while(true) {
 		if (flags & ENTIDADE_FLAG_FANTASMA) {
 			PosValido( (int)(x + novoX), (int)(y + novoY)); //se for fantasma nao importa a colisao, mas precisa enviar eventos para outras entidades
@@ -320,10 +333,20 @@ void FEntidade::PararMovimento() {
 	if (velX < 0) {
 		acelX = 1;
 	}
+	if (velY < 0) {
+		acelY = -1;
+	}
+	if (velY > 0) {
+		acelY = 1;
+	}
 	
 	if(velX < 2.0f && velX > -2.0f) {
-		acelX = 0;
-		velX = 0;
+		acelX = 1;
+		velX = 1;
+	}
+	if(velY < 2.0f && velY > -2.0f) {
+		acelY = 1;
+		velY = 1;
 	}
 }
 
@@ -396,17 +419,9 @@ bool FEntidade::PosValido(int novoX, int novoY) {
 	**/
 	if (flags & ENTIDADE_FLAG_SOMENTEMAPA) {
 	} else {
-		if (tipo == TIPO_ENTIDADE_MOUSE) {
-			for (int i = 0;i < (int)listaEntidades.size();i++) {
-				if(PosValidoEntidade(listaEntidades[i], novoX, novoY))
-					return false;
-			}
-		}
-		else {
-			for (int i = 0;i < (int)listaEntidades.size();i++) {
-				if (PosValidoEntidade(listaEntidades[i], novoX, novoY) == false) {
-					retorno = false;
-				}
+		for (int i = 0;i < (int)listaEntidades.size();i++) {
+			if (PosValidoEntidade(listaEntidades[i], novoX, novoY) == false) {
+				retorno = false;
 			}
 		}
 	}
@@ -459,3 +474,86 @@ bool FEntidade::Rotacionar(double angulo, double zoom, int smooth) {
 	return true;
 }
 **/
+
+
+/**
+ * Implementacao do FEntidadeBotao
+ **/
+FEntidadeBotao::FEntidadeBotao() : FEntidade() {
+	this->corTextoAlterada = {0,0,0};
+	this->cursorSobre = false;
+	
+	this->deslocamentoX = 0;
+	this->deslocamentoY = 0;
+
+	this->acao = 0;
+	this->cliqueDireito = 0;
+	this->cliqueEsquerdo = 0;
+}
+void FEntidadeBotao::NoLaco() {
+	//forca a alteracao de cor sempre ser falsa
+	this->cursorSobre = false;
+}
+void FEntidadeBotao::NaRenderizacao(SDL_Surface * planoExibicao) {
+	try {
+		bool retorno = false;
+		if (planoExibicao == NULL) throw 1;
+		if (fonteEntidade == NULL && superficieEntidade == NULL) throw 2;
+		if (superficieEntidade != NULL) {
+			if (( retorno = FSuperficie::NoDesenhar(planoExibicao, superficieEntidade, x - FCamera::controleCamera.GetX(), y - FCamera::controleCamera.GetY(), frameAtualCol * width, (frameAtualLinha + controleAnimacao.GetFrameAtual()) * height, width, height)) == false) throw 3;
+		}
+		if (fonteEntidade != NULL) {
+			if ((retorno = FFonte::NoEscrever(planoExibicao,fonteEntidade,texto,x + (this->cursorSobre ? this->deslocamentoX : 0),y + (this->cursorSobre ? this->deslocamentoY : 0),(this->cursorSobre ? this->corTextoAlterada : this->corTexto ))) == false) throw 3;
+		}
+	} catch (int e) {
+		string msgErro;
+		switch(e) {
+			case 1:
+				msgErro = "FEntidade::NaRenderizacao: Plano de exibicao nao existe";
+				break;
+			case 2:
+				msgErro = "FEntidade::NaRenderizacao: Superficie nao existe";
+				msgErro+= this->tipo;
+				break;
+			case 3:
+				msgErro = "FEntidade::NaRenderizacao: Recurso nao pode ser carregado";
+				break;
+		}
+		msgErro += SDL_GetError();
+		debug(msgErro);
+		return;
+	}
+}
+bool FEntidadeBotao::NaColisao(FEntidade * entidade) {
+	switch(entidade->tipo) {
+		case TIPO_ENTIDADE_CURSOR:
+			this->MudaCor();
+			if (entidade->clique)
+					FGerenciadorEstados::SetEstadoAtivo(this->cliqueDireito);
+			break;
+	}
+	return true;
+}
+
+
+void FEntidadeBotao::MudaCor() {
+	this->cursorSobre = true;
+}
+void FEntidadeBotao::MudaFonte(TTF_Font * fonte, SDL_Color corTexto) {
+	
+}
+void FEntidadeBotao::AoPassarPorCima(SDL_Color corTexto, int deslocaX, int deslocaY) {
+	this->corTextoAlterada = corTexto;
+	this->deslocamentoX = deslocaX;
+	this->deslocamentoY = deslocaY;
+}
+void FEntidadeBotao::AoClicarDireito(int acao) {
+	this->cliqueDireito = acao;
+}
+void FEntidadeBotao::AoClicarEsquerdo(int acao) {
+	this->cliqueEsquerdo = acao;
+}
+
+int FEntidadeBotao::Acao() {
+	return this->acao;
+}

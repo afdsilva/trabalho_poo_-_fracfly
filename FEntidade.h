@@ -1,9 +1,6 @@
 #ifndef _FENTIDADE_H
   #define _FENTIDADE_H
 
-//#include <vector>
-//#include <iostream>
-//#include <cmath>
 #include "male_libs.h"
 
 #include "FArea.h"
@@ -20,7 +17,7 @@ enum {
 	TIPO_ENTIDADE_GENERICO = 0,
 	TIPO_ENTIDADE_TEXTO,
 	TIPO_ENTIDADE_BOTAO,
-	TIPO_ENTIDADE_MOUSE,
+	TIPO_ENTIDADE_CURSOR,
 	TIPO_ENTIDADE_JOGADOR,
 	TIPO_ENTIDADE_TIRO
 };
@@ -29,16 +26,16 @@ enum {
 enum {
 	ENTIDADE_FLAG_NONE = 0,
 	
-	ENTIDADE_FLAG_GRAVIDADE		= 0x00000001,
-	ENTIDADE_FLAG_FANTASMA		= 0x00000002,
-	ENTIDADE_FLAG_SOMENTEMAPA	= 0x00000004,
-	ENTIDADE_FLAG_ESPACO		= 0x00000008,
-	ENTIDADE_FLAG_CURSOR		= 0x00000010,
-	ENTIDADE_FLAG_BOTAO_HOVER	= 0x00000020,
-	ENTIDADE_FLAG_BOTAO_JOGO	= 0x00000040,
-	ENTIDADE_FLAG_BOTAO_OPTIONS = 0x00000080,
-	ENTIDADE_FLAG_BOTAO_SAIR	= 0x00000100,
-	ENTIDADE_FLAG_BOTAO_CLICK	= 0x00000200
+	ENTIDADE_FLAG_GRAVIDADE		= 0x00000001, //Objetos com esta flag serao fonte de atracao para qualquer outro objeto
+	ENTIDADE_FLAG_FANTASMA		= 0x00000002, //objetos que nao sao afetados por nenhum outro objeto (luzes por exemplo)
+	ENTIDADE_FLAG_SOMENTEMAPA	= 0x00000004, //inutil
+	ENTIDADE_FLAG_ESPACO		= 0x00000008, //inutil
+	ENTIDADE_FLAG_CURSOR		= 0x00000010, //eh afetado pelo cursor
+	ENTIDADE_FLAG_CURSOR_HOVER	= 0x00000020, //
+	ENTIDADE_FLAG_CURSOR_CLICK	= 0x00000040,
+	//ENTIDADE_FLAG_BOTAO_OPTIONS = 0x00000080,
+	//ENTIDADE_FLAG_BOTAO_SAIR	= 0x00000100,
+	//ENTIDADE_FLAG_BOTAO_CLICK	= 0x00000200
 };
 
 class FEntidade {
@@ -73,6 +70,7 @@ class FEntidade {
 		
 		bool 	morto;
 		int 	flags;
+		int		clique;
 		
 	protected:
 		float 	velX;
@@ -101,9 +99,9 @@ class FEntidade {
 		virtual ~FEntidade();
 		
 	public:
-		virtual bool NoCarregar (char * arquivo, int width, int height, int maxFrames);
-		virtual bool NoCarregar (char * arquivo, string texto, int tam, SDL_Color corTexto);
-		virtual bool NoCarregar (TTF_Font * fonte, string texto, SDL_Color corTexto);
+		virtual bool NoCarregar(char * arquivo, int width, int height, int maxFrames);
+		virtual bool NoCarregar(char * arquivo, string texto, int tam, SDL_Color corTexto);
+		virtual bool NoCarregar(TTF_Font * fonte, string texto, SDL_Color corTexto);
 		virtual void NoLaco();
 		virtual void NaRenderizacao(SDL_Surface * planoExibicao);
 		virtual void NaLimpeza();
@@ -142,6 +140,40 @@ class FEntidadeColisao {
 		
 	public:
 		FEntidadeColisao();
+};
+
+class FEntidadeBotao : public FEntidade {
+	private:
+		SDL_Color corTextoAlterada;
+		bool cursorSobre;
+		
+		int deslocamentoX;
+		int deslocamentoY;
+		
+		int acao;
+		int cliqueDireito;
+		int cliqueEsquerdo;
+		
+	public:
+		FEntidadeBotao();
+		void	NoMovimento(float moveX, float moveY); //botao nao se movimenta
+
+	public:
+		void NoLaco();
+		void NaRenderizacao(SDL_Surface * planoExibicao);
+		
+	public:
+		bool NaColisao(FEntidade * entidade); //botao trata colisao de maneira diferete
+		void MudaCor();
+		void MudaFonte(TTF_Font * fonte, SDL_Color corTexto);
+		
+		//Seta o comportamento ao passar o mouse por cima do botao
+		void AoPassarPorCima(SDL_Color corTexto, int deslocaX, int deslocaY);
+		//Seta o comportamento ao clicar com
+		void AoClicarDireito(int acao);
+		void AoClicarEsquerdo(int acao);
+		int Acao();
+
 };
 
 #endif

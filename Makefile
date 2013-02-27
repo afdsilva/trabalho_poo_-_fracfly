@@ -10,7 +10,7 @@ OBJETOS=male_libs.o FSuperficie.o FFonte.o FEvento.o FAnimacao.o FEntidade.o FGe
 CPPFLAGS=-std=c++0x -Wall -g -lm `sdl-config --cflags`
 
 # Ligador flags - sdl
-LDFLAGS=`sdl-config --libs` -lSDL -lSDL_image -lSDL_gfx -lSDL_ttf 
+LDFLAGS=`sdl-config --libs` -lSDL -lSDL_image -lSDL_gfx -lSDL_ttf
 
 EXECUTAVEL=fracfly
 
@@ -175,6 +175,14 @@ depSDL_mixer:
 	make
 	sudo make install
 
+depSDL_draw:
+	cd /tmp
+	wget http://downloads.sourceforge.net/project/sdl-draw/SDL_draw/1.2.13/SDL_draw-1.2.13.tar.gz
+	cd /tmp/SDL_draw-1.2.13/
+	./configure
+	make
+	sudo make install
+	
 runtime:
 	sudo apt-get install libsdl1.2debian libsdl-gfx1.2-4 libsdl-mixer1.2 libsdl-image1.2 libsdl-ttf2.0-0 
 #limpeza

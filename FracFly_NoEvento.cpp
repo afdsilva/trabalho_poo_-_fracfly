@@ -26,24 +26,16 @@ void FracFly::OnExit() {
 void FracFly::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle) {
 	cursor.x = mX - (cursor.width / 2);
 	cursor.y = mY - (cursor.height / 2);
-	if (cursor.PosValido(mX,mY)) {
-		debug("COLIDIU");
-		cursor.flags = cursor.flags ^ ENTIDADE_FLAG_BOTAO_HOVER;
-	} else {
-		debug("NAO COLIDIU");
-		cursor.flags = cursor.flags & ~ENTIDADE_FLAG_BOTAO_HOVER;
-	}
+	//cursor.SetAcel(relX,relY);
+	//cout << "relX: " << relX << " relY: " << relY << endl;
+
 }
 
 //Evento de pressionar o botao esquerdo do mouse
 void FracFly::OnLButtonDown(int mX, int mY) {
-	cursor.flags = cursor.flags | ENTIDADE_FLAG_BOTAO_CLICK;
-	if (cursor.PosValido(mX,mY)) {
-		if (cursor.flags & ENTIDADE_FLAG_BOTAO_CLICK) {
-		}
-	}
+	cursor.clique = true;
 }
 //Evento de soltar o botao esquerdo do mouse
 void FracFly::OnLButtonUp(int mX, int mY) {
-	cursor.flags = cursor.flags & ~ENTIDADE_FLAG_BOTAO_CLICK;
+	cursor.clique = false;
 }

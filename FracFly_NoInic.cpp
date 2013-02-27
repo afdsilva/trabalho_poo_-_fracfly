@@ -51,8 +51,10 @@ bool FracFly::NoInic() {
 	try {
 		if (cursor.NoCarregar(cursorArquivo,48,48,0) == false)
 			throw;
+		cursor.x = (cursor.width / 2);
+		cursor.y = (cursor.height / 2);
 		cursor.flags = ENTIDADE_FLAG_CURSOR | ENTIDADE_FLAG_FANTASMA;
-		cursor.tipo = TIPO_ENTIDADE_MOUSE;
+		cursor.tipo = TIPO_ENTIDADE_CURSOR;
 	} catch (...) {
 		debug("FracFly::NoInic: Nao foi possivel carregar cursor",39);
 	}
