@@ -394,10 +394,8 @@ bool FEntidade::Colisoes(int oX, int oY, int oW, int oH) {
 	
 	int tX = (int) x + colX;
 	int tY = (int) y + colY;
-	
 	esquerda1 = tX;
 	esquerda2 = oX;
-	
 	direita1 = esquerda1 + width - 1 - colWidth;
 	direita2 = oX + oW - 1;
 	
@@ -416,13 +414,20 @@ bool FEntidade::Colisoes(int oX, int oY, int oW, int oH) {
 	return true;
 	
 }
+
+void FEntidade::colBox(int x, int y, int width, int height) {
+	this->colX = x;
+	this->colY = y;
+	this->colWidth = width;
+	this->colHeight = height;
+}
 /**
  * Verifica a validade da nova posicao
  * Se eh possivel se mover para proxima posicao
  **/
 bool FEntidade::PosValido(int novoX, int novoY) {
 	bool retorno = true;
-	/**
+	/** Nao preciso que seja feita validade com o mapa (por enquanto)
 	int inicioX = (novoX + colX) / TAMANHO_AZULEJO;
 	int inicioY = (novoY + colY) / TAMANHO_AZULEJO;
 	

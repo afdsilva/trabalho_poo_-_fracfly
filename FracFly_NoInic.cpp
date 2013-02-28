@@ -53,6 +53,7 @@ bool FracFly::NoInic() {
 			throw;
 		cursor.x = (cursor.width / 2);
 		cursor.y = (cursor.height / 2);
+		cursor.colBox(cursor.width / 2, cursor.height / 2, cursor.width - 1, cursor.height - 1);
 		cursor.flags = ENTIDADE_FLAG_CURSOR | ENTIDADE_FLAG_FANTASMA;
 		cursor.tipo = TIPO_ENTIDADE_CURSOR;
 	} catch (...) {

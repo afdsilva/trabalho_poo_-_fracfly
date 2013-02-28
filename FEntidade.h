@@ -94,6 +94,8 @@ class FEntidade {
 		int 	colY;
 		int 	colWidth;
 		int 	colHeight;
+	public:
+		void colBox(int x, int y, int width, int height);
 		
 	public:
 		FEntidade();
