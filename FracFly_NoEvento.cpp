@@ -10,7 +10,7 @@ void FracFly::NoEvento(SDL_Event * evento) {
 
 	FGerenciadorEstados::NoEvento(evento);
 
-	if (FGerenciadorEstados::GetEstadoAtivoId() == ESTADO_NENHUM) OnExit();
+	if ((ultimoEstado = FGerenciadorEstados::GetEstadoAtivoId()) == ESTADO_NENHUM) OnExit();
 }
 
 /**
@@ -33,7 +33,8 @@ void FracFly::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Rig
 
 //Evento de pressionar o botao esquerdo do mouse
 void FracFly::OnLButtonDown(int mX, int mY) {
-	cursor.clique = true;
+	if (ultimoEstado == FGerenciadorEstados::GetEstadoAtivoId())
+		cursor.clique = true;
 }
 //Evento de soltar o botao esquerdo do mouse
 void FracFly::OnLButtonUp(int mX, int mY) {

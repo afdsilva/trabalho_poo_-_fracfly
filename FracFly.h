@@ -19,7 +19,7 @@ class FracFly : public FEvento {
 	
 	public:
 		FEntidade cursor;
-		
+		int ultimoEstado;
 	public:
 		FracFly();
 		int naExec();

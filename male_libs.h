@@ -22,4 +22,6 @@ template <typename T> void debug(T texto,int linha) {
 }
 
 
+string itoa(int);
+
 #endif

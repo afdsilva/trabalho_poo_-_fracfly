@@ -42,6 +42,7 @@ class FEntidade {
 	public:
 		static vector<FEntidade*> listaEntidades;
 		static void OrdenaProfundidade();
+		static FEntidade * RetornaEntidade(int pos);
 		
 	protected:
 		FAnimacao 			controleAnimacao;
@@ -114,6 +115,8 @@ class FEntidade {
 
 		SDL_Surface * GetSuperficie();
 		void SetSuperficie(SDL_Surface *);
+		//virtual void MudaFonte(TTF_Font * fonte, SDL_Color corTexto);
+		virtual void MudaTexto(string texto);
 		//virtual bool Rotacionar(double angulo, double zoom, int smooth);
 		
 	public:
@@ -169,7 +172,7 @@ class FEntidadeBotao : public FEntidade {
 	public:
 		bool NaColisao(FEntidade * entidade); //botao trata colisao de maneira diferete
 		void MudaCor();
-		void MudaFonte(TTF_Font * fonte, SDL_Color corTexto);
+		//void MudaFonte(TTF_Font * fonte, SDL_Color corTexto);
 		
 		//Seta o comportamento ao passar o mouse por cima do botao
 		void AoPassarPorCima(SDL_Color corTexto, int deslocaX, int deslocaY);

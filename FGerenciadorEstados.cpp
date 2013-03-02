@@ -3,6 +3,7 @@
 //Referencia aos outros estados do jogo
 #include "FEstadoIntro.h"
 #include "FEstadoMenu.h"
+#include "FEstadoOptions.h"
 #include "FEstadoJogo.h"
 
 FEstado * FGerenciadorEstados::estadoAtivo = 0;
@@ -33,11 +34,9 @@ void FGerenciadorEstados::SetEstadoAtivo(int estadoId) {
 		case ESTADO_MENU:
 			estadoAtivo = FEstadoMenu::GetInstancia();
 			break;
-/**
 		case ESTADO_OPTIONS:
 			estadoAtivo = FEstadoOptions::GetInstancia();
 			break;
-**/
 		case ESTADO_JOGO:
 			estadoAtivo = FEstadoJogo::GetInstancia();
 			break;
@@ -56,6 +55,9 @@ int FGerenciadorEstados::GetEstadoAtivoId() {
 	}
 	else if (estadoAtivo == FEstadoMenu::GetInstancia()) {
 		return ESTADO_MENU;
+	}
+	else if (estadoAtivo == FEstadoOptions::GetInstancia()) {
+		return ESTADO_OPTIONS;
 	}
 	else if (estadoAtivo == FEstadoJogo::GetInstancia()) {
 		return ESTADO_JOGO;

@@ -2,6 +2,10 @@
 
 FNave::FNave() {
 	tipo = TIPO_ENTIDADE_JOGADOR;
+	vida = 100;
+	escudo = 100;
+	escore = 0;
+	forca = 10;
 }
 
 bool FNave::NoCarregar(char * arquivo, int width, int height, int maxFrames) {
@@ -60,4 +64,11 @@ bool FNave::Atirar(FEntidade * entidade, int aX, int aY) {
 
 	FEntidade::listaEntidades.push_back(tiro);
 	return true;
+}
+
+int FNave::GetEscore() {
+	return this->escore;
+}
+void FNave::SetEscore(int escore) {
+	this->escore = escore;
 }

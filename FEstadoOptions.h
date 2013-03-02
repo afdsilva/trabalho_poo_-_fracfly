@@ -1,5 +1,5 @@
-#ifndef _FESTADOMENU_H_
-	#define _FESTADOMENU_H_
+#ifndef _FESTADOOPTIONS_H_
+	#define _FESTADOOPTIONS_H_
 
 #include "Definicoes.h"
 
@@ -10,15 +10,15 @@
 #include "FSuperficie.h"
 #include "FFonte.h"
 
-class FEstadoMenu : public FEstado {
+class FEstadoOptions: public FEstado {
 	private:
-		static FEstadoMenu instancia;
+		static FEstadoOptions instancia;
 		
 	private:
 		TTF_Font * fonte;
 		
 	private:
-		FEstadoMenu();
+		FEstadoOptions();
 	
 	public:
 		void NaAtivacao();
@@ -36,7 +36,7 @@ class FEstadoMenu : public FEstado {
 		//void OnRButtonUp(int mX, int mY);
 		
 	public:
-		static FEstadoMenu * GetInstancia();
+		static FEstadoOptions * GetInstancia();
 };
 
 #endif

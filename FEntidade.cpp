@@ -77,7 +77,12 @@ SDL_Surface * FEntidade::GetSuperficie(){
  **/
 void FEntidade::SetSuperficie(SDL_Surface * novaSuperficie){
 	superficieEntidade = novaSuperficie;
-}	
+}
+
+void FEntidade::MudaTexto(string texto) {
+	this->texto = texto;
+}
+
 
 /**
  * Carrega um recurso na entidade (uma imagem)
@@ -474,7 +479,7 @@ bool FEntidade::PosValidoAzulejo(FAzulejo * azulejo) {
  **/
 bool FEntidade::PosValidoEntidade(FEntidade * entidade, int novoX, int novoY) {
 	if (this != entidade && entidade != NULL && entidade->morto == false
-		&& entidade->flags ^ ENTIDADE_FLAG_SOMENTEMAPA 
+		&& (entidade->flags ^ ENTIDADE_FLAG_SOMENTEMAPA)
 		&& entidade->Colisoes(novoX + colX, novoY + colY, width - colWidth - 1, height - colHeight - 1) == true) {
 			FEntidadeColisao entidadeColisao;
 			
@@ -564,9 +569,6 @@ bool FEntidadeBotao::NaColisao(FEntidade * entidade) {
 
 void FEntidadeBotao::MudaCor() {
 	this->cursorSobre = true;
-}
-void FEntidadeBotao::MudaFonte(TTF_Font * fonte, SDL_Color corTexto) {
-	
 }
 void FEntidadeBotao::AoPassarPorCima(SDL_Color corTexto, int deslocaX, int deslocaY) {
 	this->corTextoAlterada = corTexto;

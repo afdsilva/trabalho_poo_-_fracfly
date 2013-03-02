@@ -2,6 +2,7 @@
 	#define _FESTADOJOGO_H_
 
 #include "Definicoes.h"
+#include "male_libs.h"
 
 #include "FEstado.h"
 
@@ -16,11 +17,12 @@
 class FEstadoJogo : public FEstado {
 	private:
 		static FEstadoJogo instancia;
-		
+		FEntidade	fundo;
 		FNave 		jogador;
+		FEntidade	cursor;
 		FEntidade	arma1;
 		FEntidade	arma2;
-		
+		FEntidade	escore;
 	private:
 		FEstadoJogo();
 	

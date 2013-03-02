@@ -4,6 +4,12 @@
 #include "FEntidade.h"
 
 class FNave: public FEntidade {
+	private:
+		int vida;
+		int escudo;
+		int escore;
+		int forca;
+
 	public:
 		FNave();
 		bool NoCarregar(char * arquivo, int width, int height, int maxFrames);
@@ -16,6 +22,8 @@ class FNave: public FEntidade {
 		
 	public:
 		bool Atirar(FEntidade * entidade, int aX, int aY);
+		int GetEscore();
+		void SetEscore(int escore);
 };
 
 

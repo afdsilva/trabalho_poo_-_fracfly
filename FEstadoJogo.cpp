@@ -7,55 +7,106 @@ FEstadoJogo::FEstadoJogo() {
 }
 
 void FEstadoJogo::NaAtivacao() {
-	//carrega a cabine da nave
-	char naveArquivo[] = "res/cabine1024x768.png";
-	if (jogador.NoCarregar(naveArquivo, 1024, 768, 0) == false) {
-		return;
+	//carrega fundo
+	try {
+		char fundoArquivo[] = "res/ai-star-about-to-be-ripped-apart.jpg";
+		if (fundo.NoCarregar(fundoArquivo,4945,3672,0) == false)
+			throw 1;
+
+		fundo.x = FCamera::controleCamera.GetX();
+		fundo.y = FCamera::controleCamera.GetY();
+
+		//carrega a cabine da nave
+		char naveArquivo[] = "res/cabine1024x768.png";
+		if (jogador.NoCarregar(naveArquivo, 1024, 768, 0) == false) {
+			throw 1;
+		}
+
+		char armaArquivo[] =  "res/arma.png";
+		if (arma1.NoCarregar(armaArquivo,80,537,0) == false) {
+			throw 1;
+		}
+		if (arma2.NoCarregar(armaArquivo,80,537,0) == false) {
+			throw 1;
+		}
+
+		char fonteArq[] = "res/lazy.ttf";
+		try {
+			TTF_Font * lazyFontTitulo;
+			if ((lazyFontTitulo = FFonte::NoCarregar(fonteArq, 82)) == NULL)
+				throw 1;
+			TTF_Font * lazyFontItens;
+			if ((lazyFontItens = FFonte::NoCarregar(fonteArq, 18)) == NULL)
+				throw 1;
+			SDL_Color branco = {255,255,255};
+
+			if (escore.NoCarregar(lazyFontItens,"Escore: 0",branco)) {
+				escore.x = 10;
+				escore.y = 10;
+				escore.z += 500;
+				FEntidade::listaEntidades.push_back(&escore);
+			}
+		} catch(int e) {
+			debug("Error");
+		}
+
+		arma1.x = 90;
+		arma1.y = WHEIGHT - (arma1.height / 2);
+
+		arma2.x = WWIDTH - 170;
+		arma2.y = WHEIGHT - (arma2.height / 2);
+
+		arma1.flags = ENTIDADE_FLAG_ESPACO;
+		arma2.flags = ENTIDADE_FLAG_ESPACO;
+		jogador.flags = ENTIDADE_FLAG_ESPACO;
+		jogador.z+= 100;
+
+		cursor.z+= 1000;
+		fundo.z =500;
+		FEntidade::listaEntidades.push_back(&fundo);
+
+		FEntidade::listaEntidades.push_back(&jogador);
+
+		FEntidade::listaEntidades.push_back(&arma1);
+		FEntidade::listaEntidades.push_back(&arma2);
+
+
+		FCamera::controleCamera.modoAlvo = MODO_ALVO_NORMAL;
+		FCamera::controleCamera.SetAlvo(&(jogador.x), &jogador.y);
+
+	} catch (int e) {
+		debug("Erro");
 	}
 
-	char armaArquivo[] =  "res/arma.png";
-	if (arma1.NoCarregar(armaArquivo,80,537,0) == false) {
-		return;
 	}
-	if (arma2.NoCarregar(armaArquivo,80,537,0) == false) {
-		return;
-	}
-	arma1.x = 90;
-	arma1.y = WHEIGHT - (arma1.height / 2);
 
-	arma2.x = WWIDTH - 170;
-	arma2.y = WHEIGHT - (arma2.height / 2);
+	void FEstadoJogo::NaDesativacao() {
 
-	arma1.flags = ENTIDADE_FLAG_ESPACO;
-	arma2.flags = ENTIDADE_FLAG_ESPACO;
-	jogador.flags = ENTIDADE_FLAG_ESPACO;
-
-
-	//Coloca o cursor na lista de entidades, mas ele sera tratado de forma independente
-	FEntidade::listaEntidades.push_back(&jogador);
-
-	FEntidade::listaEntidades.push_back(&arma1);
-	FEntidade::listaEntidades.push_back(&arma2);
-
-	FCamera::controleCamera.modoAlvo = MODO_ALVO_NORMAL;
-	FCamera::controleCamera.SetAlvo(&(jogador.x), &jogador.y);
-
-}
-
-void FEstadoJogo::NaDesativacao() {
+		//FArea::controleArea.NaLimpeza();
 	
-	//FArea::controleArea.NaLimpeza();
+		for(int i = 0;i < (int) FEntidade::listaEntidades.size();i++) {
+			if(!FEntidade::listaEntidades[i]) continue;
+			FEntidade::listaEntidades[i]->NaLimpeza();
+		}
+		FEntidade::listaEntidades.clear();
 
-	for(int i = 0;i < (int) FEntidade::listaEntidades.size();i++) {
-		if(!FEntidade::listaEntidades[i]) continue;
-		FEntidade::listaEntidades[i]->NaLimpeza();
-	}
-	FEntidade::listaEntidades.clear();
-	
 }
 
 void FEstadoJogo::NoLaco() {
 	//Controla o cursor do mouse
+	string escoreStr = "Escore: ";
+	escoreStr.append(itoa(jogador.GetEscore() ) );
+	escore.MudaTexto(escoreStr);
+
+	//movimentacao do fundo (meio pog)
+	if (jogador.moveEsquerda)
+		fundo.x += jogador.GetAcelX() * FFPS::FPSControle.GetFatorVelocidade();
+	if (jogador.moveDireita)
+		fundo.x -= jogador.GetAcelX() * FFPS::FPSControle.GetFatorVelocidade();
+	if (jogador.moveCima)
+		fundo.y -= jogador.GetAcelY() * FFPS::FPSControle.GetFatorVelocidade();
+	if (jogador.moveBaixo)
+		fundo.y += jogador.GetAcelY() * FFPS::FPSControle.GetFatorVelocidade();
 
 	//chama cada entidade na lista de entidades, utilizando o metodo apropriado para as entidades no FEntidade.cpp
 	for (int i = 0; i < (int) FEntidade::listaEntidades.size(); i++) {
@@ -92,7 +143,13 @@ void FEstadoJogo::NaRenderizacao(SDL_Surface * planoExibicao) {
 	
 	SDL_FillRect(planoExibicao, &rect, 0);
 	
+	/** for invertido para renderizar o cockpit na frente, nao sera mais utilizado, pq foi implementado o z
 	for(int i = (int) FEntidade::listaEntidades.size()-1;i >= 0;i--) {
+		if(FEntidade::listaEntidades[i]->morto) continue;
+		FEntidade::listaEntidades[i]->NaRenderizacao(planoExibicao);
+	}
+	**/
+	for(int i = 0;i < (int) FEntidade::listaEntidades.size();i++) {
 		if(FEntidade::listaEntidades[i]->morto) continue;
 		FEntidade::listaEntidades[i]->NaRenderizacao(planoExibicao);
 	}
@@ -155,6 +212,8 @@ void FEstadoJogo::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool
 void FEstadoJogo::OnLButtonDown(int mX, int mY) {
 	//Arma1.Atirar(mX,mY);
 	jogador.Atirar(&arma1, mX, mY);
+	int setScore = jogador.GetEscore();
+	jogador.SetEscore(setScore+1);
 }
 //Evento de soltar o botao esquerdo do mouse
 void FEstadoJogo::OnLButtonUp(int mX, int mY) {
@@ -163,6 +222,7 @@ void FEstadoJogo::OnLButtonUp(int mX, int mY) {
 //Evento de pressionar o botao direito do mouse
 void FEstadoJogo::OnRButtonDown(int mX, int mY) {
 	jogador.Atirar(&arma2, mX, mY);
+	jogador.SetEscore(0);
 }
 //Evento de soltar o botao direito do mouse
 void FEstadoJogo::OnRButtonUp(int mX, int mY) {
