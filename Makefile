@@ -4,7 +4,7 @@
 CC=g++
 
 # Objects
-OBJETOS=male_libs.o FSuperficie.o FFonte.o FEvento.o FAnimacao.o FEntidade.o FGerenciadorEstados.o FEntidadeColisao.o FEstado.o FEstadoIntro.o FEstadoJogo.o FEstadoMenu.o FAzulejo.o FMap.o FCamera.o FFPS.o FArea.o FNave.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FracFly.o FundoParcial.o FundoInteiro.o Threads.o
+OBJETOS=male_libs.o FSuperficie.o FFonte.o FEvento.o FAnimacao.o FEntidade.o FGerenciadorEstados.o FEntidadeColisao.o FEstado.o FEstadoIntro.o FEstadoJogo.o FEstadoMenu.o FEstadoOptions.o FAzulejo.o FMap.o FCamera.o FFPS.o FArea.o FNave.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FracFly.o FundoParcial.o FundoInteiro.o Threads.o
 
 # Compilador flags - Warning, debug, sdl
 CPPFLAGS=-std=c++0x -Wall -g -lm `sdl-config --cflags`
@@ -99,6 +99,9 @@ FEstadoIntro: FEstado.h FEstadoIntro.h FEstadoIntro.cpp
 	$(CC) $(CPPFLAGS) -c FEstadoIntro.cpp
 FEstadoMenu: FEstado.h FEstadoMenu.h FEstadoMenu.cpp
 	rm -rf FEstadoMenu.o
+	$(CC) $(CPPFLAGS) -c FEstadoMenu.cpp
+FEstadoOptions: FEstado.h FEstadoOptions.h FEstadoOptions.cpp
+	rm -rf FEstadoOptions.o
 	$(CC) $(CPPFLAGS) -c FEstadoMenu.cpp
 FEstadoJogo: FEstado.h FEstadoJogo.h FEstadoJogo.cpp
 	rm -rf FEstadoJogo.o
