@@ -619,8 +619,10 @@ bool FEntidadeBotao::NaColisao(FEntidade * entidade) {
 	switch(entidade->tipo) {
 		case TIPO_ENTIDADE_CURSOR:
 			this->MudaCor();
-			if (entidade->clique)
+			if (entidade->clique) {
 					FGerenciadorEstados::SetEstadoAtivo(this->cliqueDireito);
+					entidade->clique = false;
+			}
 			break;
 	}
 	return true;

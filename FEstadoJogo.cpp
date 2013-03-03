@@ -13,8 +13,10 @@ void FEstadoJogo::NaAtivacao() {
 		if (fundo.NoCarregar(fundoArquivo,4945,3672,0) == false)
 			throw 1;
 
-		fundo.x = FCamera::controleCamera.GetX();
-		fundo.y = FCamera::controleCamera.GetY();
+		//fundo.x = FCamera::controleCamera.GetX();
+		fundo.x = (WWIDTH / 2) - (fundo.width / 2);
+		//fundo.y = FCamera::controleCamera.GetY();
+		fundo.y = (WHEIGHT / 2) - (fundo.height / 2);
 
 		//carrega a cabine da nave
 		char naveArquivo[] = "res/modelo_cabine_720p.png";
@@ -55,11 +57,13 @@ void FEstadoJogo::NaAtivacao() {
 		arma1.oY = WHEIGHT - (arma1.height / 2);
 		arma1.x = arma1.oX;
 		arma1.y = arma1.oY;
+		arma1.z+= 50;
 
 		arma2.oX = WWIDTH - 170;
 		arma2.oY = WHEIGHT - (arma2.height / 2);
 		arma2.x = arma1.oX;
 		arma2.y = arma2.oY;
+		arma2.z+= 50;
 
 		arma1.flags = ENTIDADE_FLAG_ESPACO;
 		arma2.flags = ENTIDADE_FLAG_ESPACO;
@@ -67,7 +71,7 @@ void FEstadoJogo::NaAtivacao() {
 		jogador.z+= 100;
 
 		cursor.z+= 1000;
-		fundo.z =500;
+		fundo.z =0;
 		FEntidade::listaEntidades.push_back(&fundo);
 
 		FEntidade::listaEntidades.push_back(&jogador);
@@ -105,13 +109,17 @@ void FEstadoJogo::NoLaco() {
 
 	//movimentacao do fundo (meio pog)
 	if (jogador.moveEsquerda)
-		fundo.x += jogador.GetAcelX() * FFPS::FPSControle.GetFatorVelocidade();
+		fundo.x += 10;
+		//fundo.x += jogador.GetAcelX() * FFPS::FPSControle.GetFatorVelocidade();
 	if (jogador.moveDireita)
+		fundo.x -= 10;
 		fundo.x -= jogador.GetAcelX() * FFPS::FPSControle.GetFatorVelocidade();
 	if (jogador.moveCima)
-		fundo.y -= jogador.GetAcelY() * FFPS::FPSControle.GetFatorVelocidade();
+		fundo.y -= 10;
+		//fundo.y -= jogador.GetAcelY() * FFPS::FPSControle.GetFatorVelocidade();
 	if (jogador.moveBaixo)
-		fundo.y += jogador.GetAcelY() * FFPS::FPSControle.GetFatorVelocidade();
+		fundo.y += 10;
+		//fundo.y += jogador.GetAcelY() * FFPS::FPSControle.GetFatorVelocidade();
 
 
 
