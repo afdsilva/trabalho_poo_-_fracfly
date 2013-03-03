@@ -45,7 +45,7 @@ using namespace std;
 class FEntidade {
 	public:
 		static vector<FEntidade*> listaEntidades;
-		static void OrdenaProfundidade();
+		static void OrdenaProfundidade(int esquerda, int direita);
 		static FEntidade * RetornaEntidade(int pos);
 		
 	protected:
