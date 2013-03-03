@@ -23,7 +23,7 @@ void FracFly::NoLaco() {
 	SDL_WM_SetCaption(buffer, buffer);
 
 	
-	FEntidade::OrdenaProfundidade();
+	FEntidade::OrdenaProfundidade(0, FEntidade::listaEntidades.size()-1);
 
 	//Reduz o consumo de CPU adicionando um delay
 	delaytime = waittime - (SDL_GetTicks() - framestarttime);

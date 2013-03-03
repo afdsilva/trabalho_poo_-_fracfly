@@ -213,11 +213,42 @@ void FEntidade::NoLaco() {
 		NaLimpeza();
 }
 
+/** 
+ * Método para ordenar as entidades pelo parâmetro z
+ **/ 
+void FEntidade::OrdenaProfundidade(int esquerda, int direita) {
+	int r;
+	int i, j;
+	FEntidade * entidadeAux;
+
+	if (direita > esquerda) {
+
+		i = esquerda;
+		//Reordena as entidades pelo atributo Z
+		for (j = esquerda + 1; j <= direita; ++j) {
+			if ( FEntidade::listaEntidades[j]->z < FEntidade::listaEntidades[esquerda]->z ) {
+				++i;
+				entidadeAux = FEntidade::listaEntidades[i];
+				FEntidade::listaEntidades[i] = FEntidade::listaEntidades[j];
+				FEntidade::listaEntidades[j] = entidadeAux;  
+			}
+		}
+		
+		entidadeAux = FEntidade::listaEntidades[esquerda];
+		FEntidade::listaEntidades[esquerda] = FEntidade::listaEntidades[i];
+		FEntidade::listaEntidades[i] = entidadeAux;
+		r = i;
+		
+		OrdenaProfundidade(esquerda, r - 1);
+		OrdenaProfundidade(r + 1, direita);
+	}
+}
+
+/**
 void FEntidade::OrdenaProfundidade() {
 	//Reordena as entidades pelo atributo Z
-	/**
-	 * bubble fedorento, depois implementar um algoritmo decente...
-	 **/
+
+	// bubble fedorento, depois implementar um algoritmo decente...
 	//debug("Ordenando");
 	FEntidade * entidadeAux;
 	for (int i = 0; i < (int) FEntidade::listaEntidades.size()-1; i++) {
@@ -231,6 +262,7 @@ void FEntidade::OrdenaProfundidade() {
 		}
 	}
 }
+**/
 
 /**
  * Controla a renderização na tela da entidade
