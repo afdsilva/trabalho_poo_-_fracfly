@@ -108,18 +108,29 @@ void FEstadoJogo::NoLaco() {
 	escore.MudaTexto(escoreStr);
 
 	//movimentacao do fundo (meio pog)
-	if (jogador.moveEsquerda)
-		fundo.x += 10;
+	if (jogador.moveEsquerda && fundo.x <= 0)
+		fundo.x += 100 * FFPS::FPSControle.GetFatorVelocidade();
 		//fundo.x += jogador.GetAcelX() * FFPS::FPSControle.GetFatorVelocidade();
-	if (jogador.moveDireita)
-		fundo.x -= 10;
-		fundo.x -= jogador.GetAcelX() * FFPS::FPSControle.GetFatorVelocidade();
-	if (jogador.moveCima)
-		fundo.y -= 10;
+	while( fundo.x >= 0)
+		fundo.x -= 1;
+	if (jogador.moveDireita && fundo.x >= -(fundo.width - WWIDTH))
+		fundo.x -= 100 * FFPS::FPSControle.GetFatorVelocidade();
+		//fundo.x -= jogador.GetAcelX() * FFPS::FPSControle.GetFatorVelocidade();
+	while( fundo.x <= -(fundo.width - WWIDTH))
+		fundo.x += 1;
+
+
+
+	if (jogador.moveCima && fundo.y <= 0)
+		fundo.y += 100 * FFPS::FPSControle.GetFatorVelocidade();
 		//fundo.y -= jogador.GetAcelY() * FFPS::FPSControle.GetFatorVelocidade();
-	if (jogador.moveBaixo)
-		fundo.y += 10;
+	while( fundo.y >= 0)
+		fundo.y -= 1;
+	if (jogador.moveBaixo && fundo.y >= -(fundo.height - WHEIGHT))
+		fundo.y -= 100 * FFPS::FPSControle.GetFatorVelocidade();
 		//fundo.y += jogador.GetAcelY() * FFPS::FPSControle.GetFatorVelocidade();
+	while( fundo.y <= -(fundo.height- WHEIGHT))
+		fundo.y += 1;
 
 
 
