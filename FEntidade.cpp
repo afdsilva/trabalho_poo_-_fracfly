@@ -1,6 +1,6 @@
-#include "FEntidade.h"
 #include "FGerenciadorEstados.h"
-#include "SDL/SDL.h"
+
+#include "FEntidade.h"
 
 /**
  * Inicializacao das Listas de Entidades
@@ -17,6 +17,9 @@ FEntidade::FEntidade() {
 	x = 0;
 	y = 0;
 	z = 1000;
+	oX = 0;
+	oY = 0;
+	angulo = 0;
 	
 	texto.clear();
 	corTexto = {255, 255, 255};
@@ -90,7 +93,11 @@ void FEntidade::MudaTexto(string texto) {
 bool FEntidade::NoCarregar (char * arquivo, int width, int height, int maxFrames) {
 	try {
 		if ((superficieEntidade = FSuperficie::NoCarregar(arquivo)) == NULL) throw;
+		if ((superficieEntidade_Original = FSuperficie::NoCarregar(arquivo)) == NULL) throw;
+
 		FSuperficie::Transparencia(superficieEntidade, 255, 0, 255);
+		FSuperficie::Transparencia(superficieEntidade_Original, 255, 0, 255);
+
 		this->width = width;
 		this->height = height;
 	
@@ -495,16 +502,69 @@ bool FEntidade::PosValidoEntidade(FEntidade * entidade, int novoX, int novoY) {
 
 
 /**
- * Metodo para rotacionar a entidade, nao utilizado mais (por enquanto)
- ** /
-bool FEntidade::Rotacionar(double angulo, double zoom, int smooth) {
-	if(superficieEntidade == NULL) {
-		return false;
+ * Metodos para rotacionar e escalonar a entidade
+ **/
+bool FEntidade::RotaZoom(double angulo, double zoom, int smooth, int centerX, int centerY) {
+	bool retorno = true;
+
+	SDL_Surface * _sup = NULL;
+	SDL_Surface * _temp_sup = NULL;
+
+	try {
+		if (!superficieEntidade)
+			throw 1;
+		if (!superficieEntidade_Original)
+			throw 2;
+		//libera superficie antiga
+		SDL_FreeSurface(superficieEntidade);
+		if ((_sup = rotozoomSurface( superficieEntidade_Original, angulo, zoom, smooth)) == NULL)
+			throw 3;
+
+		//SDL_Rect _retDest = {(int)this->oX, (int)this->oY, 0, 0};
+		//_retDest.x-=  (_sup->w / 2) - (superficieEntidade_Original->w / 2) + centerX;
+		//_retDest.y-= (_sup->h / 2) - (superficieEntidade_Original->h / 2) + centerY;
+
+
+		if (( superficieEntidade = SDL_DisplayFormatAlpha(_sup)) == NULL)
+			throw 4;
+		//SDL_BlitSurface(_temp_sup, NULL, superficieEntidade, &_retDest);
+
+		this->width = superficieEntidade->w;
+		this->height = superficieEntidade->h;
+		this->x = this->oX;
+		this->y = this->oY;
+		this->x-=  (_sup->w / 2) - (superficieEntidade_Original->w / 2) + centerX;
+		this->y-= (_sup->h / 2) - (superficieEntidade_Original->h / 2) + centerY;
+
+		retorno = true;
+	} catch (int e) {
+		string msgErro = "FEntidade::RotaZoom: ";
+		switch(e) {
+			case 1:
+				msgErro+= "Superficie vazia ";
+				break;
+			case 2:
+				msgErro+= "Superficie Original vazia ";
+				break;
+			default:
+				msgErro+= "Erro: ";
+		}
+		msgErro +=SDL_GetError();
+		debug(msgErro,e);
+		retorno = false;
 	}
-	FSuperficie::Rotacionar(superficieEntidade, angulo, zoom, smooth);
-	return true;
+	SDL_FreeSurface(_sup);
+	SDL_FreeSurface(_temp_sup);
+	return retorno;
 }
-**/
+
+bool FEntidade::Rotacionar(double angulo, int centerX, int centerY) {
+	return RotaZoom(angulo, 1,0,centerX, centerY);
+}
+
+bool FEntidade::Escalonar(double zoom, int centerX, int centerY) {
+	return RotaZoom(0,zoom,0,centerX, centerY);
+}
 
 
 /**

@@ -1,17 +1,6 @@
 #ifndef _FENTIDADE_H
   #define _FENTIDADE_H
 
-#include "male_libs.h"
-
-#include "FArea.h"
-#include "FAnimacao.h"
-#include "FCamera.h"
-#include "FFPS.h"
-#include "FSuperficie.h"
-#include "FFonte.h"
-
-using namespace std;
-
 //tipo
 enum {
 	TIPO_ENTIDADE_GENERICO = 0,
@@ -25,7 +14,7 @@ enum {
 //flags
 enum {
 	ENTIDADE_FLAG_NONE = 0,
-	
+
 	ENTIDADE_FLAG_GRAVIDADE		= 0x00000001, //Objetos com esta flag serao fonte de atracao para qualquer outro objeto
 	ENTIDADE_FLAG_FANTASMA		= 0x00000002, //objetos que nao sao afetados por nenhum outro objeto (luzes por exemplo)
 	ENTIDADE_FLAG_SOMENTEMAPA	= 0x00000004, //inutil
@@ -38,6 +27,21 @@ enum {
 	//ENTIDADE_FLAG_BOTAO_CLICK	= 0x00000200
 };
 
+#include "male_libs.h"
+
+#include "SDL/SDL.h"
+#include <SDL/SDL_rotozoom.h>
+#include <SDL/SDL_gfxPrimitives.h>
+
+#include "FArea.h"
+#include "FAnimacao.h"
+#include "FCamera.h"
+#include "FFPS.h"
+#include "FSuperficie.h"
+#include "FFonte.h"
+
+using namespace std;
+
 class FEntidade {
 	public:
 		static vector<FEntidade*> listaEntidades;
@@ -47,12 +51,18 @@ class FEntidade {
 	protected:
 		FAnimacao 			controleAnimacao;
 		SDL_Surface * 		superficieEntidade;
+		SDL_Surface * 		superficieEntidade_Original;
 		TTF_Font * 			fonteEntidade;
 
 	public:
 		float	x;
 		float 	y;
 		float 	z;
+
+		float	oX;
+		float 	oY;
+		double angulo;
+
 		string	texto;
 		SDL_Color corTexto;
 		
@@ -117,7 +127,10 @@ class FEntidade {
 		void SetSuperficie(SDL_Surface *);
 		//virtual void MudaFonte(TTF_Font * fonte, SDL_Color corTexto);
 		virtual void MudaTexto(string texto);
-		//virtual bool Rotacionar(double angulo, double zoom, int smooth);
+
+		virtual bool RotaZoom(double angulo, double zoom, int smooth, int centerX, int centerY);
+		virtual bool Rotacionar(double angulo, int centerX, int centerY);
+		virtual bool Escalonar(double zoom, int centerX, int centerY);
 		
 	public:
 		void	NoMovimento(float moveX, float moveY);

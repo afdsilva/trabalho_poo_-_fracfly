@@ -5,19 +5,26 @@ using namespace std;
 FSuperficie::FSuperficie() {
 }
  
-SDL_Surface * FSuperficie::NoCarregar(char * Arquivo) {
-    
-    SDL_Surface* Surf_Temp = NULL;
-    SDL_Surface* Surf_Retorno = NULL;
+SDL_Surface * FSuperficie::NoCarregar(char * arquivo) {
+	SDL_Surface * retorno = NULL;
 
-    if((Surf_Temp = IMG_Load(Arquivo)) == NULL) {
-        return NULL;
-    }
- 
-    Surf_Retorno = SDL_DisplayFormatAlpha(Surf_Temp);
-    SDL_FreeSurface(Surf_Temp);
- 
-    return Surf_Retorno;
+	try {
+		SDL_Surface * _temp = NULL;
+		if ((_temp = IMG_Load(arquivo)) == NULL)
+			throw 1;
+		retorno = SDL_DisplayFormatAlpha(_temp);
+		SDL_FreeSurface(_temp);
+	} catch(int e) {
+		string msgErro = "FSuperficie::NoCarregar ";
+		switch(e) {
+			case 1:
+				msgErro+= "Não foi possivel carregar imagem";
+				break;
+		}
+		debug(msgErro);
+	}
+
+    return retorno;
 }
 
 bool FSuperficie::NoDesenhar(SDL_Surface * Surf_Dest, SDL_Surface * Surf_Ori, int X, int Y) {
@@ -66,25 +73,3 @@ bool FSuperficie::Transparencia(SDL_Surface * Surf_Dest, int R, int G, int B) {
  
     return true;
 }
-
-//rotate image
-/**
-bool FSuperficie::Rotacionar(SDL_Surface * Surf_Orig, double angulo, double zoom, int smooth) {
-	cout << "Girando e rodando: " << angulo << endl;
-    //give initial for rotate image
-
-    SDL_Surface * rotatefile;
-
-    //get rotate here
-    //rotatefile = rotozoomSurface(Surf_Orig, angulo, zoom, smooth);
-    rotatefile = rotozoomSurface(Surf_Orig, angulo, zoom, smooth);
-
-    //get optimizing
-    Surf_Orig = SDL_DisplayFormat(rotatefile);
-
-    //free surface
-    SDL_FreeSurface(rotatefile);
-
-    return true;
-}
-**/

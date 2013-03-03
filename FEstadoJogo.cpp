@@ -17,10 +17,11 @@ void FEstadoJogo::NaAtivacao() {
 		fundo.y = FCamera::controleCamera.GetY();
 
 		//carrega a cabine da nave
-		char naveArquivo[] = "res/cabine1024x768.png";
-		if (jogador.NoCarregar(naveArquivo, 1024, 768, 0) == false) {
+		char naveArquivo[] = "res/modelo_cabine_720p.png";
+		if (jogador.NoCarregar(naveArquivo, WWIDTH, WHEIGHT, 0) == false) {
 			throw 1;
 		}
+		//jogador.Escalonar(-10);
 
 		char armaArquivo[] =  "res/arma.png";
 		if (arma1.NoCarregar(armaArquivo,80,537,0) == false) {
@@ -50,11 +51,15 @@ void FEstadoJogo::NaAtivacao() {
 			debug("Error");
 		}
 
-		arma1.x = 90;
-		arma1.y = WHEIGHT - (arma1.height / 2);
+		arma1.oX = 90;
+		arma1.oY = WHEIGHT - (arma1.height / 2);
+		arma1.x = arma1.oX;
+		arma1.y = arma1.oY;
 
-		arma2.x = WWIDTH - 170;
-		arma2.y = WHEIGHT - (arma2.height / 2);
+		arma2.oX = WWIDTH - 170;
+		arma2.oY = WHEIGHT - (arma2.height / 2);
+		arma2.x = arma1.oX;
+		arma2.y = arma2.oY;
 
 		arma1.flags = ENTIDADE_FLAG_ESPACO;
 		arma2.flags = ENTIDADE_FLAG_ESPACO;
@@ -78,7 +83,7 @@ void FEstadoJogo::NaAtivacao() {
 		debug("Erro");
 	}
 
-	}
+}
 
 	void FEstadoJogo::NaDesativacao() {
 
@@ -107,6 +112,8 @@ void FEstadoJogo::NoLaco() {
 		fundo.y -= jogador.GetAcelY() * FFPS::FPSControle.GetFatorVelocidade();
 	if (jogador.moveBaixo)
 		fundo.y += jogador.GetAcelY() * FFPS::FPSControle.GetFatorVelocidade();
+
+
 
 	//chama cada entidade na lista de entidades, utilizando o metodo apropriado para as entidades no FEntidade.cpp
 	for (int i = 0; i < (int) FEntidade::listaEntidades.size(); i++) {
@@ -142,7 +149,8 @@ void FEstadoJogo::NaRenderizacao(SDL_Surface * planoExibicao) {
 	rect.h = WHEIGHT;
 	
 	SDL_FillRect(planoExibicao, &rect, 0);
-	
+	if (arma1.angulo > 360) arma1.angulo -= 360;
+	if (arma1.angulo < -360) arma1.angulo += 360;
 	/** for invertido para renderizar o cockpit na frente, nao sera mais utilizado, pq foi implementado o z
 	for(int i = (int) FEntidade::listaEntidades.size()-1;i >= 0;i--) {
 		if(FEntidade::listaEntidades[i]->morto) continue;
@@ -207,6 +215,23 @@ void FEstadoJogo::OnKeyUp(SDLKey sym, SDLMod mod, Uint16 unicode) {
 
 //Evento de movimentação do mouse e cliques enquanto se move
 void FEstadoJogo::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle) {
+	double dist1 = sqrt(pow(mX - ((arma1.x+arma1.width)/2) ,2) + pow(mY - ((arma1.y+arma1.height)/2),2));
+	double dist2 = sqrt(pow(mX - ((arma1.x+arma1.width)/2),2) + pow(mY - ((arma1.y+arma1.height)/2),2));
+
+	double dy1 = (double) ((arma1.y + arma1.height) / 2) - mY;
+	double dy2 = (double) ((arma2.y + arma2.height) / 2) - mY;
+
+	double ang1 = -(double)( 90 * (dy1/dist1));
+	double ang2 = (double)( 90 * (dy2/dist2));
+	if (arma1.angulo != ang1)
+		arma1.Rotacionar(ang1, 0, 0);
+	//arma2.Rotacionar(ang2, (arma2.x+arma2.width) / 2, arma2.y+arma2.height);
+	if (arma2.angulo != ang2)
+		arma2.Rotacionar(ang2, 0, 0);
+
+	arma1.angulo = ang1;
+	arma2.angulo = ang2;
+
 }
 //Evento de pressionar o botao esquerdo do mouse
 void FEstadoJogo::OnLButtonDown(int mX, int mY) {
