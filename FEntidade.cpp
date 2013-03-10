@@ -65,22 +65,6 @@ FEntidade::~FEntidade() {
 }
 
 /**
- * retorna a superficie de uma entidade
- * criado para o metodo rotate, porem agora sem um uso especifico
- **/
-SDL_Surface * FEntidade::GetSuperficie(){
-	return superficieEntidade;
-	}
-
-/**
- * Seta uma superficie de uma entidade
- * criado para o metodo rotate, porem agora sem um uso especifico
- **/
-void FEntidade::SetSuperficie(SDL_Surface * novaSuperficie){
-	superficieEntidade = novaSuperficie;
-}
-
-/**
  * Carrega um recurso na entidade (uma imagem)
  **/
 bool FEntidade::NoCarregar (char * arquivo, int width, int height, int maxFrames) {
@@ -194,26 +178,6 @@ void FEntidade::OrdenaProfundidade(int esquerda, int direita) {
 }
 
 /**
-void FEntidade::OrdenaProfundidade() {
-	//Reordena as entidades pelo atributo Z
-
-	// bubble fedorento, depois implementar um algoritmo decente...
-	//debug("Ordenando");
-	FEntidade * entidadeAux;
-	for (int i = 0; i < (int) FEntidade::listaEntidades.size()-1; i++) {
-		for (int j = i+1; j < (int) FEntidade::listaEntidades.size()-1; j++) {
-			if (FEntidade::listaEntidades[i]->z > FEntidade::listaEntidades[j]->z) {
-				//inverte
-				entidadeAux = FEntidade::listaEntidades[i];
-				FEntidade::listaEntidades[i] = FEntidade::listaEntidades[i+1];
-				FEntidade::listaEntidades[i+1] = entidadeAux;
-			}
-		}
-	}
-}
-**/
-
-/**
  * Controla a renderização na tela da entidade
  **/
 void FEntidade::NaRenderizacao(SDL_Surface * planoExibicao) {
@@ -274,6 +238,8 @@ bool FEntidade::NaColisao(FEntidade * entidade) {
  * Metodo para movimentar a entidade na tela
  **/
 void FEntidade::NoMovimento(float moveX, float moveY) {
+	//Com excecao do mouse, que eventualmente podera estar parado e ainda e preciso manter o registro de
+	//colisao ou posicao, o TIPO_ENTIDADE_CURSOR passa a checagem dessa funcao
 	if (moveX == 0 && moveY == 0 && tipo != TIPO_ENTIDADE_CURSOR) return;
 	
 	double novoX = 0;
@@ -398,35 +364,24 @@ bool FEntidade::Colisoes(int oX, int oY, int oW, int oH) {
 	return true;
 	
 }
-
+/**
+ * Modifica a area de colisao de uma entidade, por padrao a area de colisao eh igual a area
+ * da Entidade, mas há casos onde eh necessario alterar apenas a area de colisao
+ */
 void FEntidade::colBox(int x, int y, int width, int height) {
 	this->colX = x;
 	this->colY = y;
 	this->colWidth = width;
 	this->colHeight = height;
 }
+
 /**
  * Verifica a validade da nova posicao
  * Se eh possivel se mover para proxima posicao
  **/
 bool FEntidade::PosValido(int novoX, int novoY) {
 	bool retorno = true;
-	/** Nao preciso que seja feita validade com o mapa (por enquanto)
-	int inicioX = (novoX + colX) / TAMANHO_AZULEJO;
-	int inicioY = (novoY + colY) / TAMANHO_AZULEJO;
-	
-	int fimX = ((novoX + colX) + width - colWidth - 1) / TAMANHO_AZULEJO;
-	int fimY = ((novoY + colY) + height - colHeight - 1) / TAMANHO_AZULEJO;
-	
-	for (int iY = inicioY; iY <= fimY; iY++) {
-		for (int iX = inicioX; iX <= fimX; iX++) {
-			FAzulejo * azulejo = FArea::controleArea.GetAzulejo(iX * TAMANHO_AZULEJO, iY * TAMANHO_AZULEJO);
-			if (PosValidoAzulejo(azulejo) == false) {
-				retorno = false;
-			}
-		}
-	}
-	**/
+
 	if (flags & ENTIDADE_FLAG_SOMENTEMAPA) {
 	} else {
 		for (int i = 0;i < (int)listaEntidades.size();i++) {
@@ -635,7 +590,7 @@ void FEntidadeBotao::NoLaco() {
 	this->cursorSobre = false;
 }
 void FEntidadeBotao::NaRenderizacao(SDL_Surface * planoExibicao) {
-	Excecoes::msgErro = "FEntidadeTexto::NoCarregar arquivo: ";
+	Excecoes::msgErro = "FEntidadeBotao::NaRenderizacao: ";
 	FEntidade::NaRenderizacao(planoExibicao);
 	try {
 		if (planoExibicao == NULL) {
