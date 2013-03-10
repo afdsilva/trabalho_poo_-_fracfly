@@ -492,7 +492,7 @@ bool FEntidadeTexto::NoCarregar (TTF_Font * fonte, string texto, SDL_Color corTe
 	try {
 		if ((fonteEntidade = fonte) == NULL) throw Excecoes::TratamentoExcecao();
 		if (TTF_SizeText(fonteEntidade, texto.c_str(), &this->width, &this->height) == -1) {
-			Excecoes::msgErro+="Nao foi possivel aplicar TTF_SizeText "
+			Excecoes::msgErro+="Nao foi possivel aplicar TTF_SizeText ";
 			Excecoes::msgErro+= SDL_GetError();
 			throw Excecoes::TratamentoExcecao();
 		}

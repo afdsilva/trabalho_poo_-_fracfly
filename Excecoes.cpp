@@ -28,7 +28,7 @@ int Excecoes::TratamentoExcecao() {
 	saida += Excecoes::msgErro;
 	if (Excecoes::linhaErro != -1)
 		saida += " LINHA: ";
-	saida +=
-	debug(Excecoes::msgErro, Excecoes::linhaErro);
+	saida += Excecoes::linhaErro;
+	debug(saida, Excecoes::linhaErro);
 	return 1;
 }
