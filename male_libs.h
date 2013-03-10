@@ -16,10 +16,10 @@
 using namespace std;
 
 template <typename T> void debug(T texto) {
-	cout << "Texto: " << texto << endl;
+	cout << texto << endl;
 }
 template <typename T> void debug(T texto,int linha) {
-	cout << "TEXTO: " << texto << " LINHA: " << linha << endl;
+	cout << "SAIDA: " << texto << " LINHA: " << linha << endl;
 }
 
 

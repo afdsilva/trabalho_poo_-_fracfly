@@ -6,12 +6,15 @@ FSuperficie::FSuperficie() {
 }
  
 SDL_Surface * FSuperficie::NoCarregar(char * arquivo) {
-	Excecoes::msgErro = "FSuperficie::NoCarregar ";
+	Excecoes::linhaErro = 8;
+	Excecoes::classErro = "FSuperficie::NoCarregar";
+	Excecoes::msgErro.clear();
 	SDL_Surface * retorno;
 	try {
 		SDL_Surface * _temp = NULL;
 		if ((_temp = IMG_Load(arquivo)) == NULL) {
-			Excecoes::msgErro+= "Nao foi possivel carregar imagem ";
+			Excecoes::msgErro+= "Nao foi possivel carregar o arquivo ";
+			Excecoes::msgErro+= arquivo;
 			throw Excecoes::TratamentoExcecao();
 		}
 		retorno = SDL_DisplayFormatAlpha(_temp);
@@ -24,7 +27,9 @@ SDL_Surface * FSuperficie::NoCarregar(char * arquivo) {
 }
 
 bool FSuperficie::NoDesenhar(SDL_Surface * surfDest, SDL_Surface * surfOri, int x, int y) {
-	Excecoes::msgErro = "FSuperficie::NoDesenhar ";
+	Excecoes::linhaErro = 29;
+	Excecoes::classErro = "FSuperficie::NoDesenhar";
+	Excecoes::msgErro.clear();
 	bool retorno = true;
 	try {
 		if(surfDest == NULL || surfOri == NULL) {
@@ -46,7 +51,9 @@ bool FSuperficie::NoDesenhar(SDL_Surface * surfDest, SDL_Surface * surfOri, int 
 }
 
 bool FSuperficie::NoDesenhar(SDL_Surface * surfDest, SDL_Surface * surfOri, int x, int y, int x2, int y2, int w, int h) {
-	Excecoes::msgErro = "FSuperficie::NoDesenhar ";
+	Excecoes::linhaErro = 53;
+	Excecoes::classErro = "FSuperficie::NoDesenhar";
+	Excecoes::msgErro.clear();
 	bool retorno = true;
 	try {
 		if(surfDest == NULL || surfOri == NULL) {
@@ -74,7 +81,9 @@ bool FSuperficie::NoDesenhar(SDL_Surface * surfDest, SDL_Surface * surfOri, int 
 }
 
 bool FSuperficie::Transparencia(SDL_Surface * surfDest, int r, int g, int b) {
-	Excecoes::msgErro = "FSuperficie::NoDesenhar ";
+	Excecoes::linhaErro = 83;
+	Excecoes::classErro = "FSuperficie::Transparencia";
+	Excecoes::msgErro.clear();
 	bool retorno = true;
 	try {
 		if(surfDest == NULL) {

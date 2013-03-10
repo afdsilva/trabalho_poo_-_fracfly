@@ -8,22 +8,25 @@ FEstadoJogo::FEstadoJogo() {
 }
 
 void FEstadoJogo::NaAtivacao() {
+	Excecoes::msgErro = "FEstadoJogo::NaAtivacao: ";
 	//carrega fundo
 	try {
 		char fundoArquivo[] = "res/ai-star-about-to-be-ripped-apart.jpg";
-		if (fundo.NoCarregar(fundoArquivo,4945,3672,0) == false)
-			throw 1;
-
-		//fundo.x = FCamera::controleCamera.GetX();
+		if (fundo.NoCarregar(fundoArquivo,4945,3672,0) == false) {
+			Excecoes::msgErro+= " Nao foi possivel carregar a imagem ";
+			Excecoes::msgErro+= fundoArquivo;
+			throw Excecoes::TratamentoExcecao();
+		}
 		fundo.x = (WWIDTH / 2) - (fundo.width / 2);
-		//fundo.y = FCamera::controleCamera.GetY();
 		fundo.y = (WHEIGHT / 2) - (fundo.height / 2);
 		fundoZoom = 1;
 
 		//carrega a cabine da nave
 		char naveArquivo[] = "res/modelo_cabine_novo_720p.png";
 		if (jogador.NoCarregar(naveArquivo, WWIDTH, WHEIGHT, 0) == false) {
-			throw 1;
+			Excecoes::msgErro+= " Nao foi possivel carregar a imagem ";
+			Excecoes::msgErro+= naveArquivo;
+			throw Excecoes::TratamentoExcecao();
 		}
 		//jogador.Escalonar(-10);
 

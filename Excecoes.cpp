@@ -11,7 +11,8 @@
 #include "Excecoes.h"
 
 std::string Excecoes::msgErro = "";
-int Excecoes::linhaErro = 0;
+std::string Excecoes::classErro = "";
+int Excecoes::linhaErro = -1;
 
 Excecoes::Excecoes() {
 }
@@ -21,6 +22,13 @@ Excecoes::~Excecoes() {
 }
 
 int Excecoes::TratamentoExcecao() {
+	string saida = "ERROR:\nCLASS: ";
+	saida += Excecoes::classErro;
+	saida += " MSG: ";
+	saida += Excecoes::msgErro;
+	if (Excecoes::linhaErro != -1)
+		saida += " LINHA: ";
+	saida +=
 	debug(Excecoes::msgErro, Excecoes::linhaErro);
 	return 1;
 }

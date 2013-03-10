@@ -68,25 +68,26 @@ FEntidade::~FEntidade() {
  * Carrega um recurso na entidade (uma imagem)
  **/
 bool FEntidade::NoCarregar (char * arquivo, int width, int height, int maxFrames) {
+	Excecoes::linhaErro = 70;
+	Excecoes::classErro = "FEntidade::NoCarregar";
+	Excecoes::msgErro.clear();
+	bool retorno = true;
 	try {
-		if ((superficieEntidade = FSuperficie::NoCarregar(arquivo)) == NULL) throw;
-		if ((superficieEntidade_Original = FSuperficie::NoCarregar(arquivo)) == NULL) throw;
+		if ((superficieEntidade = FSuperficie::NoCarregar(arquivo)) == NULL) throw Excecoes::TratamentoExcecao();
+		if ((superficieEntidade_Original = FSuperficie::NoCarregar(arquivo)) == NULL) throw Excecoes::TratamentoExcecao();
 
-		FSuperficie::Transparencia(superficieEntidade, 255, 0, 255);
-		FSuperficie::Transparencia(superficieEntidade_Original, 255, 0, 255);
+		//FSuperficie::Transparencia(superficieEntidade, 255, 0, 255);
+		//FSuperficie::Transparencia(superficieEntidade_Original, 255, 0, 255);
 
 		this->width = width;
 		this->height = height;
 	
 		controleAnimacao.maxFrames = maxFrames;
 	} catch (...) {
-		string msgErro = "FEntidade::NoCarregar: Superficie nao pode ser carregada";
-		msgErro += SDL_GetError();
-		debug(msgErro,109);
-		return false;
+		retorno = false;
 	}
 	
-	return true;
+	return retorno;
 }
 
 
@@ -181,22 +182,18 @@ void FEntidade::OrdenaProfundidade(int esquerda, int direita) {
  * Controla a renderização na tela da entidade
  **/
 void FEntidade::NaRenderizacao(SDL_Surface * planoExibicao) {
-	Excecoes::msgErro = "FEntidade::NoCarregar arquivo: ";
+	Excecoes::linhaErro = 184;
+	Excecoes::classErro = "FEntidade::NaRenderizacao";
+	Excecoes::msgErro.clear();
 	try {
-		if (planoExibicao == NULL) {
-			Excecoes::msgErro+= "Plano de exibicao nao existe ";
-			throw Excecoes::TratamentoExcecao();
-		}
+		if (planoExibicao == NULL) throw Excecoes::TratamentoExcecao();
 		if (superficieEntidade != NULL) {
 			if ((FSuperficie::NoDesenhar(planoExibicao,
 			superficieEntidade, x - FCamera::controleCamera.GetX(),
 			y - FCamera::controleCamera.GetY(),
 			frameAtualCol * width,
 			(frameAtualLinha + controleAnimacao.GetFrameAtual()) * height, width, height)
-			) == false) {
-				Excecoes::msgErro+= "Recurso nao pode ser carregado ";
-				throw Excecoes::TratamentoExcecao();
-			}
+			) == false) throw Excecoes::TratamentoExcecao();
 		}
 	} catch (int e) {
 		return;
@@ -420,29 +417,26 @@ bool FEntidade::PosValidoEntidade(FEntidade * entidade, int novoX, int novoY) {
  * Metodos para rotacionar e escalonar a entidade
  **/
 bool FEntidade::RotaZoom(double angulo, double zoom, int smooth, int centerX, int centerY) {
+	Excecoes::linhaErro = 425;
+	Excecoes::classErro = "FEntidade::RotaZoom";
+	Excecoes::msgErro.clear();
 	bool retorno = true;
 
 	SDL_Surface * _sup = NULL;
 	SDL_Surface * _temp_sup = NULL;
 
 	try {
-		if (!superficieEntidade)
-			throw 1;
-		if (!superficieEntidade_Original)
-			throw 2;
+		if (superficieEntidade == NULL) throw Excecoes::TratamentoExcecao();
+		if (superficieEntidade_Original == NULL) throw Excecoes::TratamentoExcecao();
+
 		//libera superficie antiga
 		SDL_FreeSurface(superficieEntidade);
-		if ((_sup = rotozoomSurface( superficieEntidade_Original, angulo, zoom, smooth)) == NULL)
-			throw 3;
+		if ((_sup = rotozoomSurface( superficieEntidade_Original, angulo, zoom, smooth)) == NULL) {
+			Excecoes::msgErro = "Nao foi possivel aplicar rotozoomSurface";
+			throw Excecoes::TratamentoExcecao();
+		}
 
-		//SDL_Rect _retDest = {(int)this->oX, (int)this->oY, 0, 0};
-		//_retDest.x-=  (_sup->w / 2) - (superficieEntidade_Original->w / 2) + centerX;
-		//_retDest.y-= (_sup->h / 2) - (superficieEntidade_Original->h / 2) + centerY;
-
-
-		if (( superficieEntidade = SDL_DisplayFormatAlpha(_sup)) == NULL)
-			throw 4;
-		//SDL_BlitSurface(_temp_sup, NULL, superficieEntidade, &_retDest);
+		if (( superficieEntidade = SDL_DisplayFormatAlpha(_sup)) == NULL) throw Excecoes::TratamentoExcecao();
 
 		this->width = superficieEntidade->w;
 		this->height = superficieEntidade->h;
@@ -451,22 +445,7 @@ bool FEntidade::RotaZoom(double angulo, double zoom, int smooth, int centerX, in
 		this->x-=  (_sup->w / 2) - (superficieEntidade_Original->w / 2) + centerX;
 		this->y-= (_sup->h / 2) - (superficieEntidade_Original->h / 2) + centerY;
 
-		retorno = true;
 	} catch (int e) {
-		string msgErro = "FEntidade::RotaZoom: ";
-		switch(e) {
-			case 1:
-				msgErro+= "Superficie vazia ";
-				break;
-			case 2:
-				msgErro+= "Superficie Original vazia ";
-				break;
-			default:
-				msgErro+= "Erro: ";
-				break;
-		}
-		msgErro +=SDL_GetError();
-		debug(msgErro,e);
 		retorno = false;
 	}
 	SDL_FreeSurface(_sup);
@@ -493,39 +472,32 @@ FEntidadeTexto::FEntidadeTexto() : FEntidade() {
  * Carrega um recurso na entidade (uma fonte)
  **/
 bool FEntidadeTexto::NoCarregar (char * arquivo, string texto, int tam, SDL_Color corTexto) {
-	Excecoes::msgErro = "FEntidadeTexto::NoCarregar arquivo: ";
+	Excecoes::linhaErro = 474;
+	Excecoes::classErro = "FEntidadeTexto::NoCarregar";
+	Excecoes::msgErro.clear();
 	bool retorno = true;
 	try {
-		if ((fonteEntidade = FFonte::NoCarregar(arquivo, tam)) == NULL) {
-			Excecoes::msgErro+= " Não foi possivel carregar arquivo de fonte ";
-			Excecoes::msgErro+= arquivo;
-			throw Excecoes::TratamentoExcecao();
-		}
-		if (!FEntidadeTexto::NoCarregar(fonteEntidade,texto,corTexto)) {
-			Excecoes::msgErro+= " Recurso de fonte nulo";
-			throw Excecoes::TratamentoExcecao();
-		}
+		if ((fonteEntidade = FFonte::NoCarregar(arquivo, tam)) == NULL) throw Excecoes::TratamentoExcecao();
+		if (FEntidadeTexto::NoCarregar(fonteEntidade,texto,corTexto) == false) throw Excecoes::TratamentoExcecao();
 	} catch (...) {
 		retorno = false;
 	}
 	return retorno;
 }
 bool FEntidadeTexto::NoCarregar (TTF_Font * fonte, string texto, SDL_Color corTexto) {
-	Excecoes::msgErro = "FEntidadeTexto::NoCarregar fonte: ";
+	Excecoes::linhaErro = 487;
+	Excecoes::classErro = "FEntidadeTexto::NoCarregar";
+	Excecoes::msgErro.clear();
 	bool retorno = true;
 	try {
-		if ((fonteEntidade = fonte) == NULL) {
-			Excecoes::msgErro+= " Recurso de fonte nulo";
-			throw Excecoes::TratamentoExcecao();
-		}
-
+		if ((fonteEntidade = fonte) == NULL) throw Excecoes::TratamentoExcecao();
 		if (TTF_SizeText(fonteEntidade, texto.c_str(), &this->width, &this->height) == -1) {
-			Excecoes::msgErro+= " Nao foi possivel criar texto: ";
+			Excecoes::msgErro+="Nao foi possivel aplicar TTF_SizeText "
 			Excecoes::msgErro+= SDL_GetError();
 			throw Excecoes::TratamentoExcecao();
 		}
+
 		this->tipo = TIPO_ENTIDADE_TEXTO;
-		//this->flags = ENTIDADE_FLAG_TEXTO;
 	    this->texto = texto;
 		this->corTexto = corTexto;
 
@@ -535,23 +507,15 @@ bool FEntidadeTexto::NoCarregar (TTF_Font * fonte, string texto, SDL_Color corTe
 	return retorno;
 }
 void FEntidadeTexto::NaRenderizacao(SDL_Surface * planoExibicao) {
-	Excecoes::msgErro = "FEntidadeTexto::NaRenderizacao: ";
+	Excecoes::linhaErro = 509;
+	Excecoes::classErro = "FEntidadeTexto::NaRenderizacao";
+	Excecoes::msgErro.clear();
 
 	FEntidade::NaRenderizacao(planoExibicao);
 	try {
-		if (planoExibicao == NULL) {
-			Excecoes::msgErro+= "Plano de exibicao nao existe ";
-			throw Excecoes::TratamentoExcecao();
-		}
-		if (fonteEntidade == NULL) {
-			Excecoes::msgErro+= "Recurso de fonte nulo";
-			throw Excecoes::TratamentoExcecao();
-		}
-		if ((FFonte::NoEscrever(planoExibicao,fonteEntidade,texto,x,y,corTexto)) == false) {
-			Excecoes::msgErro+= "Recurso nao pode ser carregado ";
-			Excecoes::msgErro+= SDL_GetError();
-			throw Excecoes::TratamentoExcecao();
-		}
+		if (planoExibicao == NULL) throw Excecoes::TratamentoExcecao();
+		if (fonteEntidade == NULL) throw Excecoes::TratamentoExcecao();
+		if ((FFonte::NoEscrever(planoExibicao,fonteEntidade,texto,x,y,corTexto)) == false) throw Excecoes::TratamentoExcecao();
 	} catch (...) {
 		return;
 	}
@@ -590,22 +554,17 @@ void FEntidadeBotao::NoLaco() {
 	this->cursorSobre = false;
 }
 void FEntidadeBotao::NaRenderizacao(SDL_Surface * planoExibicao) {
-	Excecoes::msgErro = "FEntidadeBotao::NaRenderizacao: ";
+	Excecoes::linhaErro = 557;
+	Excecoes::classErro = "FEntidadeBotao::NaRenderizacao";
+	Excecoes::msgErro.clear();
+
 	FEntidade::NaRenderizacao(planoExibicao);
 	try {
-		if (planoExibicao == NULL) {
-			Excecoes::msgErro+= "Plano de exibicao nao existe ";
-			throw Excecoes::TratamentoExcecao();
-		}
-		if (fonteEntidade == NULL) {
-			Excecoes::msgErro+= "Recurso de fonte nulo";
-			throw Excecoes::TratamentoExcecao();
-		}
-		if ((FFonte::NoEscrever(planoExibicao,fonteEntidade,texto,x + (this->cursorSobre ? this->deslocamentoX : 0),y + (this->cursorSobre ? this->deslocamentoY : 0),(this->cursorSobre ? this->corTextoAlterada : this->corTexto ))) == false) {
-			Excecoes::msgErro+= "Recurso nao pode ser carregado ";
-			Excecoes::msgErro+= SDL_GetError();
-			throw Excecoes::TratamentoExcecao();
-		}
+		if (planoExibicao == NULL) throw Excecoes::TratamentoExcecao();
+		if (fonteEntidade == NULL) throw Excecoes::TratamentoExcecao();
+
+		if ((FFonte::NoEscrever(planoExibicao,fonteEntidade,texto,x + (this->cursorSobre ? this->deslocamentoX : 0),y + (this->cursorSobre ? this->deslocamentoY : 0),(this->cursorSobre ? this->corTextoAlterada : this->corTexto ))) == false) throw Excecoes::TratamentoExcecao();
+
 	} catch (...) {
 		return;
 	}

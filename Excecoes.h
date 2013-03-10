@@ -16,6 +16,7 @@
 class Excecoes {
 public:
 	static std::string msgErro;
+	static std::string classErro;
 	static int linhaErro;
 
 public:

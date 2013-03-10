@@ -4,11 +4,12 @@ FFonte::FFonte() {
 	
 }
 TTF_Font * FFonte::NoCarregar(char * arquivo, int tam) {
+	Excecoes::linhaErro = 6;
+	Excecoes::classErro = "FFonte::NoCarregar";
 	TTF_Font * retornoFonte;
 	try {
 		if (!(retornoFonte = TTF_OpenFont(arquivo, tam))) {
-			Excecoes::msgErro = "FEntidade::Erro TTF_OpenFont ";
-			Excecoes::linhaErro = 0;
+			Excecoes::msgErro = "TTF_OpenFont ";
 			Excecoes::msgErro += SDL_GetError();
 			throw Excecoes::TratamentoExcecao();
 		}
@@ -18,11 +19,13 @@ TTF_Font * FFonte::NoCarregar(char * arquivo, int tam) {
 	return retornoFonte;
 }
 bool FFonte::NoEscrever(SDL_Surface * superfDest, TTF_Font * fonte, string texto, int x, int y, SDL_Color corTexto) {
+	Excecoes::linhaErro = 21;
+	Excecoes::classErro = "FFonte::NoEscrever";
 	bool retorno = true;
 	try {
 		SDL_Surface * tempSuperf;
 		if ((tempSuperf = TTF_RenderText_Solid(fonte, texto.c_str(), corTexto)) == NULL) {
-			Excecoes::msgErro = "FEntidade::Erro TTF_RenderText_Solid ";
+			Excecoes::msgErro = "TTF_RenderText_Solid ";
 			Excecoes::msgErro += SDL_GetError();
 			throw Excecoes::TratamentoExcecao();
 		}
@@ -34,7 +37,7 @@ bool FFonte::NoEscrever(SDL_Surface * superfDest, TTF_Font * fonte, string texto
 
 		//plota a superficie fonte na superficie destino
 		if (SDL_BlitSurface( tempSuperf, NULL, superfDest, &deslocamento ) == -1) {
-			Excecoes::msgErro = "FEntidade::Erro SDL_BlitSurface ";
+			Excecoes::msgErro = "SDL_BlitSurface ";
 			Excecoes::msgErro += SDL_GetError();
 			throw Excecoes::TratamentoExcecao();
 		}
