@@ -7,30 +7,30 @@ FEstadoMenu::FEstadoMenu() {
 }
 
 void FEstadoMenu::NaAtivacao() {
+	Excecoes::linhaErro = 9;
+	Excecoes::classErro = "FEstadoJogo::NaAtivacao";
+	Excecoes::msgErro.clear();
 	estadoSelecionado = 1;
 	//carrega o arquivo da fonte que sera usada pelos itens do menu
-	char fonteArq[] = "res/lazy.ttf";
 	try {
-		TTF_Font * lazyFontTitulo;
-		if ((lazyFontTitulo = FFonte::NoCarregar(fonteArq, 82)) == NULL)
-			throw 1;
-		TTF_Font * lazyFontItens;
-		if ((lazyFontItens = FFonte::NoCarregar(fonteArq, 40)) == NULL)
-			throw 1;
+		char fonteArq[] = "res/fonts/ShadowsAroundUs.ttf";
+		TTF_Font * lazyFontTitulo = NULL;
+		TTF_Font * lazyFontItens = NULL;
+		if ((lazyFontTitulo = FFonte::NoCarregar(fonteArq, 82)) == NULL) throw Excecoes::TratamentoExcecao();
+		if ((lazyFontItens = FFonte::NoCarregar(fonteArq, 40)) == NULL) throw Excecoes::TratamentoExcecao();
 			
 		//carregou com sucesso a fonte cria entidades que serao os itens do menu
 		SDL_Color vermelho = {255,0,0};
 		SDL_Color branco = {255,255,255};
 
 		titulo = new FEntidadeTexto();
-		if (titulo->NoCarregar(lazyFontTitulo,"Menu",branco)) {
+		if (titulo->NoCarregar(lazyFontTitulo,"Menu",branco) == false) throw Excecoes::TratamentoExcecao();
 			titulo->x = 10;
 			titulo->y = 150;
 			FEntidade::listaEntidades.push_back(titulo);
-		}
 
 		iniciar = new FEntidadeBotao();
-		if (iniciar->NoCarregar(lazyFontItens,"Iniciar",branco)) {
+		if (iniciar->NoCarregar(lazyFontItens,"Iniciar",branco) == false) throw Excecoes::TratamentoExcecao();
 			iniciar->x = titulo->x + 20;
 			iniciar->y = titulo->y + titulo->height + 40;
 			iniciar->flags = ENTIDADE_FLAG_CURSOR ;
@@ -38,9 +38,9 @@ void FEstadoMenu::NaAtivacao() {
 			iniciar->AoClicarDireito(ESTADO_JOGO);
 			iniciar->AoClicarEsquerdo(ESTADO_JOGO);
 			FEntidade::listaEntidades.push_back(iniciar);
-		}
+
 		options = new FEntidadeBotao();
-		if (options->NoCarregar(lazyFontItens,"Opcoes",branco)) {
+		if (options->NoCarregar(lazyFontItens,"Opcoes",branco) == false) throw Excecoes::TratamentoExcecao();
 			options->x = titulo->x + 20;
 			options->y = iniciar->y + iniciar->height + 30;
 			options->flags = ENTIDADE_FLAG_CURSOR;
@@ -48,9 +48,9 @@ void FEstadoMenu::NaAtivacao() {
 			options->AoClicarDireito(ESTADO_OPTIONS);
 			options->AoClicarEsquerdo(ESTADO_OPTIONS);
 			FEntidade::listaEntidades.push_back(options);
-		}
+
 		sair = new FEntidadeBotao();
-		if (sair->NoCarregar(lazyFontItens,"Sair",branco)) {
+		if (sair->NoCarregar(lazyFontItens,"Sair",branco) == false) throw Excecoes::TratamentoExcecao();
 			sair->x = titulo->x + 20;
 			sair->y = options->y + options->height + 30;
 			sair->flags = ENTIDADE_FLAG_CURSOR;
@@ -58,16 +58,9 @@ void FEstadoMenu::NaAtivacao() {
 			sair->AoClicarDireito(ESTADO_NENHUM);
 			sair->AoClicarEsquerdo(ESTADO_NENHUM);
 			FEntidade::listaEntidades.push_back(sair);
-		}
-	} catch (int e) {
-		switch(e) {
-			case 1:
-				debug("FEstadoMenu::Não foi possivel carregar fonte");
-				break;
-			default:
-				break;
-		}
-		return;
+
+	} catch (...) {
+		FGerenciadorEstados::SetEstadoAtivo(ESTADO_NENHUM);
 	}
 	
 	//srand((int)time(NULL));

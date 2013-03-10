@@ -7,30 +7,31 @@ FEstadoOptions::FEstadoOptions() {
 }
 
 void FEstadoOptions::NaAtivacao() {
+	Excecoes::linhaErro = 9;
+	Excecoes::classErro = "FEstadoJogo::NaAtivacao";
+	Excecoes::msgErro.clear();
+	estadoSelecionado = 1;
 
-	//carrega o arquivo da fonte que sera usada pelos itens do menu
-	char fonteArq[] = "res/lazy.ttf";
 	try {
-		TTF_Font * lazyFontTitulo;
-		if ((lazyFontTitulo = FFonte::NoCarregar(fonteArq, 82)) == NULL)
-			throw 1;
-		TTF_Font * lazyFontItens;
-		if ((lazyFontItens = FFonte::NoCarregar(fonteArq, 40)) == NULL)
-			throw 1;
+		//carrega o arquivo da fonte que sera usada pelos itens do menu
+		char fonteArq[] = "res/fonts/ShadowsAroundUs.ttf";
+		TTF_Font * lazyFontTitulo = NULL;
+		TTF_Font * lazyFontItens = NULL;
+		if ((lazyFontTitulo = FFonte::NoCarregar(fonteArq, 82)) == NULL) throw Excecoes::TratamentoExcecao();
+		if ((lazyFontItens = FFonte::NoCarregar(fonteArq, 40)) == NULL) throw Excecoes::TratamentoExcecao();
 
 		//carregou com sucesso a fonte cria entidades que serao os itens do menu
 		SDL_Color vermelho = {255,0,0};
 		SDL_Color branco = {255,255,255};
 
 		titulo = new FEntidadeTexto();
-		if (titulo->NoCarregar(lazyFontTitulo,"Options",branco)) {
+		if (titulo->NoCarregar(lazyFontTitulo,"Options",branco) == false) throw Excecoes::TratamentoExcecao();
 			titulo->x = 10;
 			titulo->y = 150;
 			FEntidade::listaEntidades.push_back(titulo);
-		}
 
 		voltar = new FEntidadeBotao();
-		if (voltar->NoCarregar(lazyFontItens,"Voltar",branco)) {
+		if (voltar->NoCarregar(lazyFontItens,"Voltar",branco) == false) throw Excecoes::TratamentoExcecao();
 			voltar->x = titulo->x + 20;
 			voltar->y = titulo->y + titulo->height + 40;
 			voltar->flags = ENTIDADE_FLAG_CURSOR ;
@@ -38,20 +39,10 @@ void FEstadoOptions::NaAtivacao() {
 			voltar->AoClicarDireito(ESTADO_MENU);
 			voltar->AoClicarEsquerdo(ESTADO_MENU);
 			FEntidade::listaEntidades.push_back(voltar);
-		}
-	} catch (int e) {
-		switch(e) {
-			case 1:
-				debug("FEstadoMenu::Não foi possivel carregar fonte");
-				break;
-			default:
-				break;
-		}
-		return;
-	}
 
-	//srand((int)time(NULL));
-	//fundo.NoInic();
+	} catch (int e) {
+		FGerenciadorEstados::SetEstadoAtivo(ESTADO_NENHUM);
+	}
 }	
 
 void FEstadoOptions::NaDesativacao() {
@@ -82,6 +73,13 @@ void FEstadoOptions::NoLaco() {
 			entidadeB->NaColisao(entidadeA);
 		}
 	}
+
+	switch(estadoSelecionado) {
+		case 1:
+			voltar->MudaCor();
+			break;
+	}
+
 	FEntidadeColisao::listaEntidadesColisoes.clear();
 
 	//fundo.ExecutarFractal();
@@ -112,7 +110,22 @@ void FEstadoOptions::OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode) {
 			OnExit();
 			FGerenciadorEstados::SetEstadoAtivo(ESTADO_MENU);
 			break;
+		case SDLK_w:
+		case SDLK_UP:
+			if (estadoSelecionado > 1)
+				estadoSelecionado--;
+			break;
+		case SDLK_s:
+		case SDLK_DOWN:
+			if (estadoSelecionado < 1)
+				estadoSelecionado++;
+			break;
 		case SDLK_RETURN:
+			switch(estadoSelecionado) {
+				case 1:
+					FGerenciadorEstados::SetEstadoAtivo(ESTADO_MENU);
+					break;
+			}
 			break;
 		default:
 			break;
@@ -121,6 +134,7 @@ void FEstadoOptions::OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode) {
 
 //Evento de movimentação do mouse e cliques enquanto se move
 void FEstadoOptions::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle) {
+	estadoSelecionado = 0;
 }
 
 //Evento de pressionar o botao esquerdo do mouse

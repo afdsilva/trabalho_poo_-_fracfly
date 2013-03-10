@@ -8,8 +8,8 @@ FEstadoJogo::FEstadoJogo() {
 }
 
 void FEstadoJogo::NaAtivacao() {
-	Excecoes::linhaErro = 70;
-	Excecoes::classErro = "FEntidade::NoCarregar";
+	Excecoes::linhaErro = 10;
+	Excecoes::classErro = "FEstadoJogo::NaAtivacao";
 	Excecoes::msgErro.clear();
 	//carrega fundo
 	try {
@@ -36,7 +36,7 @@ void FEstadoJogo::NaAtivacao() {
 		if ((lazyFontItens = FFonte::NoCarregar(fonteArq, 18)) == NULL) throw Excecoes::TratamentoExcecao();
 		SDL_Color branco = {255,255,255};
 
-		if (escore.NoCarregar(lazyFontItens,"Escore: 0",branco) == NULL) throw Excecoes::TratamentoExcecao();
+		if (escore.NoCarregar(lazyFontItens,"Escore: 0",branco) == false) throw Excecoes::TratamentoExcecao();
 
 		escore.x = 10;
 		escore.y = 10;
