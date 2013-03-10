@@ -54,13 +54,13 @@ void FEstadoJogo::NaAtivacao() {
 			debug("Error");
 		}
 
-		arma1.oX = 90;
+		arma1.oX = 30;
 		arma1.oY = WHEIGHT - (arma1.height /2);
 		arma1.x = arma1.oX;
 		arma1.y = arma1.oY;
 		arma1.z+= 50;
 
-		arma2.oX = WWIDTH - (90 + arma2.width);
+		arma2.oX = WWIDTH - (arma1.oX + arma2.width);
 		arma2.oY = WHEIGHT - (arma2.height /2);
 		arma2.x = arma1.oX;
 		arma2.y = arma2.oY;

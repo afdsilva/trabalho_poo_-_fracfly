@@ -8,7 +8,7 @@
 #include <SDL/SDL_rotozoom.h>
 #include <SDL/SDL_gfxPrimitives.h>
 
-class FSuperficie {
+class FSuperficie : public Excecoes {
     public:
         FSuperficie();
 

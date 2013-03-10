@@ -7,10 +7,11 @@
 #include <vector>
 #include <cmath>
 #include <complex>
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#include "Excecoes.h"
 
 using namespace std;
 
