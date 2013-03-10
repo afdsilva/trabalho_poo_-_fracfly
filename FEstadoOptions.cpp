@@ -8,7 +8,7 @@ FEstadoOptions::FEstadoOptions() {
 
 void FEstadoOptions::NaAtivacao() {
 	Excecoes::linhaErro = 9;
-	Excecoes::classErro = "FEstadoJogo::NaAtivacao";
+	Excecoes::classErro = "FEstadoOptions::NaAtivacao";
 	Excecoes::msgErro.clear();
 	estadoSelecionado = 1;
 
@@ -40,7 +40,7 @@ void FEstadoOptions::NaAtivacao() {
 			voltar->AoClicarEsquerdo(ESTADO_MENU);
 			FEntidade::listaEntidades.push_back(voltar);
 
-	} catch (int e) {
+	} catch (...) {
 		FGerenciadorEstados::SetEstadoAtivo(ESTADO_NENHUM);
 	}
 }	

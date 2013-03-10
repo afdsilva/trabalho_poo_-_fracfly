@@ -59,6 +59,7 @@ void FEstadoJogo::NaAtivacao() {
 		arma2.flags = ENTIDADE_FLAG_ESPACO;
 		jogador.flags = ENTIDADE_FLAG_ESPACO;
 		jogador.z+= 100;
+		jogador.SetEscore(0);
 		cursor.z = 2000;
 		fundo.z =0;
 
@@ -78,14 +79,12 @@ void FEstadoJogo::NaAtivacao() {
 
 }
 
-	void FEstadoJogo::NaDesativacao() {
-
-		for(int i = 0;i < (int) FEntidade::listaEntidades.size();i++) {
-			if(!FEntidade::listaEntidades[i]) continue;
-			FEntidade::listaEntidades[i]->NaLimpeza();
-		}
-		FEntidade::listaEntidades.clear();
-
+void FEstadoJogo::NaDesativacao() {
+	for(int i = 0;i < (int) FEntidade::listaEntidades.size();i++) {
+		if(!FEntidade::listaEntidades[i]) continue;
+		FEntidade::listaEntidades[i]->NaLimpeza();
+	}
+	FEntidade::listaEntidades.clear();
 }
 
 void FEstadoJogo::NoLaco() {
@@ -97,12 +96,11 @@ void FEstadoJogo::NoLaco() {
 
 	//movimentacao do fundo (meio pog)
 	if (jogador.moveEsquerda && fundo.x <= 0)
-		fundo.x += 100 * FFPS::FPSControle.GetFatorVelocidade();
-		//fundo.x += jogador.GetAcelX() * FFPS::FPSControle.GetFatorVelocidade();
+		fundo.x += 20 * FFPS::FPSControle.GetFatorVelocidade();
 	while( fundo.x >= 0)
 		fundo.x -= 1;
 	if (jogador.moveDireita && fundo.x >= -(fundo.width - WWIDTH))
-		fundo.x -= 100 * FFPS::FPSControle.GetFatorVelocidade();
+		fundo.x -= 20 * FFPS::FPSControle.GetFatorVelocidade();
 		//fundo.x -= jogador.GetAcelX() * FFPS::FPSControle.GetFatorVelocidade();
 	while( fundo.x <= -(fundo.width - WWIDTH))
 		fundo.x += 1;
@@ -110,12 +108,12 @@ void FEstadoJogo::NoLaco() {
 
 
 	if (jogador.moveCima && fundo.y <= 0)
-		fundo.y += 100 * FFPS::FPSControle.GetFatorVelocidade();
+		fundo.y += 20 * FFPS::FPSControle.GetFatorVelocidade();
 		//fundo.y -= jogador.GetAcelY() * FFPS::FPSControle.GetFatorVelocidade();
 	while( fundo.y >= 0)
 		fundo.y -= 1;
 	if (jogador.moveBaixo && fundo.y >= -(fundo.height - WHEIGHT))
-		fundo.y -= 100 * FFPS::FPSControle.GetFatorVelocidade();
+		fundo.y -= 20 * FFPS::FPSControle.GetFatorVelocidade();
 		//fundo.y += jogador.GetAcelY() * FFPS::FPSControle.GetFatorVelocidade();
 	while( fundo.y <= -(fundo.height- WHEIGHT))
 		fundo.y += 1;
@@ -245,7 +243,7 @@ void FEstadoJogo::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool
 void FEstadoJogo::OnLButtonDown(int mX, int mY) {
 	//Arma1.Atirar(mX,mY);
 
-	jogador.Atirar(&arma1, arma1.x+(arma1.width / 2), arma1.y + (arma1.height / 2), mX - 8, mY - 8);
+	jogador.Atirar(&arma1, arma1.x+(arma1.width / 2), arma1.y + (arma1.height / 2), mX - 50, mY - 50);
 	int setScore = jogador.GetEscore();
 	jogador.SetEscore(setScore+1);
 }
@@ -255,7 +253,7 @@ void FEstadoJogo::OnLButtonUp(int mX, int mY) {
 }
 //Evento de pressionar o botao direito do mouse
 void FEstadoJogo::OnRButtonDown(int mX, int mY) {
-	jogador.Atirar(&arma2, arma2.x+(arma2.width / 2), arma2.y + (arma2.height / 2), mX - 8, mY - 8);
+	jogador.Atirar(&arma2, arma2.x+(arma2.width / 2), arma2.y + (arma2.height / 2), mX - 50, mY -50);
 	int setScore = jogador.GetEscore();
 	jogador.SetEscore(setScore+1);
 }

@@ -15,8 +15,6 @@ class FNave: public FEntidade {
 
 	public:
 		FNave();
-		bool NoCarregar(char * arquivo, int width, int height, int maxFrames);
-		bool NoCarregar(char * arquivo, int width, int height, int x, int y);
 		void NoLaco();
 		void NaRenderizacao(SDL_Surface * planoExibicao);
 		void NaLimpeza();

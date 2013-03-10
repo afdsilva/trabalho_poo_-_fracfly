@@ -8,7 +8,7 @@ FEstadoMenu::FEstadoMenu() {
 
 void FEstadoMenu::NaAtivacao() {
 	Excecoes::linhaErro = 9;
-	Excecoes::classErro = "FEstadoJogo::NaAtivacao";
+	Excecoes::classErro = "FEstadoMenu::NaAtivacao";
 	Excecoes::msgErro.clear();
 	estadoSelecionado = 1;
 	//carrega o arquivo da fonte que sera usada pelos itens do menu
