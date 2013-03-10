@@ -307,8 +307,13 @@ void FEntidade::NaRenderizacao(SDL_Surface * planoExibicao) {
 void FEntidade::NaLimpeza() {
 	if(superficieEntidade) {
 		SDL_FreeSurface(superficieEntidade);
+		SDL_FreeSurface(superficieEntidade_Original);
+
+		TTF_CloseFont(fonteEntidade);
 	}
 	superficieEntidade = NULL;
+	superficieEntidade_Original = NULL;
+	fonteEntidade = NULL;
 }
 
 /**
@@ -580,6 +585,7 @@ bool FEntidade::RotaZoom(double angulo, double zoom, int smooth, int centerX, in
 				break;
 			default:
 				msgErro+= "Erro: ";
+				break;
 		}
 		msgErro +=SDL_GetError();
 		debug(msgErro,e);

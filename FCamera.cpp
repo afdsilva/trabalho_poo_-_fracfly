@@ -18,7 +18,7 @@ void FCamera::NoMovimento(int movX, int movY) {
 int FCamera::GetX() {
     if(alvoX != NULL) {
         if(modoAlvo == MODO_ALVO_CENTRO) {
-            return * alvoX - (WWIDTH / 2);
+            return * alvoX - ( WWIDTH / 2);
         }
  
         return * alvoX;

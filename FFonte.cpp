@@ -6,21 +6,26 @@ FFonte::FFonte() {
 TTF_Font * FFonte::NoCarregar(char * arquivo, int tam) {
 	TTF_Font * retornoFonte;
 	try {
-		if (!(retornoFonte = TTF_OpenFont(arquivo, tam)))
-			throw;
+		if (!(retornoFonte = TTF_OpenFont(arquivo, tam))) {
+			Excecoes::msgErro = "FEntidade::Erro TTF_OpenFont ";
+			Excecoes::linhaErro = 0;
+			Excecoes::msgErro += SDL_GetError();
+			throw Excecoes::TratamentoExcecao();
+		}
 	} catch (...) {
-		string msgErro = "FEntidade::Erro TTF_OpenFont ";
-		msgErro += SDL_GetError();
-		debug(msgErro,89);
-		return NULL;
+		retornoFonte = NULL;
 	}
 	return retornoFonte;
 }
 bool FFonte::NoEscrever(SDL_Surface * superfDest, TTF_Font * fonte, string texto, int x, int y, SDL_Color corTexto) {
+	bool retorno = true;
 	try {
 		SDL_Surface * tempSuperf;
-		if ((tempSuperf = TTF_RenderText_Solid(fonte, texto.c_str(), corTexto)) == NULL)
-			throw;
+		if ((tempSuperf = TTF_RenderText_Solid(fonte, texto.c_str(), corTexto)) == NULL) {
+			Excecoes::msgErro = "FEntidade::Erro TTF_RenderText_Solid ";
+			Excecoes::msgErro += SDL_GetError();
+			throw Excecoes::TratamentoExcecao();
+		}
 		SDL_Rect deslocamento;
 
 		//seta as posições x e y
@@ -28,20 +33,13 @@ bool FFonte::NoEscrever(SDL_Surface * superfDest, TTF_Font * fonte, string texto
 		deslocamento.y = y;
 
 		//plota a superficie fonte na superficie destino
-		try {
-			if (SDL_BlitSurface( tempSuperf, NULL, superfDest, &deslocamento ) == -1)
-				throw;
-		} catch (...) {
-		string msgErro = "FEntidade::Erro SDL_BlitSurface ";
-		msgErro += SDL_GetError();
-		debug(msgErro,89);
+		if (SDL_BlitSurface( tempSuperf, NULL, superfDest, &deslocamento ) == -1) {
+			Excecoes::msgErro = "FEntidade::Erro SDL_BlitSurface ";
+			Excecoes::msgErro += SDL_GetError();
+			throw Excecoes::TratamentoExcecao();
 		}
 	} catch (...) {
-		string msgErro = "FEntidade::Erro TTF_RenderText_Solid ";
-		msgErro += SDL_GetError();
-		debug(msgErro,89);
-		return false;
-		
+		retorno = false;
 	}
-	return true;
+	return retorno;
 }

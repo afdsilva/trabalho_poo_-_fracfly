@@ -5,8 +5,9 @@
 #include <SDL/SDL_ttf.h>
 
 #include "male_libs.h"
+#include "Excecoes.h"
 
-class FFonte {
+class FFonte : public Excecoes {
 	public:
 		FFonte();
 		

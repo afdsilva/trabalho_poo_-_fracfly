@@ -3,6 +3,7 @@
 
 #include <SDL/SDL.h>
 
+#include <libconfig.h++>
 #include "Definicoes.h"
 
 #include "FGerenciadorEstados.h" 
@@ -12,29 +13,29 @@
 #include "FEntidade.h"
 
 class FracFly : public FEvento {
-	private:
-		bool rodando;
+private:
+	bool rodando;
+
+	SDL_Surface * planoExibicao;
+
+public:
+	FEntidade cursor;
+	int ultimoEstado;
+public:
+	FracFly();
+	int naExec();
+
+public:
+	bool NoInic();
+	void NoEvento(SDL_Event * evento);
+		void OnExit();
+		void OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle);
+		void OnLButtonDown(int mX, int mY);
+		void OnLButtonUp(int mX, int mY);
 		
-		SDL_Surface * planoExibicao;
-	
-	public:
-		FEntidade cursor;
-		int ultimoEstado;
-	public:
-		FracFly();
-		int naExec();
-	
-	public:
-		bool NoInic();
-		void NoEvento(SDL_Event * evento);
-			void OnExit();
-			void OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle);
-			void OnLButtonDown(int mX, int mY);
-			void OnLButtonUp(int mX, int mY);
-			
-		void NoLaco();
-		void NaRenderizacao();
-		void NaLimpeza();
+	void NoLaco();
+	void NaRenderizacao();
+	void NaLimpeza();
 
 };
 

@@ -17,19 +17,20 @@ void FEstadoJogo::NaAtivacao() {
 		fundo.x = (WWIDTH / 2) - (fundo.width / 2);
 		//fundo.y = FCamera::controleCamera.GetY();
 		fundo.y = (WHEIGHT / 2) - (fundo.height / 2);
+		fundoZoom = 1;
 
 		//carrega a cabine da nave
-		char naveArquivo[] = "res/modelo_cabine_720p.png";
+		char naveArquivo[] = "res/modelo_cabine_novo_720p.png";
 		if (jogador.NoCarregar(naveArquivo, WWIDTH, WHEIGHT, 0) == false) {
 			throw 1;
 		}
 		//jogador.Escalonar(-10);
 
-		char armaArquivo[] =  "res/arma.png";
-		if (arma1.NoCarregar(armaArquivo,80,537,0) == false) {
+		char armaArquivo[] =  "res/canhao.png";
+		if (arma1.NoCarregar(armaArquivo,197,411,0) == false) {
 			throw 1;
 		}
-		if (arma2.NoCarregar(armaArquivo,80,537,0) == false) {
+		if (arma2.NoCarregar(armaArquivo,197,411,0) == false) {
 			throw 1;
 		}
 
@@ -54,13 +55,13 @@ void FEstadoJogo::NaAtivacao() {
 		}
 
 		arma1.oX = 90;
-		arma1.oY = WHEIGHT - (arma1.height / 2);
+		arma1.oY = WHEIGHT - (arma1.height /2);
 		arma1.x = arma1.oX;
 		arma1.y = arma1.oY;
 		arma1.z+= 50;
 
-		arma2.oX = WWIDTH - 170;
-		arma2.oY = WHEIGHT - (arma2.height / 2);
+		arma2.oX = WWIDTH - (90 + arma2.width);
+		arma2.oY = WHEIGHT - (arma2.height /2);
 		arma2.x = arma1.oX;
 		arma2.y = arma2.oY;
 		arma2.z+= 50;
@@ -227,6 +228,15 @@ void FEstadoJogo::OnKeyUp(SDLKey sym, SDLMod mod, Uint16 unicode) {
 		case SDLK_s:
 			jogador.moveBaixo = false;
 			break;
+		case SDLK_f:
+			fundoZoom-= 0.01;
+			fundo.RotaZoom((double)0,fundoZoom,0,0,0);
+			break;
+		case SDLK_v:
+			fundoZoom+= 0.01;
+			fundo.RotaZoom((double)0,fundoZoom,0,0,0);
+			break;
+
 		default:
 			break;
 	}
@@ -240,8 +250,8 @@ void FEstadoJogo::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool
 	double dy1 = (double) ((arma1.y + arma1.height) / 2) - mY;
 	double dy2 = (double) ((arma2.y + arma2.height) / 2) - mY;
 
-	double ang1 = -(double)( 90 * (dy1/dist1));
-	double ang2 = (double)( 90 * (dy2/dist2));
+	double ang1 = -(double)( 45 * (dy1/dist1));
+	double ang2 = (double)( 45 * (dy2/dist2));
 	if (arma1.angulo != ang1)
 		arma1.Rotacionar(ang1, 0, 0);
 	//arma2.Rotacionar(ang2, (arma2.x+arma2.width) / 2, arma2.y+arma2.height);
@@ -255,7 +265,8 @@ void FEstadoJogo::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool
 //Evento de pressionar o botao esquerdo do mouse
 void FEstadoJogo::OnLButtonDown(int mX, int mY) {
 	//Arma1.Atirar(mX,mY);
-	jogador.Atirar(&arma1, mX, mY);
+
+	jogador.Atirar(&arma1, arma1.x+(arma1.width / 2), arma1.y + (arma1.height / 2), mX, mY);
 	int setScore = jogador.GetEscore();
 	jogador.SetEscore(setScore+1);
 }
@@ -265,8 +276,9 @@ void FEstadoJogo::OnLButtonUp(int mX, int mY) {
 }
 //Evento de pressionar o botao direito do mouse
 void FEstadoJogo::OnRButtonDown(int mX, int mY) {
-	jogador.Atirar(&arma2, mX, mY);
-	jogador.SetEscore(0);
+	jogador.Atirar(&arma2, arma2.x+(arma2.width / 2), arma2.y + (arma2.height / 2), mX, mY);
+	int setScore = jogador.GetEscore();
+	jogador.SetEscore(setScore+1);
 }
 //Evento de soltar o botao direito do mouse
 void FEstadoJogo::OnRButtonUp(int mX, int mY) {

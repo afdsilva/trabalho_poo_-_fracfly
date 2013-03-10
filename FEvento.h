@@ -2,12 +2,13 @@
     #define _FEVENTO_H_
  
 #include <SDL/SDL.h>
+#include "Excecoes.h"
 
 /**
- * Para manter compatabilidade com o SDL, o nome dos metodos e argumentos
+ * Para manter compatibilidade com o SDL, o nome dos metodos e argumentos
  * foram mantido igual ao original do tutorial
  **/
-class FEvento {
+class FEvento : public Excecoes {
     public:
         FEvento();
         virtual ~FEvento();

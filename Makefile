@@ -4,13 +4,13 @@
 CC=g++
 
 # Objects
-OBJETOS=male_libs.o FSuperficie.o FFonte.o FEvento.o FAnimacao.o FEntidade.o FGerenciadorEstados.o FEntidadeColisao.o FEstado.o FEstadoIntro.o FEstadoJogo.o FEstadoMenu.o FEstadoOptions.o FAzulejo.o FMap.o FCamera.o FFPS.o FArea.o FNave.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FracFly.o FundoParcial.o FundoInteiro.o Threads.o
+OBJETOS=male_libs.o Excecoes.o FSuperficie.o FFonte.o FEvento.o FAnimacao.o FEntidade.o FGerenciadorEstados.o FEntidadeColisao.o FEstado.o FEstadoIntro.o FEstadoJogo.o FEstadoMenu.o FEstadoOptions.o FAzulejo.o FMap.o FCamera.o FFPS.o FArea.o FNave.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FracFly.o
 
 # Compilador flags - Warning, debug, sdl
 CPPFLAGS=-std=c++0x -Wall -g -lm `sdl-config --cflags`
 
 # Ligador flags - sdl
-LDFLAGS=`sdl-config --libs` -lSDL -lSDL_image -lSDL_gfx -lSDL_ttf
+LDFLAGS=`sdl-config --libs` -lSDL -lSDL_image -lSDL_gfx -lSDL_ttf -lconfig++
 
 EXECUTAVEL=fracfly
 
@@ -24,6 +24,9 @@ FracFly: $(OBJETOS) FracFly.h FracFly.cpp
 male_libs: male_libs.h male_libs.cpp
 	rm -rf male_libs.o
 	$(CC) $(CPPFLAGS) -c male_libs.cpp
+Excecoes: male_libs.o Excecoes.h Excecoes.cpp
+	rm -rf Excecoes.o
+	$(CC) $(CPPFLAGS) -c Excecoes.cpp
 NoInic: FracFly.h FracFly_NoInic.cpp
 	rm -rf NoInic.o
 	$(CC) $(CPPFLAGS) -c FracFly_NoInic.cpp
@@ -120,6 +123,7 @@ dependencias:
 	@echo "make depFreetype : instala freetype-2.4.11"
 	@echo "make depSDL_ttf : instala SDL_ttf-2.0.11"
 	@echo "make depSDL_mixer : instala SDL_mixer-1.2.12"
+	@echo "make deplibConfig : instala libconfig-1.4.9"
 
 depM4:
 	#verifica se m4 esta instalado
@@ -178,14 +182,15 @@ depSDL_mixer:
 	make
 	sudo make install
 
-depSDL_draw:
+deplibConfig:
 	cd /tmp
-	wget http://downloads.sourceforge.net/project/sdl-draw/SDL_draw/1.2.13/SDL_draw-1.2.13.tar.gz
-	cd /tmp/SDL_draw-1.2.13/
+	wget http://www.hyperrealm.com/libconfig/libconfig-1.4.9.tar.gz
+	tar xvzf libconfig-1.4.9.tar.gz
+	cd /tmp/libconfig-1.4.9.tar.gz
 	./configure
 	make
 	sudo make install
-	
+
 runtime:
 	sudo apt-get install libsdl1.2debian libsdl-gfx1.2-4 libsdl-mixer1.2 libsdl-image1.2 libsdl-ttf2.0-0 
 #limpeza

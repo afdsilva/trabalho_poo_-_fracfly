@@ -7,7 +7,7 @@ FEstadoMenu::FEstadoMenu() {
 }
 
 void FEstadoMenu::NaAtivacao() {
-
+	estadoSelecionado = 1;
 	//carrega o arquivo da fonte que sera usada pelos itens do menu
 	char fonteArq[] = "res/lazy.ttf";
 	try {
@@ -22,14 +22,14 @@ void FEstadoMenu::NaAtivacao() {
 		SDL_Color vermelho = {255,0,0};
 		SDL_Color branco = {255,255,255};
 
-		FEntidade * titulo = new FEntidade();
+		titulo = new FEntidade();
 		if (titulo->NoCarregar(lazyFontTitulo,"Menu",branco)) {
 			titulo->x = 10;
 			titulo->y = 150;
 			FEntidade::listaEntidades.push_back(titulo);
 		}
 
-		FEntidadeBotao * iniciar = new FEntidadeBotao();
+		iniciar = new FEntidadeBotao();
 		if (iniciar->NoCarregar(lazyFontItens,"Iniciar",branco)) {
 			iniciar->x = titulo->x + 20;
 			iniciar->y = titulo->y + titulo->height + 40;
@@ -39,7 +39,7 @@ void FEstadoMenu::NaAtivacao() {
 			iniciar->AoClicarEsquerdo(ESTADO_JOGO);
 			FEntidade::listaEntidades.push_back(iniciar);
 		}
-		FEntidadeBotao * options = new FEntidadeBotao();
+		options = new FEntidadeBotao();
 		if (options->NoCarregar(lazyFontItens,"Opcoes",branco)) {
 			options->x = titulo->x + 20;
 			options->y = iniciar->y + iniciar->height + 30;
@@ -49,7 +49,7 @@ void FEstadoMenu::NaAtivacao() {
 			options->AoClicarEsquerdo(ESTADO_OPTIONS);
 			FEntidade::listaEntidades.push_back(options);
 		}
-		FEntidadeBotao * sair = new FEntidadeBotao();
+		sair = new FEntidadeBotao();
 		if (sair->NoCarregar(lazyFontItens,"Sair",branco)) {
 			sair->x = titulo->x + 20;
 			sair->y = options->y + options->height + 30;
@@ -92,6 +92,18 @@ void FEstadoMenu::NoLaco() {
 		FEntidade::listaEntidades[i]->NoLaco();
 	}
 
+	switch(estadoSelecionado) {
+		case 1:
+			iniciar->MudaCor();
+			break;
+		case 2:
+			options->MudaCor();
+			break;
+		case 3:
+			sair->MudaCor();
+			break;
+	}
+
 	for (int i = 0; i < (int) FEntidadeColisao::listaEntidadesColisoes.size(); i++) {
 		FEntidade * entidadeA = FEntidadeColisao::listaEntidadesColisoes[i].entidadeA;
 		FEntidade * entidadeB = FEntidadeColisao::listaEntidadesColisoes[i].entidadeB;
@@ -132,7 +144,29 @@ void FEstadoMenu::OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode) {
 			OnExit();
 			FGerenciadorEstados::SetEstadoAtivo(ESTADO_NENHUM);
 			break;
+		case SDLK_w:
+		case SDLK_UP:
+			if (estadoSelecionado > 1)
+				estadoSelecionado--;
+			break;
+		case SDLK_s:
+		case SDLK_DOWN:
+			if (estadoSelecionado < 3)
+				estadoSelecionado++;
+			break;
 		case SDLK_RETURN:
+			switch(estadoSelecionado) {
+				case 1:
+					FGerenciadorEstados::SetEstadoAtivo(ESTADO_JOGO);
+					break;
+				case 2:
+					FGerenciadorEstados::SetEstadoAtivo(ESTADO_OPTIONS);
+					break;
+				case 3:
+					OnExit();
+					FGerenciadorEstados::SetEstadoAtivo(ESTADO_NENHUM);
+					break;
+			}
 			break;
 		default:
 			break;
@@ -141,6 +175,7 @@ void FEstadoMenu::OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode) {
 
 //Evento de movimentação do mouse e cliques enquanto se move
 void FEstadoMenu::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle) {
+	estadoSelecionado = 0;
 }
 
 //Evento de pressionar o botao esquerdo do mouse

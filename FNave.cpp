@@ -6,6 +6,9 @@ FNave::FNave() {
 	escudo = 100;
 	escore = 0;
 	forca = 10;
+
+	atirandoEsquerda = false;
+	atirandoDireita = false;
 }
 
 bool FNave::NoCarregar(char * arquivo, int width, int height, int maxFrames) {
@@ -34,18 +37,15 @@ bool FNave::NaColisao(FEntidade * entidade) {
 	return true;
 }
 
-bool FNave::Atirar(FEntidade * entidade, int aX, int aY) {
+bool FNave::Atirar(FEntidade * entidade, float x, float y, int aX, int aY) {
 	if (entidade == NULL) {
 		return false;
 	}
 	FEntidade * tiro = new FEntidade();
-	char tiroArquivo[] = "res/tiro1.png";
-	if (tiro->NoCarregar(tiroArquivo,16,59,0) == false) {
+	char tiroArquivo[] = "res/tiro_1.png";
+	if (tiro->NoCarregar(tiroArquivo,109,109,0) == false) {
 		return false;
 	}
-
-	float x = entidade->x + (entidade->width / 2);
-	float y = entidade->y;
 
 	tiro->tipo = TIPO_ENTIDADE_TIRO;
 	tiro->flags = ENTIDADE_FLAG_FANTASMA;
@@ -55,6 +55,9 @@ bool FNave::Atirar(FEntidade * entidade, int aX, int aY) {
 	tiro->movePraY = aY;
 	tiro->velMaxX = 100;
 	tiro->velMaxY = 100;
+
+	this->atirandoEsquerda = true;
+	this->atirandoDireita = true;
 
 	float distancia = sqrt((float)pow( (x < aX ? aX - x : -aX + x) ,2) + (float)pow((y > aY ? aY - y : -aY + y),2));
 

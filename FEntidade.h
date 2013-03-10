@@ -1,6 +1,20 @@
 #ifndef _FENTIDADE_H
   #define _FENTIDADE_H
 
+#include "male_libs.h"
+
+#include "SDL/SDL.h"
+#include <SDL/SDL_rotozoom.h>
+#include <SDL/SDL_gfxPrimitives.h>
+
+#include "FArea.h"
+#include "FAnimacao.h"
+#include "FCamera.h"
+#include "FFPS.h"
+#include "FSuperficie.h"
+#include "FFonte.h"
+
+
 //tipo
 enum {
 	TIPO_ENTIDADE_GENERICO = 0,
@@ -26,19 +40,6 @@ enum {
 	//ENTIDADE_FLAG_BOTAO_SAIR	= 0x00000100,
 	//ENTIDADE_FLAG_BOTAO_CLICK	= 0x00000200
 };
-
-#include "male_libs.h"
-
-#include "SDL/SDL.h"
-#include <SDL/SDL_rotozoom.h>
-#include <SDL/SDL_gfxPrimitives.h>
-
-#include "FArea.h"
-#include "FAnimacao.h"
-#include "FCamera.h"
-#include "FFPS.h"
-#include "FSuperficie.h"
-#include "FFonte.h"
 
 using namespace std;
 

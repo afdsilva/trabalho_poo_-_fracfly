@@ -10,6 +10,9 @@ class FNave: public FEntidade {
 		int escore;
 		int forca;
 
+		bool atirandoEsquerda;
+		bool atirandoDireita;
+
 	public:
 		FNave();
 		bool NoCarregar(char * arquivo, int width, int height, int maxFrames);
@@ -21,7 +24,7 @@ class FNave: public FEntidade {
 		bool NaColisao(FEntidade * entidade);
 		
 	public:
-		bool Atirar(FEntidade * entidade, int aX, int aY);
+		bool Atirar(FEntidade * entidade, float x, float y, int aX, int aY);
 		int GetEscore();
 		void SetEscore(int escore);
 };

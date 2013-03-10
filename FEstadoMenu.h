@@ -13,6 +13,11 @@
 class FEstadoMenu : public FEstado {
 	private:
 		static FEstadoMenu instancia;
+		int estadoSelecionado;
+		FEntidade * titulo;
+		FEntidadeBotao * iniciar;
+		FEntidadeBotao * options;
+		FEntidadeBotao * sair;
 		
 	private:
 		TTF_Font * fonte;

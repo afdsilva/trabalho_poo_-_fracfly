@@ -6,10 +6,13 @@
  **/
 void FracFly::NoEvento(SDL_Event * evento) {
 
+	//Chama o NoEvento do metodo pai para tratamento de eventos
 	FEvento::NoEvento(evento);
 
+	//controla os eventos do gerenciador de estados (no gerenciador
 	FGerenciadorEstados::NoEvento(evento);
 
+	//Quando o estado for ESTADO_NENHUM, sai do programa
 	if ((ultimoEstado = FGerenciadorEstados::GetEstadoAtivoId()) == ESTADO_NENHUM) OnExit();
 }
 
@@ -24,10 +27,9 @@ void FracFly::OnExit() {
 
 //Evento de movimentação do mouse e cliques enquanto se move
 void FracFly::OnMouseMove(int mX, int mY, int relX, int relY, bool Left,bool Right,bool Middle) {
+
 	cursor.x = mX - (cursor.width / 2);
 	cursor.y = mY - (cursor.height / 2);
-	//cursor.SetAcel(relX,relY);
-	//cout << "relX: " << relX << " relY: " << relY << endl;
 
 }
 

@@ -1,3 +1,14 @@
+/**
+ * Trabalho POO - Fracfly
+ * Integrantes:
+ * - André Felipe da Silva
+ * - Eliézer Ribeiro
+ * - Mario Saldanha
+ * - Lucio Leal Bastos
+ *
+ * Classe Principal do jogo
+ **/
+
 #include "FracFly.h"
 
 /**
@@ -7,7 +18,6 @@ FracFly::FracFly() {
 	planoExibicao = NULL;
 	rodando = true;
 }
-
 /**
  * Classe de execução do programa
  **/
@@ -20,17 +30,16 @@ int FracFly::naExec() {
 	SDL_Event evento;
 	
 	//Permanece no loop infinito enquanto nao for especificado para sair
-	//cout << FEntidade_Tiro::ListaTiros.size() << endl;
 	while(rodando) {
-		//checa por eventos e passa um por um para o NoEvento
+		//Checa os eventos e faz o tratamento no metodo NoEvento
 		while(SDL_PollEvent(&evento)) {
 			NoEvento(&evento);
 		}
 		
-		//move dados ou nao
+		//Controle de dados
 		NoLaco();
 		
-		//Renderiza o jogo
+		//Renderiza os graficos
 		NaRenderizacao();
 	}
 	

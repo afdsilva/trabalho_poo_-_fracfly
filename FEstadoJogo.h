@@ -18,6 +18,7 @@ class FEstadoJogo : public FEstado {
 	private:
 		static FEstadoJogo instancia;
 		FEntidade	fundo;
+		double		fundoZoom;
 		FNave 		jogador;
 		FEntidade	cursor;
 		FEntidade	arma1;
