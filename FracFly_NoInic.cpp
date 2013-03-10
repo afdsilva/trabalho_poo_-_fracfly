@@ -3,7 +3,9 @@
  * Metodo de Inicializacao de variaveis, configurações e de carregar recursos
  **/
 bool FracFly::NoInic() {
-	Excecoes::msgErro = "FracFly::NoInic: ";
+	Excecoes::linhaErro = 6;
+	Excecoes::classErro = "FracFly::NoInic";
+	Excecoes::msgErro.clear();
 	bool retorno = true;
 
 	try {
