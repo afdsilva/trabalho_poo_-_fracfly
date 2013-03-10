@@ -18,7 +18,7 @@ void FFPS::NoLaco() {
 		numFrames = frames;
 		frames = 0;
 	}
-	fatorVelocidade = ((SDL_GetTicks() - ultimoTempo) / 1000.0f) * 60.0f;
+	fatorVelocidade = ((SDL_GetTicks() - ultimoTempo) / 1000.0f) * 40.0f;
 	
 	ultimoTempo = SDL_GetTicks();
 	

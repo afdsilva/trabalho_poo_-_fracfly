@@ -14,7 +14,7 @@ class FEstadoMenu : public FEstado {
 	private:
 		static FEstadoMenu instancia;
 		int estadoSelecionado;
-		FEntidade * titulo;
+		FEntidadeTexto * titulo;
 		FEntidadeBotao * iniciar;
 		FEntidadeBotao * options;
 		FEntidadeBotao * sair;

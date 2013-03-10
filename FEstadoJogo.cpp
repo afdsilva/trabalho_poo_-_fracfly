@@ -4,6 +4,7 @@
 FEstadoJogo FEstadoJogo::instancia;
 
 FEstadoJogo::FEstadoJogo() {
+	fundoZoom = 0;
 }
 
 void FEstadoJogo::NaAtivacao() {
@@ -182,7 +183,7 @@ void FEstadoJogo::NaRenderizacao(SDL_Surface * planoExibicao) {
 		FEntidade::listaEntidades[i]->NaRenderizacao(planoExibicao);
 	}
 
-	FArea::controleArea.NaRenderizacao(planoExibicao, -FCamera::controleCamera.GetX(), -FCamera::controleCamera.GetY());
+	//FArea::controleArea.NaRenderizacao(planoExibicao, -FCamera::controleCamera.GetX(), -FCamera::controleCamera.GetY());
 
 }
 

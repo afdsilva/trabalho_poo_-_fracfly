@@ -17,50 +17,28 @@ void FEstadoOptions::NaAtivacao() {
 		TTF_Font * lazyFontItens;
 		if ((lazyFontItens = FFonte::NoCarregar(fonteArq, 40)) == NULL)
 			throw 1;
-			
+
 		//carregou com sucesso a fonte cria entidades que serao os itens do menu
 		SDL_Color vermelho = {255,0,0};
 		SDL_Color branco = {255,255,255};
 
-		FEntidade * titulo = new FEntidade();
+		titulo = new FEntidadeTexto();
 		if (titulo->NoCarregar(lazyFontTitulo,"Options",branco)) {
 			titulo->x = 10;
 			titulo->y = 150;
 			FEntidade::listaEntidades.push_back(titulo);
 		}
 
-		FEntidadeBotao * iniciar = new FEntidadeBotao();
-		if (iniciar->NoCarregar(lazyFontItens,"Voltar",branco)) {
-			iniciar->x = titulo->x + 20;
-			iniciar->y = titulo->y + titulo->height + 40;
-			iniciar->flags = ENTIDADE_FLAG_CURSOR ;
-			iniciar->AoPassarPorCima(vermelho,1,1);
-			iniciar->AoClicarDireito(ESTADO_MENU);
-			iniciar->AoClicarEsquerdo(ESTADO_MENU);
-			FEntidade::listaEntidades.push_back(iniciar);
+		voltar = new FEntidadeBotao();
+		if (voltar->NoCarregar(lazyFontItens,"Voltar",branco)) {
+			voltar->x = titulo->x + 20;
+			voltar->y = titulo->y + titulo->height + 40;
+			voltar->flags = ENTIDADE_FLAG_CURSOR ;
+			voltar->AoPassarPorCima(vermelho,1,1);
+			voltar->AoClicarDireito(ESTADO_MENU);
+			voltar->AoClicarEsquerdo(ESTADO_MENU);
+			FEntidade::listaEntidades.push_back(voltar);
 		}
-		/**
-		FEntidadeBotao * options = new FEntidadeBotao();
-		if (options->NoCarregar(lazyFontItens,"Opcoes",branco)) {
-			options->x = titulo->x + 20;
-			options->y = iniciar->y + iniciar->height + 30;
-			options->flags = ENTIDADE_FLAG_CURSOR;
-			options->AoPassarPorCima(vermelho,1,1);
-			options->AoClicarDireito(ESTADO_OPTIONS);
-			options->AoClicarEsquerdo(ESTADO_OPTIONS);
-			FEntidade::listaEntidades.push_back(options);
-		}
-		FEntidadeBotao * sair = new FEntidadeBotao();
-		if (sair->NoCarregar(lazyFontItens,"Sair",branco)) {
-			sair->x = titulo->x + 20;
-			sair->y = options->y + options->height + 30;
-			sair->flags = ENTIDADE_FLAG_CURSOR;
-			sair->AoPassarPorCima(vermelho,1,1);
-			sair->AoClicarDireito(ESTADO_NENHUM);
-			sair->AoClicarEsquerdo(ESTADO_NENHUM);
-			FEntidade::listaEntidades.push_back(sair);
-		}
-		**/
 	} catch (int e) {
 		switch(e) {
 			case 1:
@@ -71,9 +49,9 @@ void FEstadoOptions::NaAtivacao() {
 		}
 		return;
 	}
-	
+
 	//srand((int)time(NULL));
-	//fundo.NoInic();	
+	//fundo.NoInic();
 }	
 
 void FEstadoOptions::NaDesativacao() {

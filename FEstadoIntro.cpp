@@ -8,9 +8,17 @@ FEstadoIntro::FEstadoIntro() {
 }
 
 void FEstadoIntro::NaAtivacao() {
+	Excecoes::msgErro = "FEstadoIntro::NaAtivacao:";
+	try {
 	//carrega a logo do estudio :3
 	char logoArquivo[] = "res/logo.png";
-	logo = FSuperficie::NoCarregar(logoArquivo);
+	if ((logo = FSuperficie::NoCarregar(logoArquivo)) == NULL)  {
+		Excecoes::msgErro+= " Nao foi possivel carregar arquivo do logotipo ";
+		Excecoes::msgErro+= logoArquivo;
+	}
+	} catch (...) {
+
+	}
 	tempoInicio = SDL_GetTicks();
 }
 
@@ -34,10 +42,12 @@ void FEstadoIntro::NaRenderizacao(SDL_Surface * planoExibicao) {
 	rect.w = WWIDTH;
 	rect.h = WHEIGHT;
 	
+	//limpa a tela
 	SDL_FillRect(planoExibicao, &rect, 0);
 
+
 	if (logo) {
-		FSuperficie::NoDesenhar(planoExibicao, logo, ((1024 / 2) - (640 / 2)), ((768 / 2) - (480 / 2)));
+		FSuperficie::NoDesenhar(planoExibicao, logo, ((WWIDTH / 2) - (640 / 2)), ((WHEIGHT / 2) - (480 / 2)));
 	}
 }
 

@@ -13,16 +13,13 @@ std::vector<FEntidade*> FEntidade::listaEntidades;
 FEntidade::FEntidade() {
 
 	superficieEntidade = NULL;
-	fonteEntidade = NULL;
+	superficieEntidade_Original = NULL;
 	x = 0;
 	y = 0;
 	z = 1000;
 	oX = 0;
 	oY = 0;
 	angulo = 0;
-	
-	texto.clear();
-	corTexto = {255, 255, 255};
 	
 	movePraX = 0;
 	movePraY = 0;
@@ -64,6 +61,7 @@ FEntidade::FEntidade() {
  * Destrutor de uma entidade
  **/
 FEntidade::~FEntidade() {
+	this->NaLimpeza();
 }
 
 /**
@@ -81,11 +79,6 @@ SDL_Surface * FEntidade::GetSuperficie(){
 void FEntidade::SetSuperficie(SDL_Surface * novaSuperficie){
 	superficieEntidade = novaSuperficie;
 }
-
-void FEntidade::MudaTexto(string texto) {
-	this->texto = texto;
-}
-
 
 /**
  * Carrega um recurso na entidade (uma imagem)
@@ -109,50 +102,6 @@ bool FEntidade::NoCarregar (char * arquivo, int width, int height, int maxFrames
 		return false;
 	}
 	
-	return true;
-}
-
-
-/**
- * Carrega um recurso na entidade (uma fonte)
- **/
-bool FEntidade::NoCarregar (char * arquivo, string texto, int tam, SDL_Color corTexto) {
-	try {
-		if ((fonteEntidade = FFonte::NoCarregar(arquivo, tam)) == NULL)
-			throw;
-		try {
-			if (!FEntidade::NoCarregar(fonteEntidade,texto,corTexto))
-				throw;
-		} catch (...) {
-			debug("FEntidade::Recurso de fonte nulo",84);
-		}
-	} catch (...) {
-		debug("FEntidade::Não foi possivel carregar fonte",81);
-		return false;
-	}
-	return true;
-}
-bool FEntidade::NoCarregar (TTF_Font * fonte, string texto, SDL_Color corTexto) {
-	try {
-		if ((fonteEntidade = fonte) == NULL)
-			throw;
-	} catch (...) {
-		debug("FEntidade::NoCarregar: Recurso de fonte nulo",100);
-		return false;
-	}
-	try {
-		if (TTF_SizeText(fonteEntidade, texto.c_str(), &this->width, &this->height) == -1)
-			throw;
-	} catch(...) {
-		string msgErro = "FEntidade::NoCarregar";
-		msgErro += SDL_GetError();
-		debug(msgErro,109);
-		return false;
-	}
-	this->tipo = TIPO_ENTIDADE_TEXTO;
-	//this->flags = ENTIDADE_FLAG_TEXTO;
-    this->texto = texto;
-	this->corTexto = corTexto;
 	return true;
 }
 
@@ -268,52 +217,38 @@ void FEntidade::OrdenaProfundidade() {
  * Controla a renderização na tela da entidade
  **/
 void FEntidade::NaRenderizacao(SDL_Surface * planoExibicao) {
+	Excecoes::msgErro = "FEntidade::NoCarregar arquivo: ";
 	try {
-		bool retorno = false;
-		if (planoExibicao == NULL) throw 1;
-		if (fonteEntidade == NULL && superficieEntidade == NULL) throw 2;
+		if (planoExibicao == NULL) {
+			Excecoes::msgErro+= "Plano de exibicao nao existe ";
+			throw Excecoes::TratamentoExcecao();
+		}
 		if (superficieEntidade != NULL) {
-			if (( retorno = FSuperficie::NoDesenhar(planoExibicao,
+			if ((FSuperficie::NoDesenhar(planoExibicao,
 			superficieEntidade, x - FCamera::controleCamera.GetX(),
 			y - FCamera::controleCamera.GetY(),
 			frameAtualCol * width,
 			(frameAtualLinha + controleAnimacao.GetFrameAtual()) * height, width, height)
-			) == false) throw 3;
-		}
-		if (fonteEntidade != NULL) {
-			if ((retorno = FFonte::NoEscrever(planoExibicao,fonteEntidade,texto,x,y,corTexto)) == false) throw 3;
+			) == false) {
+				Excecoes::msgErro+= "Recurso nao pode ser carregado ";
+				throw Excecoes::TratamentoExcecao();
+			}
 		}
 	} catch (int e) {
-		string msgErro;
-		switch(e) {
-			case 1:
-				msgErro = "FEntidade::NaRenderizacao: Plano de exibicao nao existe";
-				break;
-			case 2:
-				msgErro = "FEntidade::NaRenderizacao: Superficie nao existe";
-				break;
-			case 3:
-				msgErro = "FEntidade::NaRenderizacao: Recurso nao pode ser carregado";
-				break;
-		}
-		msgErro += SDL_GetError();
-		debug(msgErro);
 		return;
 	}
+	return;
 }
 /**
  * Coletor de Lixo da entidade
  **/
 void FEntidade::NaLimpeza() {
-	if(superficieEntidade) {
+	if(superficieEntidade)
 		SDL_FreeSurface(superficieEntidade);
+	if(superficieEntidade_Original)
 		SDL_FreeSurface(superficieEntidade_Original);
-
-		TTF_CloseFont(fonteEntidade);
-	}
 	superficieEntidade = NULL;
 	superficieEntidade_Original = NULL;
-	fonteEntidade = NULL;
 }
 
 /**
@@ -504,37 +439,25 @@ bool FEntidade::PosValido(int novoX, int novoY) {
 	return retorno;
 }
 
-/**
- * Verifica a validade de um Azulejo (tile)
- **/
-bool FEntidade::PosValidoAzulejo(FAzulejo * azulejo) {
-	if (azulejo == NULL) {
-		return true;
-	}
-	if (azulejo->tipoId == AZULEJO_TIPO_BLOCO) {
-		return false;
-	}
-	
-	return true;
-}
 
 /**
  * Verifica se a posicao valida com outra entidade, caso nao seja cria uma colisao na lista
  **/
 bool FEntidade::PosValidoEntidade(FEntidade * entidade, int novoX, int novoY) {
+	bool retorno = true;
 	if (this != entidade && entidade != NULL && entidade->morto == false
 		&& (entidade->flags ^ ENTIDADE_FLAG_SOMENTEMAPA)
 		&& entidade->Colisoes(novoX + colX, novoY + colY, width - colWidth - 1, height - colHeight - 1) == true) {
 			FEntidadeColisao entidadeColisao;
-			
+
 			entidadeColisao.entidadeA = this;
 			entidadeColisao.entidadeB = entidade;
-			
+
 			FEntidadeColisao::listaEntidadesColisoes.push_back(entidadeColisao);
-			return false;
+			retorno = false;
 	}
-	
-	return true;
+
+	return retorno;
 }
 
 
@@ -606,10 +529,98 @@ bool FEntidade::Escalonar(double zoom, int centerX, int centerY) {
 
 
 /**
+ * Implementacao do FEntidadeTexto
+ **/
+FEntidadeTexto::FEntidadeTexto() : FEntidade() {
+	fonteEntidade = NULL;
+}
+/**
+ * Carrega um recurso na entidade (uma fonte)
+ **/
+bool FEntidadeTexto::NoCarregar (char * arquivo, string texto, int tam, SDL_Color corTexto) {
+	Excecoes::msgErro = "FEntidadeTexto::NoCarregar arquivo: ";
+	bool retorno = true;
+	try {
+		if ((fonteEntidade = FFonte::NoCarregar(arquivo, tam)) == NULL) {
+			Excecoes::msgErro+= " Não foi possivel carregar arquivo de fonte ";
+			Excecoes::msgErro+= arquivo;
+			throw Excecoes::TratamentoExcecao();
+		}
+		if (!FEntidadeTexto::NoCarregar(fonteEntidade,texto,corTexto)) {
+			Excecoes::msgErro+= " Recurso de fonte nulo";
+			throw Excecoes::TratamentoExcecao();
+		}
+	} catch (...) {
+		retorno = false;
+	}
+	return retorno;
+}
+bool FEntidadeTexto::NoCarregar (TTF_Font * fonte, string texto, SDL_Color corTexto) {
+	Excecoes::msgErro = "FEntidadeTexto::NoCarregar fonte: ";
+	bool retorno = true;
+	try {
+		if ((fonteEntidade = fonte) == NULL) {
+			Excecoes::msgErro+= " Recurso de fonte nulo";
+			throw Excecoes::TratamentoExcecao();
+		}
+
+		if (TTF_SizeText(fonteEntidade, texto.c_str(), &this->width, &this->height) == -1) {
+			Excecoes::msgErro+= " Nao foi possivel criar texto: ";
+			Excecoes::msgErro+= SDL_GetError();
+			throw Excecoes::TratamentoExcecao();
+		}
+		this->tipo = TIPO_ENTIDADE_TEXTO;
+		//this->flags = ENTIDADE_FLAG_TEXTO;
+	    this->texto = texto;
+		this->corTexto = corTexto;
+
+	} catch(...) {
+		retorno = false;
+	}
+	return retorno;
+}
+void FEntidadeTexto::NaRenderizacao(SDL_Surface * planoExibicao) {
+	Excecoes::msgErro = "FEntidadeTexto::NaRenderizacao: ";
+
+	FEntidade::NaRenderizacao(planoExibicao);
+	try {
+		if (planoExibicao == NULL) {
+			Excecoes::msgErro+= "Plano de exibicao nao existe ";
+			throw Excecoes::TratamentoExcecao();
+		}
+		if (fonteEntidade == NULL) {
+			Excecoes::msgErro+= "Recurso de fonte nulo";
+			throw Excecoes::TratamentoExcecao();
+		}
+		if ((FFonte::NoEscrever(planoExibicao,fonteEntidade,texto,x,y,corTexto)) == false) {
+			Excecoes::msgErro+= "Recurso nao pode ser carregado ";
+			Excecoes::msgErro+= SDL_GetError();
+			throw Excecoes::TratamentoExcecao();
+		}
+	} catch (...) {
+		return;
+	}
+	return;
+}
+void FEntidadeTexto::NaLimpeza() {
+	FEntidade::NaLimpeza();
+	//essa eh a funcao para fechar o recurso de uma fonte, mas ela ta causando erro no programa
+	//if (fonteEntidade)
+	//	TTF_CloseFont(fonteEntidade);
+	fonteEntidade = NULL;
+}
+void FEntidadeTexto::MudaTexto(string texto) {
+	this->texto = texto;
+}
+
+
+/**
  * Implementacao do FEntidadeBotao
  **/
-FEntidadeBotao::FEntidadeBotao() : FEntidade() {
-	this->corTextoAlterada = {0,0,0};
+FEntidadeBotao::FEntidadeBotao() : FEntidadeTexto() {
+	this->corTextoAlterada.r = 0;
+	this->corTextoAlterada.g = 0;
+	this->corTextoAlterada.b = 0;
 	this->cursorSobre = false;
 	
 	this->deslocamentoX = 0;
@@ -624,34 +635,26 @@ void FEntidadeBotao::NoLaco() {
 	this->cursorSobre = false;
 }
 void FEntidadeBotao::NaRenderizacao(SDL_Surface * planoExibicao) {
+	Excecoes::msgErro = "FEntidadeTexto::NoCarregar arquivo: ";
+	FEntidade::NaRenderizacao(planoExibicao);
 	try {
-		bool retorno = false;
-		if (planoExibicao == NULL) throw 1;
-		if (fonteEntidade == NULL && superficieEntidade == NULL) throw 2;
-		if (superficieEntidade != NULL) {
-			if (( retorno = FSuperficie::NoDesenhar(planoExibicao, superficieEntidade, x - FCamera::controleCamera.GetX(), y - FCamera::controleCamera.GetY(), frameAtualCol * width, (frameAtualLinha + controleAnimacao.GetFrameAtual()) * height, width, height)) == false) throw 3;
+		if (planoExibicao == NULL) {
+			Excecoes::msgErro+= "Plano de exibicao nao existe ";
+			throw Excecoes::TratamentoExcecao();
 		}
-		if (fonteEntidade != NULL) {
-			if ((retorno = FFonte::NoEscrever(planoExibicao,fonteEntidade,texto,x + (this->cursorSobre ? this->deslocamentoX : 0),y + (this->cursorSobre ? this->deslocamentoY : 0),(this->cursorSobre ? this->corTextoAlterada : this->corTexto ))) == false) throw 3;
+		if (fonteEntidade == NULL) {
+			Excecoes::msgErro+= "Recurso de fonte nulo";
+			throw Excecoes::TratamentoExcecao();
 		}
-	} catch (int e) {
-		string msgErro;
-		switch(e) {
-			case 1:
-				msgErro = "FEntidade::NaRenderizacao: Plano de exibicao nao existe";
-				break;
-			case 2:
-				msgErro = "FEntidade::NaRenderizacao: Superficie nao existe";
-				msgErro+= this->tipo;
-				break;
-			case 3:
-				msgErro = "FEntidade::NaRenderizacao: Recurso nao pode ser carregado";
-				break;
+		if ((FFonte::NoEscrever(planoExibicao,fonteEntidade,texto,x + (this->cursorSobre ? this->deslocamentoX : 0),y + (this->cursorSobre ? this->deslocamentoY : 0),(this->cursorSobre ? this->corTextoAlterada : this->corTexto ))) == false) {
+			Excecoes::msgErro+= "Recurso nao pode ser carregado ";
+			Excecoes::msgErro+= SDL_GetError();
+			throw Excecoes::TratamentoExcecao();
 		}
-		msgErro += SDL_GetError();
-		debug(msgErro);
+	} catch (...) {
 		return;
 	}
+	return;
 }
 bool FEntidadeBotao::NaColisao(FEntidade * entidade) {
 	switch(entidade->tipo) {
@@ -680,8 +683,4 @@ void FEntidadeBotao::AoClicarDireito(int acao) {
 }
 void FEntidadeBotao::AoClicarEsquerdo(int acao) {
 	this->cliqueEsquerdo = acao;
-}
-
-int FEntidadeBotao::Acao() {
-	return this->acao;
 }

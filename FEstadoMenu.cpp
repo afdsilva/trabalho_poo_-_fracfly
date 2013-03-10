@@ -22,7 +22,7 @@ void FEstadoMenu::NaAtivacao() {
 		SDL_Color vermelho = {255,0,0};
 		SDL_Color branco = {255,255,255};
 
-		titulo = new FEntidade();
+		titulo = new FEntidadeTexto();
 		if (titulo->NoCarregar(lazyFontTitulo,"Menu",branco)) {
 			titulo->x = 10;
 			titulo->y = 150;

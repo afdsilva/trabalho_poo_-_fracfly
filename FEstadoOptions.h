@@ -13,6 +13,8 @@
 class FEstadoOptions: public FEstado {
 	private:
 		static FEstadoOptions instancia;
+		FEntidadeTexto * titulo;
+		FEntidadeBotao * voltar;
 		
 	private:
 		TTF_Font * fonte;

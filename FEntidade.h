@@ -7,7 +7,6 @@
 #include <SDL/SDL_rotozoom.h>
 #include <SDL/SDL_gfxPrimitives.h>
 
-#include "FArea.h"
 #include "FAnimacao.h"
 #include "FCamera.h"
 #include "FFPS.h"
@@ -44,126 +43,139 @@ enum {
 using namespace std;
 
 class FEntidade {
-	public:
-		static vector<FEntidade*> listaEntidades;
-		static void OrdenaProfundidade(int esquerda, int direita);
-		static FEntidade * RetornaEntidade(int pos);
-		
-	protected:
-		FAnimacao 			controleAnimacao;
-		SDL_Surface * 		superficieEntidade;
-		SDL_Surface * 		superficieEntidade_Original;
-		TTF_Font * 			fonteEntidade;
+public:
+	static vector<FEntidade*> listaEntidades;
+	static void OrdenaProfundidade(int esquerda, int direita);
+	static FEntidade * RetornaEntidade(int pos);
 
-	public:
-		float	x;
-		float 	y;
-		float 	z;
+protected:
+	FAnimacao 			controleAnimacao;
+	SDL_Surface * 		superficieEntidade;
+	SDL_Surface * 		superficieEntidade_Original;
 
-		float	oX;
-		float 	oY;
-		double angulo;
+public:
+	float	x;
+	float 	y;
+	float 	z;
 
-		string	texto;
-		SDL_Color corTexto;
-		
-		//entidades especiais que se movem para determinadas posicoes
-		float movePraX;
-		float movePraY;
+	float	oX;
+	float 	oY;
+	double angulo;
 
-		int 	width; //nomes da variavel em ingles
-		int 	height; //pra facilitar o entendimento Width = largura, Height = altura
-		
-		bool 	moveCima;
-		bool 	moveBaixo;
-		bool 	moveDireita;
-		bool 	moveEsquerda;
-		
-	public:
-		int 	tipo;
-		
-		bool 	morto;
-		int 	flags;
-		int		clique;
-		
-	protected:
-		float 	velX;
-		float 	velY;
-		
-		float 	acelX;
-		float 	acelY;
-		
-	public:
-		float 	velMaxX;
-		float 	velMaxY;
+	//entidades especiais que se movem para determinadas posicoes
+	float movePraX;
+	float movePraY;
+
+	int 	width; //nomes da variavel em ingles
+	int 	height; //pra facilitar o entendimento Width = largura, Height = altura
+
+	bool 	moveCima;
+	bool 	moveBaixo;
+	bool 	moveDireita;
+	bool 	moveEsquerda;
+
+public:
+	int 	tipo;
+
+	bool 	morto;
+	int 	flags;
+	int		clique;
+
+protected:
+	float 	velX;
+	float 	velY;
+
+	float 	acelX;
+	float 	acelY;
+
+public:
+	float 	velMaxX;
+	float 	velMaxY;
+
+protected: //variaveis de Animacao
+	int 	frameAtualCol;
+	int 	frameAtualLinha;
+
+protected: //variaveis de colisao
+	int 	colX;
+	int 	colY;
+	int 	colWidth;
+	int 	colHeight;
+public:
+	void colBox(int x, int y, int width, int height);
+
+public:
+	FEntidade();
+
+	virtual ~FEntidade();
 	
-	protected: //variaveis de Animacao
-		int 	frameAtualCol;
-		int 	frameAtualLinha;
+public:
+	virtual bool NoCarregar(char * arquivo, int width, int height, int maxFrames);
+	virtual void NoLaco();
+	virtual void NaRenderizacao(SDL_Surface * planoExibicao);
+	virtual void NaLimpeza();
+	virtual void NaAnimacao();
+	virtual bool NaColisao(FEntidade * entidade);
 
-	protected: //variaveis de colisao
-		int 	colX;
-		int 	colY;
-		int 	colWidth;
-		int 	colHeight;
-	public:
-		void colBox(int x, int y, int width, int height);
-		
-	public:
-		FEntidade();
-		
-		virtual ~FEntidade();
-		
-	public:
-		virtual bool NoCarregar(char * arquivo, int width, int height, int maxFrames);
-		virtual bool NoCarregar(char * arquivo, string texto, int tam, SDL_Color corTexto);
-		virtual bool NoCarregar(TTF_Font * fonte, string texto, SDL_Color corTexto);
-		virtual void NoLaco();
-		virtual void NaRenderizacao(SDL_Surface * planoExibicao);
-		virtual void NaLimpeza();
-		virtual void NaAnimacao();
-		virtual bool NaColisao(FEntidade * entidade);
+	SDL_Surface * GetSuperficie();
+	void SetSuperficie(SDL_Surface *);
 
-		SDL_Surface * GetSuperficie();
-		void SetSuperficie(SDL_Surface *);
-		//virtual void MudaFonte(TTF_Font * fonte, SDL_Color corTexto);
-		virtual void MudaTexto(string texto);
+	virtual bool RotaZoom(double angulo, double zoom, int smooth, int centerX, int centerY);
+	virtual bool Rotacionar(double angulo, int centerX, int centerY);
+	virtual bool Escalonar(double zoom, int centerX, int centerY);
 
-		virtual bool RotaZoom(double angulo, double zoom, int smooth, int centerX, int centerY);
-		virtual bool Rotacionar(double angulo, int centerX, int centerY);
-		virtual bool Escalonar(double zoom, int centerX, int centerY);
-		
-	public:
-		void	NoMovimento(float moveX, float moveY);
-		void	PararMovimento();
-		void	SetAcel(float x, float y);
-		float	GetAcelX();
-		float	GetAcelY();
-		
-	public:
-		bool Colisoes(int oX, int oY, int oW, int oH);
+public:
+	void	NoMovimento(float moveX, float moveY);
+	void	PararMovimento();
+	void	SetAcel(float x, float y);
+	float	GetAcelX();
+	float	GetAcelY();
+
+public:
+	bool Colisoes(int oX, int oY, int oW, int oH);
+
+public:
+	bool PosValido(int novoX, int novoY);
+private:
+	bool PosValidoEntidade(FEntidade * entidade, int novoX, int novoY);
 	
-	public:
-		bool PosValido(int novoX, int novoY);
-	private:
-		bool PosValidoAzulejo(FAzulejo * azulejo);
-		bool PosValidoEntidade(FEntidade * entidade, int novoX, int novoY);
-		
 };
+
 
 class FEntidadeColisao {
-	public:
-		static std::vector<FEntidadeColisao> listaEntidadesColisoes;
-	
-	public:
-		FEntidade * entidadeA;
-		FEntidade * entidadeB;
-		
-	public:
-		FEntidadeColisao();
+public:
+	static std::vector<FEntidadeColisao> listaEntidadesColisoes;
+
+public:
+	FEntidade * entidadeA;
+	FEntidade * entidadeB;
+
+public:
+	FEntidadeColisao();
 };
 
-class FEntidadeBotao : public FEntidade {
+class FEntidadeTexto : public FEntidade {
+protected:
+	TTF_Font * 			fonteEntidade;
+
+public:
+	string	texto;
+	SDL_Color corTexto;
+	
+public:
+	FEntidadeTexto();
+	virtual bool NoCarregar(char * arquivo, string texto, int tam, SDL_Color corTexto);
+	virtual bool NoCarregar(TTF_Font * fonte, string texto, SDL_Color corTexto);
+	virtual void NaRenderizacao(SDL_Surface * planoExibicao);
+	virtual void NaLimpeza();
+
+public:
+	//virtual void MudaFonte(TTF_Font * fonte, SDL_Color corTexto);
+	virtual void MudaTexto(string texto);
+};
+
+
+class FEntidadeBotao : public FEntidadeTexto {
 	private:
 		SDL_Color corTextoAlterada;
 		bool cursorSobre;

@@ -4,7 +4,7 @@
 CC=g++
 
 # Objects
-OBJETOS=male_libs.o Excecoes.o FSuperficie.o FFonte.o FEvento.o FAnimacao.o FEntidade.o FGerenciadorEstados.o FEntidadeColisao.o FEstado.o FEstadoIntro.o FEstadoJogo.o FEstadoMenu.o FEstadoOptions.o FAzulejo.o FMap.o FCamera.o FFPS.o FArea.o FNave.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FracFly.o
+OBJETOS=male_libs.o Excecoes.o FSuperficie.o FFonte.o FEvento.o FAnimacao.o FEntidade.o FGerenciadorEstados.o FEntidadeColisao.o FEstado.o FEstadoIntro.o FEstadoJogo.o FEstadoMenu.o FEstadoOptions.o FCamera.o FFPS.o FNave.o FracFly_NaLimpeza.o FracFly_NoEvento.o FracFly_NoInic.o FracFly_NoLaco.o FracFly_NaRenderizacao.o FracFly.o
 
 # Compilador flags - Warning, debug, sdl
 CPPFLAGS=-std=c++0x -Wall -g -lm `sdl-config --cflags`
@@ -78,15 +78,6 @@ FundoParcial: FundoParcial.cpp   FundoParcial.hpp
 FCamera: FCamera.h FCamera.cpp
 	rm -rf FCamera.o
 	$(CC) $(CPPFLAGS) -c FCamera.cpp
-FArea: FMap.h FArea.h FArea.cpp
-	rm -rf FArea.o
-	$(CC) $(CPPFLAGS) -c FArea.cpp
-FMap: FMap.h FMap.cpp
-	rm -rf FMap.o
-	$(CC) $(CPPFLAGS) -c FMap.cpp
-FAzulejo: FAzulejo.h FAzulejo.cpp
-	rm -rf FAzulejo.o
-	$(CC) $(CPPFLAGS) -c FAzulejo.cpp
 FFPS: FFPS.h FFPS.cpp
 	rm -rf FFPS.o
 	$(CC) $(CPPFLAGS) -c FFPS.cpp

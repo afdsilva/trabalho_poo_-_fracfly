@@ -10,5 +10,6 @@ void FracFly::NaLimpeza() {
 	cursor.NaLimpeza();
 	
 	SDL_FreeSurface(planoExibicao);
+	TTF_Quit();
 	SDL_Quit();
 }

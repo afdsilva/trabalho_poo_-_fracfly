@@ -6,7 +6,6 @@
 
 #include "FEstado.h"
 
-#include "FArea.h"
 #include "FCamera.h"
 #include "FEntidade.h"
 #include "FSuperficie.h"
@@ -23,7 +22,7 @@ class FEstadoJogo : public FEstado {
 		FEntidade	cursor;
 		FEntidade	arma1;
 		FEntidade	arma2;
-		FEntidade	escore;
+		FEntidadeTexto	escore;
 	private:
 		FEstadoJogo();
 	
