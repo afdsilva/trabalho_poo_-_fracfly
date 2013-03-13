@@ -22,9 +22,9 @@ void FEstadoJogo::NaAtivacao() {
 	Excecoes::msgErro.clear();
 	//carrega fundo
 	try {
-		char fundoArquivo[] = "res/ai-star-about-to-be-ripped-apart.jpg";
+		char fundoArquivo[] = "res/universo.jpg";
 
-		if (fundo.NoCarregar(fundoArquivo,4945,3672,0) == false) throw Excecoes::TratamentoExcecao();
+		if (fundo.NoCarregar(fundoArquivo,6000,3000,0) == false) throw Excecoes::TratamentoExcecao();
 
 		fundo.x = (WWIDTH / 2) - (fundo.width / 2);
 		fundo.y = (WHEIGHT / 2) - (fundo.height / 2);
