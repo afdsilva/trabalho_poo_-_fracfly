@@ -30,7 +30,7 @@ void FEstadoIntro::NaDesativacao() {
 }
 
 void FEstadoIntro::NoLaco() {
-	if (tempoInicio + 1500 < (int) SDL_GetTicks()) {
+	if (tempoInicio + 3500 < (int) SDL_GetTicks()) {
 		FGerenciadorEstados::SetEstadoAtivo(ESTADO_MENU);
 	}
 }
@@ -53,4 +53,16 @@ void FEstadoIntro::NaRenderizacao(SDL_Surface * planoExibicao) {
 
 FEstadoIntro * FEstadoIntro::GetInstancia() {
 	return &instancia;
+}
+
+void FEstadoIntro::OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode) {
+	switch(sym) {
+		case SDLK_ESCAPE: //Esc
+		case SDLK_RETURN:
+			FGerenciadorEstados::SetEstadoAtivo(ESTADO_MENU);
+			break;
+	}
+}
+void FEstadoIntro::OnLButtonDown(int mX, int mY) {
+	FGerenciadorEstados::SetEstadoAtivo(ESTADO_MENU);
 }

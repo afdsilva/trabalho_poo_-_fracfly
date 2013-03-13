@@ -10,7 +10,7 @@ OBJETOS=male_libs.o Excecoes.o FSuperficie.o FFonte.o FEvento.o FAnimacao.o FEnt
 CPPFLAGS=-std=c++0x -Wall -g -lm `sdl-config --cflags`
 
 # Ligador flags - sdl
-LDFLAGS=`sdl-config --libs` -lSDL -lSDL_image -lSDL_gfx -lSDL_ttf -lconfig++
+LDFLAGS=`sdl-config --libs` -lSDL -lSDL_image -lSDL_gfx -lSDL_ttf
 
 EXECUTAVEL=fracfly
 
@@ -119,68 +119,69 @@ dependencias:
 depM4:
 	#verifica se m4 esta instalado
 	M4=m4 --version | grep GNU | sed 's/GNU M4 \(.*\)/\1/'
-	cd /tmp 
-	wget http://ftp.gnu.org/gnu/m4/m4-1.4.6.tar.gz
-	tar xvzf m4-1.4.6.tar.gz
-	cd /tmp/m4-1.4.6/
-	./configure
-	make
-	sudo make install
+	@echo cd /tmp 
+	@echo wget http://ftp.gnu.org/gnu/m4/m4-1.4.6.tar.gz
+	@echo tar xvzf m4-1.4.6.tar.gz
+	@echo cd /tmp/m4-1.4.6/
+	@echo ./configure
+	@echo make
+	@echo sudo make install
 
 depAutoconf:
 	#AUTOCONF=autoconf --version | grep autoconf | grep GNU | sed 's/.*) \(.*\)/\1/'
-	cd /tmp 
-	wget http://ftpmirror.gnu.org/autoconf/autoconf-2.69.tar.gz
-	tar xvzf autoconf-2.69.tar.gz
-	cd /tmp/autoconf-2.69/
-	./configure
-	make
-	sudo make install
+	@echo cd /tmp 
+	@echo wget http://ftpmirror.gnu.org/autoconf/autoconf-2.69.tar.gz
+	@echo tar xvzf autoconf-2.69.tar.gz
+	@echo cd /tmp/autoconf-2.69/
+	@echo ./configure
+	@echo make
+	@echo sudo make install
 
 depAutomake:
-	cd /tmp 
-	wget ftp://ftp.gnu.org/gnu/automake/automake-1.13.tar.gz
-	tar xvzf automake-1.13.tar.xz
-	cd /tmp/automake-1.13/
-	./configure
-	make
-	sudo make install
+	@echo cd /tmp 
+	@echo wget ftp://ftp.gnu.org/gnu/automake/automake-1.13.tar.gz
+	@echo tar xvzf automake-1.13.tar.xz
+	@echo cd /tmp/automake-1.13/
+	@echo ./configure
+	@echo make
+	@echo sudo make install
 
 depFreetype:
-	cd /tmp 
-	wget http://download.savannah.gnu.org/releases/freetype/freetype-2.4.11.tar.gz
-	tar xvzf freetype-2.4.11.tar.gz
-	cd /tmp/freetype-2.4.11/
-	./configure
-	make
-	sudo make install
+	@echo cd /tmp 
+	@echo wget http://download.savannah.gnu.org/releases/freetype/freetype-2.4.11.tar.gz
+	@echo tar xvzf freetype-2.4.11.tar.gz
+	@echo cd /tmp/freetype-2.4.11/
+	@echo ./configure
+	@echo make
+	@echo sudo make install
 
 depSDL_ttf:
-	cd /tmp 
-	wget http://www.libsdl.org/projects/SDL_ttf/release/SDL_ttf-2.0.11.tar.gz
-	tar xvzf SDL_ttf-2.0.11.tar.gz
-	cd /tmp/SDL_ttf-2.0.11/
-	./configure
-	make
-	sudo make install
+	@echo cd /tmp 
+	@echo wget http://www.libsdl.org/projects/SDL_ttf/release/SDL_ttf-2.0.11.tar.gz
+	@echo tar xvzf SDL_ttf-2.0.11.tar.gz
+	@echo cd /tmp/SDL_ttf-2.0.11/
+	@echo ./configure
+	@echo make
+	@echo sudo make install
 
 depSDL_mixer:
-	cd /tmp 
-	wget http://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-1.2.12.tar.gz
-	tar xvzf SDL_mixer-1.2.12.tar.gz
-	cd /tmp/SDL_mixer-1.2.12/
-	./configure
-	make
-	sudo make install
+	@echo cd /tmp 
+	@echo wget http://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-1.2.12.tar.gz
+	@echo tar xvzf SDL_mixer-1.2.12.tar.gz
+	@echo cd /tmp/SDL_mixer-1.2.12/
+	@echo ./configure
+	@echo make
+	@echo sudo make install
 
 deplibConfig:
-	cd /tmp
-	wget http://www.hyperrealm.com/libconfig/libconfig-1.4.9.tar.gz
-	tar xvzf libconfig-1.4.9.tar.gz
-	cd /tmp/libconfig-1.4.9.tar.gz
-	./configure
-	make
-	sudo make install
+	@echo nao utilizado
+	@echo cd /tmp
+	@echo wget http://www.hyperrealm.com/libconfig/libconfig-1.4.9.tar.gz
+	@echo tar xvzf libconfig-1.4.9.tar.gz
+	@echo cd /tmp/libconfig-1.4.9/
+	@echo ./configure
+	@echo make
+	@echo sudo make install
 
 runtime:
 	sudo apt-get install libsdl1.2debian libsdl-gfx1.2-4 libsdl-mixer1.2 libsdl-image1.2 libsdl-ttf2.0-0 

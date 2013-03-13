@@ -19,6 +19,9 @@ class FEstadoIntro : public FEstado {
 		void NoLaco();
 		void NaRenderizacao(SDL_Surface * planoExibicao);
 		
+		void OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode);
+		void OnLButtonDown(int mX, int mY);
+
 	public:
 		static FEstadoIntro * GetInstancia();
 };

@@ -19,7 +19,7 @@ FracFly::FracFly() {
 	rodando = true;
 }
 /**
- * Classe de execução do programa
+ * Metodo de execução do programa
  **/
 int FracFly::naExec() {
 	//Verifica se todas inicializacoes foram feitas corretamente

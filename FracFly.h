@@ -3,7 +3,6 @@
 
 #include <SDL/SDL.h>
 
-#include <libconfig.h++>
 #include "Definicoes.h"
 
 #include "FGerenciadorEstados.h" 
