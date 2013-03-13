@@ -20,8 +20,18 @@ void FEstadoOptions::NaAtivacao() {
 	Excecoes::classErro = "FEstadoOptions::NaAtivacao";
 	Excecoes::msgErro.clear();
 	estadoSelecionado = 1;
+	
 
 	try {
+		// Carrega fundo
+		char fundoArquivo[] = "res/ai-star-about-to-be-ripped-apart.jpg";
+
+		if (fundo.NoCarregar(fundoArquivo,6000,3000,0) == false) throw Excecoes::TratamentoExcecao();
+
+		fundo.x = (WWIDTH / 2) - (fundo.width / 2);
+		fundo.y = (WHEIGHT / 2) - (fundo.height / 2);
+		FEntidade::listaEntidades.push_back(&fundo);
+		
 		//carrega o arquivo da fonte que sera usada pelos itens do menu
 		char fonteArq[] = "res/fonts/ShadowsAroundUs.ttf";
 		TTF_Font * lazyFontTitulo = NULL;
