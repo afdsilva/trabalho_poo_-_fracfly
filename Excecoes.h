@@ -1,9 +1,11 @@
-/*
- * Excecoes.h
- *
- *  Created on: 09/03/2013
- *      Author: andref
- */
+/**
+ * Trabalho POO - Fracfly
+ * Integrantes:
+ * - André Felipe da Silva
+ * - Eliézer Ribeiro
+ * - Mario Saldanha
+ * - Lucio Leal Bastos
+**/
 
 #ifndef EXCECOES_H_
 	#define EXCECOES_H_

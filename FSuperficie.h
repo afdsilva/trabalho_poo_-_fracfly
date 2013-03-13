@@ -1,3 +1,13 @@
+/**
+ * Trabalho POO - Fracfly
+ * Integrantes:
+ * - André Felipe da Silva
+ * - Eliézer Ribeiro
+ * - Mario Saldanha
+ * - Lucio Leal Bastos
+**/
+
+
 #ifndef _FSUPERFICIE_H_
     #define _FSUPERFICIE_H_
 

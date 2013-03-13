@@ -174,6 +174,7 @@ depSDL_mixer:
 	@echo sudo make install
 
 deplibConfig:
+<<<<<<< HEAD
 	@echo nao utilizado
 	@echo cd /tmp
 	@echo wget http://www.hyperrealm.com/libconfig/libconfig-1.4.9.tar.gz
@@ -182,6 +183,15 @@ deplibConfig:
 	@echo ./configure
 	@echo make
 	@echo sudo make install
+=======
+	cd /tmp
+	wget http://www.hyperrealm.com/libconfig/libconfig-1.4.9.tar.gz
+	tar xvzf libconfig-1.4.9.tar.gz
+	cd /tmp/libconfig-1.4.9/
+	./configure
+	make
+	sudo make install
+>>>>>>> 36df6a5bc55a50164a9fd852c8e3f80bce95da09
 
 runtime:
 	sudo apt-get install libsdl1.2debian libsdl-gfx1.2-4 libsdl-mixer1.2 libsdl-image1.2 libsdl-ttf2.0-0 
