@@ -22,6 +22,16 @@ void FEstadoMenu::NaAtivacao() {
 	estadoSelecionado = 1;
 	//carrega o arquivo da fonte que sera usada pelos itens do menu
 	try {
+		char fundoArquivo[] = "res/ai-star-about-to-be-ripped-apart.jpg";
+
+		if (fundo.NoCarregar(fundoArquivo,6000,3000,0) == false) throw Excecoes::TratamentoExcecao();
+
+		fundo.x = (WWIDTH / 2) - (fundo.width / 2);
+		fundo.y = (WHEIGHT / 2) - (fundo.height / 2);
+		FEntidade::listaEntidades.push_back(&fundo);
+		
+		
+		
 		char fonteArq[] = "res/fonts/ShadowsAroundUs.ttf";
 		TTF_Font * lazyFontTitulo = NULL;
 		TTF_Font * lazyFontItens = NULL;

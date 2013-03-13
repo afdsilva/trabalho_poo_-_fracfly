@@ -27,7 +27,7 @@ class FEstadoMenu : public FEstado {
 		FEntidadeBotao * iniciar;
 		FEntidadeBotao * options;
 		FEntidadeBotao * sair;
-		
+		FEntidade	fundo;
 	private:
 		TTF_Font * fonte;
 		
