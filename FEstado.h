@@ -1,3 +1,12 @@
+/**
+ * Trabalho POO - Fracfly
+ * Integrantes:
+ * - André Felipe da Silva
+ * - Eliézer Ribeiro
+ * - Mario Saldanha
+ * - Lucio Leal Bastos
+**/
+
 #ifndef _FESTADO_H_
 	#define _FESTADO_H_
 	

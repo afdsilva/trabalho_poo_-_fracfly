@@ -1,3 +1,12 @@
+/**
+ * Trabalho POO - Fracfly
+ * Integrantes:
+ * - André Felipe da Silva
+ * - Eliézer Ribeiro
+ * - Mario Saldanha
+ * - Lucio Leal Bastos
+**/
+
 #include "FracFly.h"
 /**
  * Metodo de Inicializacao de variaveis, configurações e de carregar recursos

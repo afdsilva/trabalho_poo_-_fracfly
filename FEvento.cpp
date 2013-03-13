@@ -1,3 +1,12 @@
+/**
+ * Trabalho POO - Fracfly
+ * Integrantes:
+ * - André Felipe da Silva
+ * - Eliézer Ribeiro
+ * - Mario Saldanha
+ * - Lucio Leal Bastos
+**/
+
 #include "FEvento.h"
  
 FEvento::FEvento() {

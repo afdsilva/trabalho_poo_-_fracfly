@@ -177,7 +177,7 @@ deplibConfig:
 	cd /tmp
 	wget http://www.hyperrealm.com/libconfig/libconfig-1.4.9.tar.gz
 	tar xvzf libconfig-1.4.9.tar.gz
-	cd /tmp/libconfig-1.4.9.tar.gz
+	cd /tmp/libconfig-1.4.9/
 	./configure
 	make
 	sudo make install
