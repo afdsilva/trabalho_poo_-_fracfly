@@ -32,27 +32,6 @@ bool FracFly::NoInic() {
 		}
 		//* Resolucao da tela
 		//const SDL_VideoInfo* myPointer = SDL_GetVideoInfo();
-		SDL_Rect** modes;
-		int i;
-
-		modes = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE);
-
-		if (modes == (SDL_Rect**)0) {
-			  printf("No modes available!\n");
-			  exit(-1);
-		  }
-
-		  /* Check if our resolution is restricted */
-		  if (modes == (SDL_Rect**)-1) {
-			  printf("All resolutions available.\n");
-		  }
-		  else{
-			  /* Print valid modes */
-			  printf("Available Modes\n");
-			  for (i=0; modes[i]; ++i)
-			  printf("  %d x %d\n", modes[i]->w, modes[i]->h);
-		  }
-
 
 		// Print out some information
 		// WARNING: myPointer is not NULL here

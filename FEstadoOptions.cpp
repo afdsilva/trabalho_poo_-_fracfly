@@ -49,6 +49,52 @@ void FEstadoOptions::NaAtivacao() {
 			voltar->AoClicarEsquerdo(ESTADO_MENU);
 			FEntidade::listaEntidades.push_back(voltar);
 
+			SDL_Rect** modes;
+			int i;
+
+			modes = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE);
+
+			if (modes == (SDL_Rect**)0) {
+			  }
+
+			  /* Check if our resolution is restricted */
+			  if (modes == (SDL_Rect**)-1) {
+			  }
+			  else{
+				  char fontRes[] = "res/lazy.ttf";
+				  if ((lazyFontTitulo = FFonte::NoCarregar(fontRes, 32)) == NULL) throw Excecoes::TratamentoExcecao();
+			  	  if ((lazyFontItens = FFonte::NoCarregar(fontRes, 24)) == NULL) throw Excecoes::TratamentoExcecao();
+				  FEntidadeTexto * modos = new FEntidadeTexto();
+					if (modos->NoCarregar(lazyFontTitulo,"Resolucao",branco) == false) throw Excecoes::TratamentoExcecao();
+						modos->x = titulo->x + titulo->width;
+						modos->y = 150;
+						FEntidade::listaEntidades.push_back(modos);
+
+					FEntidadeBotao * opcao;
+				  /* Print valid modes */
+				string resolucao;
+				for (i=0; modes[i]; ++i) {
+					opcao = new FEntidadeBotao();
+					resolucao.clear();
+					resolucao.append(itoa(modes[i]->w));
+					resolucao.append("x");
+					resolucao.append(itoa(modes[i]->h));
+					if (opcao->NoCarregar(lazyFontItens,resolucao,branco) == false) throw Excecoes::TratamentoExcecao();
+					opcao->x = modos->x + 20;
+					opcao->y = modos->y + modos->height + ((i+1) * 20) + 3;
+					opcao->flags = ENTIDADE_FLAG_CURSOR ;
+					opcao->AoPassarPorCima(vermelho,1,1);
+					opcao->Acao(MUDA_RESOLUCAO);
+					FEntidade::listaEntidades.push_back(opcao);
+					//printf("  %d x %d\n", modes[i]->w, modes[i]->h);
+				}
+			  }
+
+
+
+
+
+
 	} catch (...) {
 		FGerenciadorEstados::SetEstadoAtivo(ESTADO_NENHUM);
 	}

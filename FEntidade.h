@@ -49,6 +49,12 @@ enum {
 	//ENTIDADE_FLAG_BOTAO_CLICK	= 0x00000200
 };
 
+//acoes que podem ser tomados
+enum  {
+	MUDA_ESTADO,
+	MUDA_RESOLUCAO
+};
+
 using namespace std;
 
 class FEntidade {
@@ -214,7 +220,7 @@ class FEntidadeBotao : public FEntidadeTexto {
 		//Seta o comportamento ao clicar com
 		void AoClicarDireito(int acao);
 		void AoClicarEsquerdo(int acao);
-		int Acao();
+		void Acao(int acao);
 
 };
 

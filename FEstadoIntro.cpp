@@ -65,11 +65,8 @@ FEstadoIntro * FEstadoIntro::GetInstancia() {
 }
 
 void FEstadoIntro::OnKeyDown(SDLKey sym, SDLMod mod, Uint16 unicode) {
-	switch(sym) {
-		case SDLK_ESCAPE: //Esc
-		case SDLK_RETURN:
-			FGerenciadorEstados::SetEstadoAtivo(ESTADO_MENU);
-			break;
+	if (sym == SDLK_ESCAPE || sym == SDLK_RETURN) {
+		FGerenciadorEstados::SetEstadoAtivo(ESTADO_MENU);
 	}
 }
 void FEstadoIntro::OnLButtonDown(int mX, int mY) {
