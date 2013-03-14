@@ -25,6 +25,7 @@ class FEstadoOptions: public FEstado {
 		FEntidadeTexto * titulo;
 		FEntidadeBotao * voltar;
 		int estadoSelecionado;
+		FEntidade	fundo;
 		
 	private:
 		TTF_Font * fonte;
