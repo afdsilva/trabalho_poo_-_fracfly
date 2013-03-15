@@ -14,6 +14,8 @@ LDFLAGS=`sdl-config --libs` -lSDL -lSDL_image -lSDL_gfx -lSDL_ttf
 
 EXECUTAVEL=fracfly
 
+BASE_FILENAME=trabalho_poo_fracfly
+
 #Compila o binario do jogo
 #jogo: NaLimpeza FSuperficie NoEvento NoInic NoLaco NaRenderezicao FracFly FracFly.cpp
 jogo: $(OBJETOS) FracFly.h FracFly.cpp
@@ -196,3 +198,16 @@ runtime:
 clean:
 	rm -rf $(OBJETOS)
 #	rm -rf $(EXECUTAVEL)
+
+package:
+	@echo "Empacotando: "
+ifneq ($(wildcard *$(BASE_FILENAME)*),)
+	rename 's/tar.gz/$(REVISION).tar.gz' $(wildcard *$(BASE_FILENAME)*) 
+	#@echo "Arquivo Existe"
+endif
+ifeq ($(wildcard $(BASE_FILENAME).tar.gz),)
+	mkdir $(BASE_FILENAME)
+	cp -R README.md *.cpp *.h *.pdf *.ini Makefile res/ TesteFractal/ $(BASE_FILENAME)/
+	tar -zcvf $(BASE_FILENAME).tar.gz $(BASE_FILENAME)/
+	rm -R $(BASE_FILENAME)/
+endif
